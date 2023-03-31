@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6A0ADCB429D73CB700FC9621 /* AudioRecordingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0ADCB329D73CB700FC9621 /* AudioRecordingView.swift */; };
+		6A0ADCB729D73D0100FC9621 /* SpeechRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0ADCB629D73D0100FC9621 /* SpeechRecognizer.swift */; };
 		6A6196E129CAFA1B008A9405 /* Voice_NoteApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A6196E029CAFA1B008A9405 /* Voice_NoteApp.swift */; };
 		6A6196E329CAFA1B008A9405 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A6196E229CAFA1B008A9405 /* ContentView.swift */; };
 		6A6196E529CAFA1D008A9405 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6A6196E429CAFA1D008A9405 /* Assets.xcassets */; };
@@ -34,6 +36,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		6A0ADCB329D73CB700FC9621 /* AudioRecordingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRecordingView.swift; sourceTree = "<group>"; };
+		6A0ADCB629D73D0100FC9621 /* SpeechRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechRecognizer.swift; sourceTree = "<group>"; };
 		6A6196DD29CAFA1B008A9405 /* Voice Note.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Voice Note.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6A6196E029CAFA1B008A9405 /* Voice_NoteApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Voice_NoteApp.swift; sourceTree = "<group>"; };
 		6A6196E229CAFA1B008A9405 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -71,6 +75,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6A0ADCB029D73BC500FC9621 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				6A6196E229CAFA1B008A9405 /* ContentView.swift */,
+				6A0ADCB329D73CB700FC9621 /* AudioRecordingView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		6A0ADCB529D73CDF00FC9621 /* utils */ = {
+			isa = PBXGroup;
+			children = (
+				6A0ADCB629D73D0100FC9621 /* SpeechRecognizer.swift */,
+			);
+			path = utils;
+			sourceTree = "<group>";
+		};
 		6A6196D429CAFA1B008A9405 = {
 			isa = PBXGroup;
 			children = (
@@ -94,8 +115,9 @@
 		6A6196DF29CAFA1B008A9405 /* Voice Note */ = {
 			isa = PBXGroup;
 			children = (
+				6A0ADCB529D73CDF00FC9621 /* utils */,
+				6A0ADCB029D73BC500FC9621 /* Views */,
 				6A6196E029CAFA1B008A9405 /* Voice_NoteApp.swift */,
-				6A6196E229CAFA1B008A9405 /* ContentView.swift */,
 				6A6196E429CAFA1D008A9405 /* Assets.xcassets */,
 				6A6196E629CAFA1D008A9405 /* Preview Content */,
 			);
@@ -258,7 +280,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				6A6196E329CAFA1B008A9405 /* ContentView.swift in Sources */,
+				6A0ADCB729D73D0100FC9621 /* SpeechRecognizer.swift in Sources */,
 				6A6196E129CAFA1B008A9405 /* Voice_NoteApp.swift in Sources */,
+				6A0ADCB429D73CB700FC9621 /* AudioRecordingView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
