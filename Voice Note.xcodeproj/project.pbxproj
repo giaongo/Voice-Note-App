@@ -443,6 +443,8 @@
 				DEVELOPMENT_ASSET_PATHS = "\"Voice Note/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Audio is recorded to transcribe the note speech";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "The app uses speech recognition to dictate notes";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -471,6 +473,8 @@
 				DEVELOPMENT_ASSET_PATHS = "\"Voice Note/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Audio is recorded to transcribe the note speech";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "The app uses speech recognition to dictate notes";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
