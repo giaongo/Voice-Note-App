@@ -34,6 +34,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3C7C3659A698D3D6EB945C45 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = file.gitignore; path = .gitignore; sourceTree = "<group>"; };
 		6A6196DD29CAFA1B008A9405 /* Voice Note.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Voice Note.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6A6196E029CAFA1B008A9405 /* Voice_NoteApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Voice_NoteApp.swift; sourceTree = "<group>"; };
 		6A6196E229CAFA1B008A9405 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -78,6 +79,7 @@
 				6A6196F029CAFA1D008A9405 /* Voice NoteTests */,
 				6A6196FA29CAFA1D008A9405 /* Voice NoteUITests */,
 				6A6196DE29CAFA1B008A9405 /* Products */,
+				3C7C3659A698D3D6EB945C45 /* .gitignore */,
 			);
 			sourceTree = "<group>";
 		};
