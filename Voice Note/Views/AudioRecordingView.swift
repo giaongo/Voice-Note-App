@@ -46,8 +46,8 @@ struct AudioRecordingView: View {
             speechRecognizer.reset()
             speechRecognizer.transcribe()
         } else {
-            speechRecognizer.stopTranscibing()
-            message = speechRecognizer.transciptionText
+            speechRecognizer.stopTranscribing()
+            message = speechRecognizer.transcriptionText
         }
     }
     
