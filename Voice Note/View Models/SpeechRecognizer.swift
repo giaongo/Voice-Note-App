@@ -8,32 +8,15 @@
 import Foundation
 import AVFoundation
 import Speech
-import SwiftUI
 
 class SpeechRecognizer: ObservableObject {
-    
-    enum RecognizeError: Error {
-        case nilRecognizer
-        case notAuthorizedToRecognize
-        case notPermittedToRecord
-        case recognizerIsUnavailable
-        
-        var message:String {
-            switch self {
-            case .nilRecognizer: return "Can't iniialize speech recognizer"
-            case .notAuthorizedToRecognize: return "Not authorized to recognize speech"
-            case .notPermittedToRecord: return "Not permitted to record audio"
-            case .recognizerIsUnavailable: return "Recognizer is unavailable"
-            }
-        }
-    }
-    
+
     private var audioEngine: AVAudioEngine?
     private var request: SFSpeechAudioBufferRecognitionRequest?
     private var task: SFSpeechRecognitionTask?
     private let recognizer: SFSpeechRecognizer?
     
-    var transciptionText: String = ""
+    var transcriptionText: String = ""
     
     init() {
         recognizer = SFSpeechRecognizer()
@@ -67,7 +50,7 @@ class SpeechRecognizer: ObservableObject {
         } else {
             errorMessage += error.localizedDescription
         }
-        transciptionText = "Error dictacting speech \(errorMessage)"
+        transcriptionText = "Error dictating speech \(errorMessage)"
     }
     
     private static func prepareEngine() throws -> (AVAudioEngine, SFSpeechAudioBufferRecognitionRequest) {
@@ -89,7 +72,7 @@ class SpeechRecognizer: ObservableObject {
     }
     
     /**
-     This creates a speech recognition task to transcibe speech to text. The result is writtent to public transcriptionText until stopTransribing method is called
+     This creates a speech recognition task to transcribe speech to text. The result is written to public transcriptionText until stopTranscribing method is called
      */
     func transcribe() {
         DispatchQueue(label: "Speech Recognition Queue", qos:.background).async {
@@ -113,7 +96,7 @@ class SpeechRecognizer: ObservableObject {
     /**
      This stops transcription
      */
-    func stopTranscibing () {
+    func stopTranscribing () {
         reset()
     }
     
@@ -133,7 +116,7 @@ class SpeechRecognizer: ObservableObject {
             audioEngine?.inputNode.removeTap(onBus: 0)
         }
         if let result = result {
-            transciptionText = result.bestTranscription.formattedString
+            transcriptionText = result.bestTranscription.formattedString
         }
     }
 }
