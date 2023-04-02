@@ -2,7 +2,7 @@
 //  SpeechRecognizer.swift
 //  Voice Note
 //
-//  Created by iosdev on 31.3.2023.
+//  Created by Giao Ngo on 31.3.2023.
 //
 
 import Foundation
@@ -10,13 +10,11 @@ import AVFoundation
 import Speech
 
 class SpeechRecognizer: ObservableObject {
-
-    private var audioEngine: AVAudioEngine?
-    private var request: SFSpeechAudioBufferRecognitionRequest?
+    
     private var task: SFSpeechRecognitionTask?
     private let recognizer: SFSpeechRecognizer?
     
-    var transcriptionText: String = ""
+    @Published var transcriptionText: String = ""
     
     init() {
         recognizer = SFSpeechRecognizer()
@@ -53,45 +51,28 @@ class SpeechRecognizer: ObservableObject {
         transcriptionText = "Error dictating speech \(errorMessage)"
     }
     
-    private static func prepareEngine() throws -> (AVAudioEngine, SFSpeechAudioBufferRecognitionRequest) {
-        let audioEngine = AVAudioEngine()
-        let request = SFSpeechAudioBufferRecognitionRequest()
-        request.shouldReportPartialResults = true
-        
-        let audioSession = AVAudioSession.sharedInstance()
-        try audioSession.setCategory(.record, mode: .measurement, options: .duckOthers)
-        try audioSession.setActive(true,  options: .notifyOthersOnDeactivation)
-        let inputNode = audioEngine.inputNode
-        let recordingFormat = inputNode.outputFormat(forBus: 0)
-        inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) {(buffer: AVAudioPCMBuffer, when: AVAudioTime) in
-            request.append(buffer)
-        }
-        audioEngine.prepare()
-        try audioEngine.start()
-        return (audioEngine, request)
-    }
-    
-    /**
-     This creates a speech recognition task to transcribe speech to text. The result is written to public transcriptionText until stopTranscribing method is called
-     */
-    func transcribe() {
-        DispatchQueue(label: "Speech Recognition Queue", qos:.background).async {
+    func transcribeFile(from url:URL){
+        DispatchQueue(label:"Speech Recognition Queue", qos:.userInteractive).async {
             [weak self] in
             guard let self = self, let recognizer = self.recognizer, recognizer.isAvailable else {
                 self?.displayError(RecognizeError.recognizerIsUnavailable)
                 return
             }
-            do {
-                let (audioEngine, request) = try Self.prepareEngine()
-                self.audioEngine = audioEngine
-                self.request = request
-                self.task = recognizer.recognitionTask(with: request, resultHandler: self.recognitionHandler(result:error:))
-            } catch {
-                self.reset()
-                self.displayError(error)
+            
+            let request = SFSpeechURLRecognitionRequest(url: url)
+            recognizer.recognitionTask(with: request) { (result, error) in
+                guard let result = result else {
+                    self.displayError(RecognizeError.errorInRecognizing)
+                    return
+                }
+                if result.isFinal {
+                    self.transcriptionText = result.bestTranscription.formattedString
+                    self.stopTranscribing()
+                }
             }
         }
     }
+    
     
     /**
      This stops transcription
@@ -102,22 +83,7 @@ class SpeechRecognizer: ObservableObject {
     
     func reset() {
         task?.cancel()
-        audioEngine?.stop()
-        audioEngine = nil
-        request = nil
         task = nil
-    }
-    
-    private func recognitionHandler (result: SFSpeechRecognitionResult?, error:Error?) {
-        let receivedFinalResult = result?.isFinal ?? false
-        let receivedError = error != nil
-        if receivedFinalResult || receivedError {
-            audioEngine?.stop()
-            audioEngine?.inputNode.removeTap(onBus: 0)
-        }
-        if let result = result {
-            transcriptionText = result.bestTranscription.formattedString
-        }
     }
 }
 
