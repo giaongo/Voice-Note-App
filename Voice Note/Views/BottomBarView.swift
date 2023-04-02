@@ -2,7 +2,7 @@
 //  BottomBarView.swift
 //  Voice Note
 //
-//  Created by iosdev on 2.4.2023.
+//  Created by Giao Ngo on 2.4.2023.
 //
 
 import SwiftUI

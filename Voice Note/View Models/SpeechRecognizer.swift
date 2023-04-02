@@ -2,7 +2,7 @@
 //  SpeechRecognizer.swift
 //  Voice Note
 //
-//  Created by iosdev on 31.3.2023.
+//  Created by Giao Ngo on 31.3.2023.
 //
 
 import Foundation
