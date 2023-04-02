@@ -1,5 +1,6 @@
 //
 // Created by Anwar Ulhaq on 1.4.2023, developed by Giao Ngo
+// Study source: https://github.com/App-Lobby/CO-Voice/tree/main/CO-Voice/CO-Voice
 //
 
 import Foundation
@@ -12,6 +13,9 @@ class VoiceNoteViewModel: ObservableObject{
     @Published var isRecording: Bool = false
     @Published var recordingList = [Recording]()
     
+    init () {
+        fetchAllRecordings()
+    }
     func startRecording() {
         let recordingSession = AVAudioSession.sharedInstance()
         do {
@@ -47,5 +51,26 @@ class VoiceNoteViewModel: ObservableObject{
     func stopRecording() {
         audioRecorder?.stop()
         isRecording = false
+    }
+    
+    private func fetchAllRecordings() {
+        let path = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        do {
+            let recordingsContent = try FileManager.default.contentsOfDirectory(at: path, includingPropertiesForKeys: nil)
+            for url in recordingsContent {
+                recordingList.append(Recording(fileUrl: url, createdAt: getFileDate(for: url), isPlaying: false))
+            }
+        } catch {
+            print("Error fetching all recordings \(error.localizedDescription)")
+        }
+    }
+    
+    private func getFileDate(for file: URL) -> Date {
+        if let attributes = try? FileManager.default.attributesOfItem(atPath: file.path) as [FileAttributeKey: Any],
+           let creationDate = attributes[FileAttributeKey.creationDate] as? Date {
+            return creationDate
+        } else {
+            return Date()
+        }
     }
 }
