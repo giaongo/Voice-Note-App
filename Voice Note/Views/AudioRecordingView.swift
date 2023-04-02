@@ -9,7 +9,7 @@ import SwiftUI
 
 struct AudioRecordingView: View {
     @State var message:String = ""
-    
+    @StateObject var speechRecognizer = SpeechRecognizer()
     var body: some View {
         ZStack {
             Rectangle()
@@ -19,9 +19,9 @@ struct AudioRecordingView: View {
                 Text("Recording scene")
                 Spacer()
                 Text("Transcription message")
-                Text("\(message)")
+                Text("\(speechRecognizer.transcriptionText)")
                 Spacer()
-                BottomBarView(message: $message)
+                BottomBarView(message: $message, speechRecognizer: speechRecognizer)
             }
         }
     }

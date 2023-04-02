@@ -10,12 +10,11 @@ import SwiftUI
 struct BottomBarView: View {
     @Binding var message: String
     @StateObject var voiceNoteViewModel = VoiceNoteViewModel()
-    @ObservedObject var speechRecognizer = SpeechRecognizer()
+    @ObservedObject var speechRecognizer: SpeechRecognizer
     let buttonColor = #colorLiteral(red: 0.1764705926, green: 0.01176470611, blue: 0.5607843399, alpha: 1)
     
     var body: some View {
         VStack {
-            Text("Changing in text transcription: \(speechRecognizer.transcriptionText)")
             HStack {
                 Spacer()
                 Button {
@@ -75,13 +74,11 @@ struct BottomBarView: View {
         voiceNoteViewModel.isRecording.toggle()
         print("Recording bool: \( voiceNoteViewModel.isRecording)")
         if voiceNoteViewModel.isRecording {
-            print("Start recording")
-            print("Transcription Message is \(message)")
             speechRecognizer.reset()
+            speechRecognizer.transcriptionText = ""
             voiceNoteViewModel.startRecording()
             
         } else {
-            print("Stop recording")
             voiceNoteViewModel.stopRecording()
             if let newestRecordUrl = voiceNoteViewModel.fileUrlList.last {
                 print("NewesrRecordUrl is \(newestRecordUrl)")

@@ -1,6 +1,6 @@
 //
 // Created by Anwar Ulhaq on 1.4.2023, developed by Giao Ngo
-// Study source: https://github.com/App-Lobby/CO-Voice/tree/main/CO-Voice/CO-Voice
+// 
 //
 
 import Foundation
