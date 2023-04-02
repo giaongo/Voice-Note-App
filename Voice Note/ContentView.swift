@@ -8,14 +8,13 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    var mapView = MapView()
+    
     var body: some View {
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Test token")
+            mapView
         }
-        .padding()
     }
 }
 
