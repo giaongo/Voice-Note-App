@@ -23,7 +23,7 @@ struct AudioRecordingView: View {
                 Text("Transcription message")
                 Text("\(message)")
                 Spacer()
-                BottomBarView(message: $message, speechRecognizer: speechRecognizer)
+                BottomBarView(message: $message)
             }
         }
     }

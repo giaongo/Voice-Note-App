@@ -28,9 +28,9 @@ class VoiceNoteViewModel: ObservableObject{
         let path = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         let currentDate = Date()
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd/MM/YY 'at' HH:m:ss"
+        dateFormatter.dateFormat = "dd-MM-YY 'at' HH:mm:ss"
         let formattedDate = dateFormatter.string(from: currentDate)
-        let fileName = path.appendingPathComponent("VoiceNote: \(formattedDate).m4a")
+        let fileName = path.appendingPathComponent("VoiceNote:\(formattedDate).m4a")
         
         let settings = [
             AVFormatIDKey: Int(kAudioFormatMPEG4AAC),

@@ -11,8 +11,9 @@ import SwiftUI
 struct Voice_NoteApp: App {
     var body: some Scene {
         WindowGroup {
-            AudioRecordingView()
-            MapView()
+            NavigationView {
+                AudioRecordingView()
+            }
         }
     }
 }

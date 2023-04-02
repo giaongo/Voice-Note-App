@@ -9,7 +9,6 @@ import SwiftUI
 
 struct BottomBarView: View {
     @Binding var message: String
-    @ObservedObject var speechRecognizer:SpeechRecognizer
     @ObservedObject var voiceNoteViewModel = VoiceNoteViewModel()
     
     let buttonColor = #colorLiteral(red: 0.1764705926, green: 0.01176470611, blue: 0.5607843399, alpha: 1)
@@ -46,8 +45,8 @@ struct BottomBarView: View {
             Spacer()
             Spacer()
             
-            Button {
-                print("List pressed")
+            NavigationLink {
+                RecordingListView()
             } label: {
                 VStack {
                     Image(systemName: "list.dash")
@@ -55,7 +54,7 @@ struct BottomBarView: View {
                         .foregroundColor(Color(buttonColor))
                         .padding(.bottom,3)
                 }
-
+                
             }
             Spacer()
         }
@@ -68,10 +67,16 @@ struct BottomBarView: View {
         .frame(height: 60)
     }
     
-
+    
     private func clickAudioButton() {
         voiceNoteViewModel.isRecording.toggle()
-        voiceNoteViewModel.isRecording ? voiceNoteViewModel.stopRecording() : voiceNoteViewModel.stopRecording()
+        if voiceNoteViewModel.isRecording {
+            print("Start recording")
+            voiceNoteViewModel.startRecording()
+        } else {
+            print("Stop recording")
+            voiceNoteViewModel.stopRecording()
+        }
     }
 }
 
