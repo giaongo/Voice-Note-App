@@ -9,7 +9,7 @@ import SwiftUI
 
 struct AudioRecordingView: View {
     @State var message:String = ""
-    @State var isRecoding: Bool = false
+    @State var isRecording: Bool = false
     @StateObject var speechRecognizer = SpeechRecognizer()
     
     var body: some View {
@@ -23,35 +23,13 @@ struct AudioRecordingView: View {
                 Text("Transcription message")
                 Text("\(message)")
                 Spacer()
-                Button {
-                    clickAudioButton()
-                } label: {
-                    Image(systemName: "\(isRecoding ? "mic" : "mic.fill")")
-                        .font(.system(size: 30))
-                        .foregroundColor(.white)
-                }
-                .padding(.all,20)
-                .background(
-                    Circle()
-                        .fill(.orange)
-                )
+                BottomBarView(isRecording: $isRecording, message: $message, speechRecognizer: speechRecognizer)
             }
         }
     }
     
-    private func clickAudioButton() {
-        isRecoding = !isRecoding
-        if isRecoding {
-            message = ""
-            speechRecognizer.reset()
-            speechRecognizer.transcribe()
-        } else {
-            speechRecognizer.stopTranscribing()
-            message = speechRecognizer.transcriptionText
-        }
-    }
-    
 }
+
 
 struct AudioRecordingView_Previews: PreviewProvider {
     static var previews: some View {
