@@ -7,14 +7,15 @@ import Foundation
 import AVFoundation
 
 class VoiceNoteViewModel: ObservableObject{
-    var audioRecorder: AVAudioRecorder?
-    var audioPlayer: AVAudioPlayer?
+    private var audioRecorder: AVAudioRecorder?
+    private var audioPlayer: AVAudioPlayer?
     
     @Published var isRecording: Bool = false
     @Published var recordingList = [Recording]()
+    @Published var fileUrlList = [URL]()
     
     init () {
-        fetchAllRecordings()
+        self.fetchAllRecordings()
     }
     func startRecording() {
         let recordingSession = AVAudioSession.sharedInstance()
@@ -30,8 +31,8 @@ class VoiceNoteViewModel: ObservableObject{
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd-MM-YY 'at' HH:mm:ss"
         let formattedDate = dateFormatter.string(from: currentDate)
-        let fileName = path.appendingPathComponent("VoiceNote:\(formattedDate).m4a")
-        
+        let audioFileName = path.appendingPathComponent("VoiceNote:\(formattedDate).m4a")
+        fileUrlList.append(audioFileName)
         let settings = [
             AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
             AVSampleRateKey: 12000,
@@ -40,9 +41,10 @@ class VoiceNoteViewModel: ObservableObject{
         ]
         
         do {
-            audioRecorder = try AVAudioRecorder(url: fileName, settings: settings)
+            audioRecorder = try AVAudioRecorder(url: audioFileName, settings: settings)
             audioRecorder?.prepareToRecord()
             audioRecorder?.record()
+            
         } catch {
             print("Error Setting Up Recorder \(error.localizedDescription)")
         }
@@ -50,7 +52,6 @@ class VoiceNoteViewModel: ObservableObject{
     
     func stopRecording() {
         audioRecorder?.stop()
-        isRecording = false
     }
     
     private func fetchAllRecordings() {

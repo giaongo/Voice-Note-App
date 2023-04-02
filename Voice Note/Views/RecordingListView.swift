@@ -12,9 +12,9 @@ struct RecordingListView: View {
     var body: some View {
         VStack {
             Text("Recordings: \(voiceNoteViewModel.recordingList.count)")
+            Spacer()
             ForEach(voiceNoteViewModel.recordingList, id: \.createdAt) { recording in
                 VStack {
-                    Text("File From Recording")
                     Text("Recording file is: \(recording.fileUrl.lastPathComponent)")
                 }
             }

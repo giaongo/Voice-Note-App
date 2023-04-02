@@ -9,8 +9,6 @@ import SwiftUI
 
 struct AudioRecordingView: View {
     @State var message:String = ""
-    @ObservedObject var speechRecognizer = SpeechRecognizer()
-    @ObservedObject var voiceNoteViewModel = VoiceNoteViewModel()
     
     var body: some View {
         ZStack {
