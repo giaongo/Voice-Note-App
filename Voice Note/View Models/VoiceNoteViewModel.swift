@@ -1,6 +1,7 @@
 //
 // Created by Anwar Ulhaq on 1.4.2023, developed by Giao Ngo
-// 
+// Learning resource on AVAudioRecorder and AVAudioPlayer:
+// https://mdcode2021.medium.com/audio-recording-in-swiftui-mvvm-with-avfoundation-an-ios-app-6e6c8ddb00cc
 //
 
 import Foundation
@@ -17,6 +18,9 @@ class VoiceNoteViewModel: ObservableObject{
     init () {
         self.fetchAllRecordings()
     }
+    /**
+        This function starts the recording, writes the audio records to FileManager
+     */
     func startRecording() {
         let recordingSession = AVAudioSession.sharedInstance()
         do {
@@ -50,10 +54,16 @@ class VoiceNoteViewModel: ObservableObject{
         }
     }
     
+    /**
+        This function stops the recording
+     */
     func stopRecording() {
         audioRecorder?.stop()
     }
     
+    /**
+        This function fetches all of the recordings to the FileManager and appends its data to the recording lists
+     */
     private func fetchAllRecordings() {
         let path = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         do {
@@ -66,6 +76,9 @@ class VoiceNoteViewModel: ObservableObject{
         }
     }
     
+    /**
+        This function fetches the creation date of a file
+     */
     private func getFileDate(for file: URL) -> Date {
         if let attributes = try? FileManager.default.attributesOfItem(atPath: file.path) as [FileAttributeKey: Any],
            let creationDate = attributes[FileAttributeKey.creationDate] as? Date {
