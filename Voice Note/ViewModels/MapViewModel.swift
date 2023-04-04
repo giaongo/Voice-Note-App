@@ -10,11 +10,6 @@ import SwiftUI
 import CoreLocation
 
 
-enum MapDetails {
-    static let startingLocation = CLLocationCoordinate2D(latitude: 60.192, longitude: 24.945)
-    static let defaultSpan = MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
-}
-
 class MapViewModel:NSObject, ObservableObject, CLLocationManagerDelegate {
         
     @Published var mapView = MKMapView()
@@ -33,8 +28,6 @@ class MapViewModel:NSObject, ObservableObject, CLLocationManagerDelegate {
     //SearchText...
     @Published var searchText = ""
     
-    //Searched places
-    @Published var places: [Place] = []
     
     //Update Map Type...
     func updateMapType() {
@@ -58,7 +51,6 @@ class MapViewModel:NSObject, ObservableObject, CLLocationManagerDelegate {
     //Search Places...
     func searchQuery() {
         
-        places.removeAll()
         
         let request = MKLocalSearch.Request()
         request.naturalLanguageQuery = searchText
@@ -66,11 +58,8 @@ class MapViewModel:NSObject, ObservableObject, CLLocationManagerDelegate {
         //Fetch...
         MKLocalSearch(request: request).start { (response, _) in
             
-            guard let result = response else {return} 
+            guard response != nil else {return} 
             
-            self.places = result.mapItems.compactMap({  (item) -> Place? in
-                return Place(place: item.placemark)
-            })
         }
     }
     
