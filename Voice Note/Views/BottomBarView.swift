@@ -8,65 +8,65 @@
 import SwiftUI
 
 struct BottomBarView: View {
-    @Binding var message: String
-    @StateObject var voiceNoteViewModel = VoiceNoteViewModel()
-    @ObservedObject var speechRecognizer: SpeechRecognizer
+    @EnvironmentObject var voiceNoteViewModel: VoiceNoteViewModel
+    @EnvironmentObject var speechRecognizer: SpeechRecognizer
+    @Binding var showSheet:Bool
+    
     let buttonColor = #colorLiteral(red: 0.1764705926, green: 0.01176470611, blue: 0.5607843399, alpha: 1)
     
     var body: some View {
-        VStack {
-            HStack {
-                Spacer()
-                Button {
-                    print("Home pressed")
-                } label: {
-                    VStack {
-                        Image(systemName: "house")
-                            .font(.system(size: 25))
-                            .foregroundColor(Color(buttonColor))
-                    }
-                }
-                
-                Spacer()
-                Spacer()
-                
-                Button {
-                    clickAudioButton()
-                } label: {
-                    Image(systemName: "\(voiceNoteViewModel.isRecording ? "mic" : "mic.fill")")
-                        .font(.system(size: 30))
-                        .foregroundColor(.white)
-                }
-                .padding(.all,20)
-                .background(
-                    Circle()
-                        .fill(Color(buttonColor))
-                )
-                .offset(y:-30)
-                Spacer()
-                Spacer()
-                
-                NavigationLink {
-                    RecordingListView()
-                } label: {
-                    VStack {
-                        Image(systemName: "list.dash")
-                            .font(.system(size: 25))
-                            .foregroundColor(Color(buttonColor))
-                            .padding(.bottom,3)
-                    }
-                    
-                }
-                Spacer()
-            }
-            .background(
+        HStack {
+            Spacer()
+            Button {
+                print("Home pressed")
+            } label: {
                 VStack {
-                    Divider()
-                    Spacer()
+                    Image(systemName: "house")
+                        .font(.system(size: 25))
+                        .foregroundColor(Color(buttonColor))
                 }
+            }
+            Spacer()
+            Spacer()
+            
+            Button {
+                clickAudioButton()
+            } label: {
+                Image(systemName: "\(voiceNoteViewModel.isRecording ? "square.fill" : "mic.fill")")
+                    .font(.system(size: 30))
+                    .foregroundColor(.white)
+            }
+            .padding(.all,20)
+            .background(
+                Circle()
+                    .fill(Color(buttonColor))
             )
-        .frame(height: 60)
+            .offset(y:-30)
+            
+            Spacer()
+            Spacer()
+            
+            NavigationLink {
+                RecordingListView()
+            } label: {
+                VStack {
+                    Image(systemName: "list.dash")
+                        .font(.system(size: 25))
+                        .foregroundColor(Color(buttonColor))
+                        .padding(.bottom,3)
+                }
+                
+            }
+            Spacer()
         }
+        .background(
+            VStack {
+                Divider()
+                    .overlay(.black)
+                Spacer()
+            }.background(.white)
+        )
+        .frame(height: 60)
     }
     
     
@@ -74,6 +74,9 @@ struct BottomBarView: View {
         voiceNoteViewModel.isRecording.toggle()
         print("Recording bool: \( voiceNoteViewModel.isRecording)")
         if voiceNoteViewModel.isRecording {
+            withAnimation {
+                showSheet.toggle()
+            }
             speechRecognizer.reset()
             speechRecognizer.transcriptionText = ""
             voiceNoteViewModel.startRecording()
@@ -88,3 +91,8 @@ struct BottomBarView: View {
     }
 }
 
+struct BottomBarView_Previews: PreviewProvider {
+    static var previews: some View {
+        BottomBarView(showSheet: .constant(false)).environmentObject(VoiceNoteViewModel()).environmentObject(SpeechRecognizer())
+    }
+}

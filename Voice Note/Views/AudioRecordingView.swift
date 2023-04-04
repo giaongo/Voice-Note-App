@@ -8,22 +8,22 @@
 import SwiftUI
 
 struct AudioRecordingView: View {
-    @State var message:String = ""
-    @StateObject var speechRecognizer = SpeechRecognizer()
+//    @EnvironmentObject var speechRecognizer: SpeechRecognizer
+    
     var body: some View {
-        ZStack {
-            Rectangle()
-                .fill(.white)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-            VStack() {
-                Text("Recording scene")
-                Spacer()
-                Text("Transcription message")
-                Text("\(speechRecognizer.transcriptionText)")
-                Spacer()
-                BottomBarView(message: $message, speechRecognizer: speechRecognizer)
-            }
-        }
+        Text("Hello World")
+//        ZStack {
+//            Rectangle()
+//                .fill(.white)
+//                .frame(maxWidth: .infinity, maxHeight: .infinity)
+//            VStack() {
+//                Text("Recording scene")
+//                Spacer()
+//                Text("Transcription message")
+//                Text("\(speechRecognizer.transcriptionText)")
+//                Spacer()
+//            }
+//        }
     }
     
 }
@@ -31,6 +31,7 @@ struct AudioRecordingView: View {
 
 struct AudioRecordingView_Previews: PreviewProvider {
     static var previews: some View {
+//        AudioRecordingView().environmentObject(SpeechRecognizer())
         AudioRecordingView()
     }
 }

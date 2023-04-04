@@ -8,20 +8,28 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State var showSheet:Bool = false
+    @State var increaseHeight: Bool = false
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
-            MapView()
+        VStack(spacing:0) {
+            Spacer()
+            if showSheet {
+                SlidingModalView()
+            }
+            BottomBarView(showSheet: $showSheet)
         }
-        .padding()
+        .background(
+            MapView()
+                .ignoresSafeArea()
+        )
+        
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        NavigationView {
+            ContentView().environmentObject(VoiceNoteViewModel()).environmentObject(SpeechRecognizer())
+        }
     }
 }

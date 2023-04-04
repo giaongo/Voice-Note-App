@@ -9,11 +9,14 @@ import SwiftUI
 
 @main
 struct Voice_NoteApp: App {
+    @StateObject var speechRecognizer = SpeechRecognizer()
+    @StateObject var voiceNoteViewModel = VoiceNoteViewModel()
+    
     var body: some Scene {
         WindowGroup {
             NavigationView {
-                AudioRecordingView()
-            }
+                ContentView()
+            }.environmentObject(speechRecognizer).environmentObject(voiceNoteViewModel)
         }
     }
 }

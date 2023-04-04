@@ -7,6 +7,10 @@ import SwiftUI
 struct MapView: View {
 
     var body: some View {
-        Text("Hello, from MapView!")
+        ZStack {
+            Color.yellow
+            Text("Hello, from MapView!")
+        }
+        
     }
 }
