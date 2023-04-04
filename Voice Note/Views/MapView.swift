@@ -8,19 +8,33 @@
 import SwiftUI
 import MapKit
 
-struct MapView: View {
-    @StateObject private var viewModel = MapViewModel()
-   
+struct MapView: UIViewRepresentable {
     
-    var body: some View {
-        ZStack{
-            Map(coordinateRegion: $viewModel.region, showsUserLocation: true, userTrackingMode: .constant(.follow))
-                .ignoresSafeArea()
-                .onAppear{
-                    viewModel.checkIfLocationServicesIsEnabled()
-                }
-        }
+    func updateUIView(_ uiView: UIViewType, context: Context) {
+        return
     }
+    
+    
+    @EnvironmentObject var mapData: MapViewModel
+    
+    func makeCoordinator() -> Coordinator {
+        return MapView.Coordinator()
+    }
+    
+    func makeUIView(context: Context) -> some UIView {
+        let view = mapData.mapView
+        
+        view.showsUserLocation = true
+        view.delegate = context.coordinator
+        
+        return view
+    }
+    
+    
+    class Coordinator: NSObject, MKMapViewDelegate {
+        
+    }
+    
 }
     
 struct MapView_Previews: PreviewProvider {

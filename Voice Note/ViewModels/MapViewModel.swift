@@ -6,7 +6,8 @@
 //
 
 import MapKit
-import Foundation
+import SwiftUI
+import CoreLocation
 
 
 enum MapDetails {
@@ -14,44 +15,101 @@ enum MapDetails {
     static let defaultSpan = MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
 }
 
-final class MapViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
-    
-    @Published var region = MKCoordinateRegion(center: MapDetails.startingLocation,
-                                               span: MapDetails.defaultSpan)
-    
-    private var locationManager = CLLocationManager()
-    
-    @Published var location: CLLocationCoordinate2D?
-    
-        func checkIfLocationServicesIsEnabled() {
-            if CLLocationManager.locationServicesEnabled(){
-                locationManager = CLLocationManager()
-                locationManager.desiredAccuracy = kCLLocationAccuracyBest
-                locationManager.delegate = self
-            } else {
-                //let them know they need to enable
-            }
-        }
+class MapViewModel:NSObject, ObservableObject, CLLocationManagerDelegate {
         
-        private func checkLocationAuthorization() {
+    @Published var mapView = MKMapView()
+    
+    //Region
+    @Published var region : MKCoordinateRegion!
+    //Based on Location it will set up..
+    
+    //Alert
+    @Published var permissionDenied = false
+    
+    
+    //Map type...
+    @Published var mapType: MKMapType = .standard
+    
+    //SearchText...
+    @Published var searchText = ""
+    
+    //Searched places
+    @Published var places: [Place] = []
+    
+    //Update Map Type...
+    func updateMapType() {
+        if mapType == .standard {
+            mapType = .hybrid
+            mapView.mapType = mapType
+        } else {
+            mapType = .standard
+            mapView.mapType = mapType
+        }
+    }
+    
+    //Focus Location...
+    func focusLocation() {
+        guard let _ = region else {return}
+        
+        mapView.setRegion(region, animated: true)
+        mapView.setVisibleMapRect(mapView.visibleMapRect, animated: true)
+    }
+    
+    //Search Places...
+    func searchQuery() {
+        
+        places.removeAll()
+        
+        let request = MKLocalSearch.Request()
+        request.naturalLanguageQuery = searchText
+        
+        //Fetch...
+        MKLocalSearch(request: request).start { (response, _) in
             
-            switch locationManager.authorizationStatus {
-                
-                case .notDetermined:
-                    locationManager.requestWhenInUseAuthorization()
-                case .restricted:
-                    print("Your location is restricted likely due to parental controls")
-                case .denied:
-                    print("Your location is restricted likely due to parental controls")
-                case .authorizedAlways, .authorizedWhenInUse:
-                region = MKCoordinateRegion(center: locationManager.location!.coordinate,
-                                            span: MapDetails.defaultSpan)
-                @unknown default:
-                    break
-                }
+            guard let result = response else {return} 
+            
+            self.places = result.mapItems.compactMap({  (item) -> Place? in
+                return Place(place: item.placemark)
+            })
         }
+    }
+    
+ 
+    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        //Check with permission
+        switch manager.authorizationStatus {
+            
+        case .notDetermined:
+            //Requesting
+            manager.requestWhenInUseAuthorization()
+        case .authorizedWhenInUse:
+            //If Permission given
+            manager.requestLocation()
+        case .denied:
+            //Alert
+            permissionDenied.toggle()
+        case .restricted,.authorizedAlways:
+            print("Permission is restricted")
+        @unknown default:
+            ()
+        }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print(error.localizedDescription)
+    }
+    
+    //Getting user region
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        guard let location = locations.last else {return}
         
-        func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-            checkLocationAuthorization()
-        }
+        self.region = MKCoordinateRegion(center: location.coordinate, latitudinalMeters: 5000, longitudinalMeters: 5000)
+        
+        //Updating Map...
+        self.mapView.setRegion(self.region, animated: true)
+        
+        //Smooth Animations...
+        self.mapView.setVisibleMapRect(self.mapView.visibleMapRect, animated: true)
+    }
 }
