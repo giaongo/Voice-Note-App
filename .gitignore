@@ -1,0 +1,35 @@
+.DS_Store
+.Trashes
+*.swp
+*~.nib
+*.lock
+profile
+DerivedData/
+build/
+*.pbxuser
+*.mode1v3
+*.mode2v3
+!default.pbxuser
+!default.mode1v3
+!default.mode2v3
+!default.perspectivev3
+*.xccheckout
+xcuserdata/
+*.moved-aside
+.idea/
+*.xcworkspace
+!default.xcworkspace
+
+
+
+## Obj-C/Swift specific
+*.hmap
+
+## App packaging
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+## Playgrounds
+timeline.xctimeline
+playground.xcworkspace
