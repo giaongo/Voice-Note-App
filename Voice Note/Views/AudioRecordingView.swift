@@ -1,15 +1,10 @@
-//
-//  AudioRecordingView.swift
-//  Voice Note
-//
-//  Created by Giao Ngo on 31.3.2023.
-//
-
 import SwiftUI
 
 struct AudioRecordingView: View {
-    @State var message:String = ""
+    @State var message: String = ""
     @StateObject var speechRecognizer = SpeechRecognizer()
+    @ObservedObject var voiceNoteViewModel = VoiceNoteViewModel()
+    
     var body: some View {
         ZStack {
             Rectangle()
@@ -21,13 +16,11 @@ struct AudioRecordingView: View {
                 Text("Transcription message")
                 Text("\(speechRecognizer.transcriptionText)")
                 Spacer()
-                BottomBarView(message: $message, speechRecognizer: speechRecognizer)
+                BottomBarView(message: $message, speechRecognizer: speechRecognizer, voiceNoteViewModel: voiceNoteViewModel)
             }
         }
     }
-    
 }
-
 
 struct AudioRecordingView_Previews: PreviewProvider {
     static var previews: some View {

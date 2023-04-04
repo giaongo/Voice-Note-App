@@ -1,10 +1,3 @@
-//
-//  SpeechRecognizer.swift
-//  Voice Note
-//
-//  Created by Giao Ngo on 31.3.2023.
-//
-
 import Foundation
 import AVFoundation
 import Speech
@@ -18,29 +11,32 @@ class SpeechRecognizer: ObservableObject {
     
     init() {
         recognizer = SFSpeechRecognizer()
-        Task(priority: .background) {
-            do {
-                guard recognizer != nil else {
-                    throw RecognizeError.nilRecognizer
-                }
-                guard await SFSpeechRecognizer.hasAuthorizationToRecognize() else {
-                    throw RecognizeError.notAuthorizedToRecognize
-                }
-                guard await AVAudioSession.sharedInstance().hasPermissionToRecord() else {
-                    throw RecognizeError.notPermittedToRecord
-                }
-            } catch {
-                displayError(error)
-            }
-        }
+        checkAuthorizationStatus()
     }
     
     deinit {
         reset()
     }
-    /**
-     This displays error message handling
-     */
+    
+    private func checkAuthorizationStatus() {
+        SFSpeechRecognizer.requestAuthorization { authStatus in
+            OperationQueue.main.addOperation {
+                switch authStatus {
+                case .authorized:
+                    AVAudioSession.sharedInstance().requestRecordPermission { allowed in
+                        DispatchQueue.main.async {
+                            if !allowed {
+                                self.displayError(RecognizeError.notPermittedToRecord)
+                            }
+                        }
+                    }
+                default:
+                    self.displayError(RecognizeError.notAuthorizedToRecognize)
+                }
+            }
+        }
+    }
+    
     private func displayError(_ error: Error) {
         var errorMessage: String = ""
         if let error = error as? RecognizeError {
@@ -73,10 +69,6 @@ class SpeechRecognizer: ObservableObject {
         }
     }
     
-    
-    /**
-     This stops transcription
-     */
     func stopTranscribing () {
         reset()
     }
@@ -84,25 +76,5 @@ class SpeechRecognizer: ObservableObject {
     func reset() {
         task?.cancel()
         task = nil
-    }
-}
-
-extension SFSpeechRecognizer {
-    static func hasAuthorizationToRecognize() async -> Bool {
-        await withCheckedContinuation({ continuation in
-            requestAuthorization { status in
-                continuation.resume(returning: status == .authorized)
-            }
-        })
-    }
-}
-
-extension AVAudioSession {
-    func hasPermissionToRecord() async -> Bool {
-        await withCheckedContinuation({ continuation in
-            requestRecordPermission { granted in
-                continuation.resume(returning: granted)
-            }
-        })
     }
 }

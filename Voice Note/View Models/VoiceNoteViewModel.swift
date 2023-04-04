@@ -1,22 +1,19 @@
-//
-// Created by Anwar Ulhaq on 1.4.2023, developed by Giao Ngo
-// 
-//
-
 import Foundation
 import AVFoundation
 
-class VoiceNoteViewModel: ObservableObject{
+class VoiceNoteViewModel: ObservableObject {
     private var audioRecorder: AVAudioRecorder?
     private var audioPlayer: AVAudioPlayer?
+    private var recordingPausedAt: TimeInterval = 0
     
     @Published var isRecording: Bool = false
     @Published var recordingList = [Recording]()
     @Published var fileUrlList = [URL]()
     
-    init () {
+    init() {
         self.fetchAllRecordings()
     }
+    
     func startRecording() {
         let recordingSession = AVAudioSession.sharedInstance()
         do {
@@ -50,8 +47,22 @@ class VoiceNoteViewModel: ObservableObject{
         }
     }
     
+    func pauseRecording() {
+        guard let recorder = audioRecorder else { return }
+        recordingPausedAt = recorder.currentTime
+        recorder.pause()
+        objectWillChange.send()
+    }
+    
+    func resumeRecording() {
+        guard let recorder = audioRecorder else { return }
+        recorder.record(atTime: recordingPausedAt)
+        objectWillChange.send()
+    }
+    
     func stopRecording() {
         audioRecorder?.stop()
+        objectWillChange.send()
     }
     
     private func fetchAllRecordings() {
@@ -59,7 +70,7 @@ class VoiceNoteViewModel: ObservableObject{
         do {
             let recordingsContent = try FileManager.default.contentsOfDirectory(at: path, includingPropertiesForKeys: nil)
             for url in recordingsContent {
-                recordingList.append(Recording(fileUrl: url, createdAt: getFileDate(for: url), isPlaying: false))
+                recordingList.append(Recording(fileUrl: url, createdAt: getFileDate(for: url), isPlaying: false, duration: getDuration(for: url)))
             }
         } catch {
             print("Error fetching all recordings \(error.localizedDescription)")
@@ -73,5 +84,12 @@ class VoiceNoteViewModel: ObservableObject{
         } else {
             return Date()
         }
+    }
+    
+    private func getDuration(for file: URL) -> TimeInterval {
+        guard let player = try? AVAudioPlayer(contentsOf: file) else {
+            return 0
+        }
+        return player.duration
     }
 }

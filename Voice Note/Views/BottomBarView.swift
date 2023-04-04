@@ -1,17 +1,10 @@
-//
-//  BottomBarView.swift
-//  Voice Note
-//
-//  Created by Giao Ngo on 2.4.2023.
-//
-
 import SwiftUI
 
 struct BottomBarView: View {
     @Binding var message: String
-    @StateObject var voiceNoteViewModel = VoiceNoteViewModel()
+    @ObservedObject var voiceNoteViewModel: VoiceNoteViewModel
     @ObservedObject var speechRecognizer: SpeechRecognizer
-    let buttonColor = #colorLiteral(red: 0.1764705926, green: 0.01176470611, blue: 0.5607843399, alpha: 1)
+    let buttonColor = Color(#colorLiteral(red: 0.1764705926, green: 0.01176470611, blue: 0.5607843399, alpha: 1))
     
     var body: some View {
         VStack {
@@ -23,7 +16,7 @@ struct BottomBarView: View {
                     VStack {
                         Image(systemName: "house")
                             .font(.system(size: 25))
-                            .foregroundColor(Color(buttonColor))
+                            .foregroundColor(buttonColor)
                     }
                 }
                 
@@ -40,10 +33,30 @@ struct BottomBarView: View {
                 .padding(.all,20)
                 .background(
                     Circle()
-                        .fill(Color(buttonColor))
+                        .fill(buttonColor)
                 )
                 .offset(y:-30)
                 Spacer()
+                Spacer()
+                
+                Button(action: {
+                    if voiceNoteViewModel.isRecording {
+                        voiceNoteViewModel.pauseRecording()
+                    } else if voiceNoteViewModel.recordingPaused {
+                        voiceNoteViewModel.resumeRecording()
+                    }
+                }, label: {
+                    Image(systemName: "\(voiceNoteViewModel.recordingPaused ? "play.fill" : "pause.fill")")
+                        .font(.system(size: 30))
+                        .foregroundColor(.white)
+                })
+                .padding(.all,20)
+                .background(
+                    Circle()
+                        .fill(buttonColor)
+                )
+                .offset(y:-30)
+                
                 Spacer()
                 
                 NavigationLink {
@@ -52,7 +65,7 @@ struct BottomBarView: View {
                     VStack {
                         Image(systemName: "list.dash")
                             .font(.system(size: 25))
-                            .foregroundColor(Color(buttonColor))
+                            .foregroundColor(buttonColor)
                             .padding(.bottom,3)
                     }
                     
@@ -65,26 +78,21 @@ struct BottomBarView: View {
                     Spacer()
                 }
             )
-        .frame(height: 60)
+            .frame(height: 60)
         }
     }
     
-    
     private func clickAudioButton() {
         voiceNoteViewModel.isRecording.toggle()
-        print("Recording bool: \( voiceNoteViewModel.isRecording)")
         if voiceNoteViewModel.isRecording {
+            voiceNoteViewModel.startRecording()
             speechRecognizer.reset()
             speechRecognizer.transcriptionText = ""
-            voiceNoteViewModel.startRecording()
-            
         } else {
             voiceNoteViewModel.stopRecording()
             if let newestRecordUrl = voiceNoteViewModel.fileUrlList.last {
-                print("NewesrRecordUrl is \(newestRecordUrl)")
                 speechRecognizer.transcribeFile(from: newestRecordUrl)
             }
         }
     }
 }
-
