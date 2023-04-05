@@ -16,7 +16,7 @@ struct AudioRecordingView: View {
                 Text("Transcription message")
                 Text("\(speechRecognizer.transcriptionText)")
                 Spacer()
-                BottomBarView(message: $message, speechRecognizer: speechRecognizer, voiceNoteViewModel: voiceNoteViewModel)
+                BottomBarView(message: $message, voiceNoteViewModel: voiceNoteViewModel, speechRecognizer: speechRecognizer)
             }
         }
     }

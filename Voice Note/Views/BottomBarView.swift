@@ -26,7 +26,7 @@ struct BottomBarView: View {
                 Button {
                     clickAudioButton()
                 } label: {
-                    Image(systemName: "\(voiceNoteViewModel.isRecording ? "mic" : "mic.fill")")
+                    Image(systemName: "\(voiceNoteViewModel.isRecording ? "stop.fill" : "mic.fill")")
                         .font(.system(size: 30))
                         .foregroundColor(.white)
                 }
@@ -40,16 +40,16 @@ struct BottomBarView: View {
                 Spacer()
                 
                 Button(action: {
-                    if voiceNoteViewModel.isRecording {
-                        voiceNoteViewModel.pauseRecording()
-                    } else if voiceNoteViewModel.recordingPaused {
+                    if voiceNoteViewModel.isRecordingPaused {
                         voiceNoteViewModel.resumeRecording()
+                    } else {
+                        voiceNoteViewModel.pauseRecording()
                     }
                 }, label: {
-                    Image(systemName: "\(voiceNoteViewModel.recordingPaused ? "play.fill" : "pause.fill")")
+                    Image(systemName: "\(voiceNoteViewModel.isRecordingPaused ? "play.fill" : "pause.fill")")
                         .font(.system(size: 30))
                         .foregroundColor(.white)
-                })
+                }).disabled(!voiceNoteViewModel.isRecording)
                 .padding(.all,20)
                 .background(
                     Circle()
@@ -70,7 +70,6 @@ struct BottomBarView: View {
                     }
                     
                 }
-                Spacer()
             }
             .background(
                 VStack {

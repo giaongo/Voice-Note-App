@@ -7,6 +7,7 @@ class VoiceNoteViewModel: ObservableObject {
     private var recordingPausedAt: TimeInterval = 0
     
     @Published var isRecording: Bool = false
+    @Published var isRecordingPaused: Bool = false
     @Published var recordingList = [Recording]()
     @Published var fileUrlList = [URL]()
     
@@ -41,7 +42,7 @@ class VoiceNoteViewModel: ObservableObject {
             audioRecorder = try AVAudioRecorder(url: audioFileName, settings: settings)
             audioRecorder?.prepareToRecord()
             audioRecorder?.record()
-            
+            isRecording = true
         } catch {
             print("Error Setting Up Recorder \(error.localizedDescription)")
         }
@@ -50,18 +51,22 @@ class VoiceNoteViewModel: ObservableObject {
     func pauseRecording() {
         guard let recorder = audioRecorder else { return }
         recordingPausedAt = recorder.currentTime
+        isRecordingPaused = true
         recorder.pause()
         objectWillChange.send()
     }
     
     func resumeRecording() {
         guard let recorder = audioRecorder else { return }
+        isRecordingPaused = false
         recorder.record(atTime: recordingPausedAt)
         objectWillChange.send()
     }
     
     func stopRecording() {
         audioRecorder?.stop()
+        isRecording = false
+        isRecordingPaused = false
         objectWillChange.send()
     }
     
