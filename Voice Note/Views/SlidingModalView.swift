@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct SlidingModalView: View {
+    @EnvironmentObject var voiceNoteViewModel: VoiceNoteViewModel
     var body: some View {
         ZStack {
             Rectangle()
@@ -15,9 +16,14 @@ struct SlidingModalView: View {
                 .frame(width: UIScreen.main.bounds.width,height: UIScreen.main.bounds.height * 0.4)
                 .transition(.move(edge: .bottom))
                 .cornerRadius(40, corners: [.topLeft, .topRight])
-            AudioRecordingView()
+            if voiceNoteViewModel.isRecording {
+                AudioRecordingView()
+            } else {
+                AudioConfirmationView().animation(.easeInOut, value: voiceNoteViewModel.isRecording)
+            }
+            
         }
-
+        
     }
 }
 

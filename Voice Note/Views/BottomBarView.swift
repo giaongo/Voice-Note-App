@@ -18,7 +18,7 @@ struct BottomBarView: View {
         HStack {
             Spacer()
             Button {
-                print("Home pressed")
+                showSheet = false
             } label: {
                 VStack {
                     Image(systemName: "house")
