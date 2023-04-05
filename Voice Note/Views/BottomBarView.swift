@@ -75,7 +75,7 @@ struct BottomBarView: View {
         print("Recording bool: \( voiceNoteViewModel.isRecording)")
         if voiceNoteViewModel.isRecording {
             withAnimation {
-                showSheet.toggle()
+                showSheet = true
             }
             speechRecognizer.reset()
             speechRecognizer.transcriptionText = ""
@@ -93,6 +93,6 @@ struct BottomBarView: View {
 
 struct BottomBarView_Previews: PreviewProvider {
     static var previews: some View {
-        BottomBarView(showSheet: .constant(false)).environmentObject(VoiceNoteViewModel()).environmentObject(SpeechRecognizer())
+        BottomBarView(showSheet: .constant(false)).environmentObject(VoiceNoteViewModel(numberOfSample: samples)).environmentObject(SpeechRecognizer())
     }
 }

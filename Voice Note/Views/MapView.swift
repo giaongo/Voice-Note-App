@@ -8,7 +8,7 @@ struct MapView: View {
 
     var body: some View {
         ZStack {
-            Color.yellow
+            Color.orange
             Text("Hello, from MapView!")
         }
         

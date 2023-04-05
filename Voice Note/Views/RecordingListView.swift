@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct RecordingListView: View {
-    @ObservedObject var voiceNoteViewModel = VoiceNoteViewModel()
+    @EnvironmentObject var voiceNoteViewModel:VoiceNoteViewModel
     var body: some View {
         VStack {
             Text("Recordings: \(voiceNoteViewModel.recordingList.count)")
@@ -26,6 +26,6 @@ struct RecordingListView: View {
 
 struct RecordingListView_Previews: PreviewProvider {
     static var previews: some View {
-        RecordingListView()
+        RecordingListView().environmentObject(VoiceNoteViewModel(numberOfSample: samples))
     }
 }

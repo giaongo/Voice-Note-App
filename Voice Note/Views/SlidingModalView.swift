@@ -9,11 +9,15 @@ import SwiftUI
 
 struct SlidingModalView: View {
     var body: some View {
-        Rectangle()
-            .fill(Color.white)
-            .frame(width: UIScreen.main.bounds.width,height: UIScreen.main.bounds.height * 0.4)
-            .transition(.move(edge: .bottom))
-            .cornerRadius(40, corners: [.topLeft, .topRight])
+        ZStack {
+            Rectangle()
+                .fill(Color.white)
+                .frame(width: UIScreen.main.bounds.width,height: UIScreen.main.bounds.height * 0.4)
+                .transition(.move(edge: .bottom))
+                .cornerRadius(40, corners: [.topLeft, .topRight])
+            AudioRecordingView()
+        }
+
     }
 }
 

@@ -7,11 +7,12 @@
 
 import SwiftUI
 
+let samples = 10
 @main
 struct Voice_NoteApp: App {
     @StateObject var speechRecognizer = SpeechRecognizer()
-    @StateObject var voiceNoteViewModel = VoiceNoteViewModel()
-    
+    @StateObject var voiceNoteViewModel = VoiceNoteViewModel(numberOfSample: samples)
+
     var body: some Scene {
         WindowGroup {
             NavigationView {
