@@ -21,7 +21,6 @@ struct BottomBarView: View {
                 }
                 
                 Spacer()
-                Spacer()
                 
                 Button {
                     clickAudioButton()
@@ -36,7 +35,6 @@ struct BottomBarView: View {
                         .fill(buttonColor)
                 )
                 .offset(y:-30)
-                Spacer()
                 Spacer()
                 
                 Button(action: {
@@ -70,6 +68,7 @@ struct BottomBarView: View {
                     }
                     
                 }
+                Spacer()
             }
             .background(
                 VStack {
