@@ -19,7 +19,7 @@ struct ContentView: View {
             BottomBarView(showSheet: $showSheet)
         }
         .background(
-            MapView()
+            Home()
                 .ignoresSafeArea()
         )
         

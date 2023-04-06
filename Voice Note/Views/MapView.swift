@@ -20,7 +20,7 @@ struct MapView: UIViewRepresentable {
     func makeCoordinator() -> Coordinator {
         return MapView.Coordinator()
     }
-
+    
     func makeUIView(context: Context) -> some UIView {
         let view = mapData.mapView
 
@@ -39,6 +39,6 @@ struct MapView: UIViewRepresentable {
 
 struct MapView_Previews: PreviewProvider {
     static var previews: some View {
-        MapView()
+        MapView().environmentObject(MapViewModel())
     }
 }
