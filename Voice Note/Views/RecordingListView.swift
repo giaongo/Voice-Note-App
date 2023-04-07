@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import CoreLocation
 
 struct RecordingListView: View {
     @EnvironmentObject var voiceNoteViewModel:VoiceNoteViewModel
@@ -21,7 +22,7 @@ struct RecordingListView: View {
                                     noteDuration: TimeDuration(size: 3765),
                                     noteCreatedAt: Date.init(),
                                     noteTakenNear: "Ruoholahti",
-                                    voiceNoteLocation: NoteLocation(lat: 24.33, lon: 33.56)
+                                    voiceNoteLocation: CLLocation(latitude: 24.33, longitude: 33.56)
                     ))
                 }
                 }

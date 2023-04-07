@@ -3,6 +3,7 @@
 //
 
 import Foundation
+import CoreLocation
 
 //
 struct VoiceNote: Identifiable/*, Decodable, Codable*/ {
@@ -14,9 +15,9 @@ struct VoiceNote: Identifiable/*, Decodable, Codable*/ {
     //let fileUrl: URL
     let createdAt: Date
     //var isPlaying: Bool
-    var location: NoteLocation
+    var location: CLLocation
 
-    init(noteId id: UUID, noteTitle title: String, noteText text: String, noteDuration duration: TimeDuration, noteCreatedAt createdAt: Date, noteTakenNear near: String, voiceNoteLocation location: NoteLocation) {
+    init(noteId id: UUID, noteTitle title: String, noteText text: String, noteDuration duration: TimeDuration, noteCreatedAt createdAt: Date, noteTakenNear near: String, voiceNoteLocation location: CLLocation) {
         self.id = id
         self.title = title
         self.text = text
