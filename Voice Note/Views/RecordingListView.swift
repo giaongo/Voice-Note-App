@@ -6,21 +6,27 @@
 //
 
 import SwiftUI
+import CoreLocation
 
 struct RecordingListView: View {
     @EnvironmentObject var voiceNoteViewModel:VoiceNoteViewModel
     var body: some View {
-        VStack {
-            Text("Recordings: \(voiceNoteViewModel.recordingList.count)")
-            Spacer()
-            ForEach(voiceNoteViewModel.recordingList, id: \.createdAt) { recording in
-                VStack {
-                    Text("Recording file is: \(recording.fileUrl.lastPathComponent)")
+        NavigationStack {
+            List {
+                ForEach(voiceNoteViewModel.recordingList) { recording in
+                    ListItem (
+                            voiceNote: VoiceNote(
+                                    noteId: recording.id,
+                                    noteTitle: "Note - \(recording.id)",
+                                    noteText: "Rekjh falk sdlfka hsldkj fhkasdh lkfsd",
+                                    noteDuration: TimeDuration(size: 3765),
+                                    noteCreatedAt: Date.init(),
+                                    noteTakenNear: "Ruoholahti",
+                                    voiceNoteLocation: CLLocation(latitude: 24.33, longitude: 33.56)
+                    ))
                 }
-            }
-            
-        }
-        
+                }
+        }.navigationBarTitle("My Voice Notes")
     }
 }
 

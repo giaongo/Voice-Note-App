@@ -80,7 +80,7 @@ class VoiceNoteViewModel: ObservableObject{
         do {
             let recordingsContent = try FileManager.default.contentsOfDirectory(at: path, includingPropertiesForKeys: nil)
             for url in recordingsContent {
-                recordingList.append(Recording(fileUrl: url, createdAt: getFileDate(for: url), isPlaying: false))
+                recordingList.append(Recording(id: UUID(), fileUrl: url, createdAt: getFileDate(for: url), isPlaying: false))
             }
         } catch {
             print("Error fetching all recordings \(error.localizedDescription)")
