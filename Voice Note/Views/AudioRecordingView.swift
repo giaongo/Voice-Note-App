@@ -34,6 +34,6 @@ extension VoiceNoteViewModel {
 
 struct AudioRecordingView_Previews: PreviewProvider {
     static var previews: some View {
-        AudioRecordingView().environmentObject(VoiceNoteViewModel(numberOfSample: samples))
+        AudioRecordingView().environmentObject(VoiceNoteViewModel())
     }
 }

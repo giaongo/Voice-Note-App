@@ -32,6 +32,6 @@ struct RecordingListView: View {
 
 struct RecordingListView_Previews: PreviewProvider {
     static var previews: some View {
-        RecordingListView().environmentObject(VoiceNoteViewModel(numberOfSample: samples))
+        RecordingListView().environmentObject(VoiceNoteViewModel())
     }
 }
