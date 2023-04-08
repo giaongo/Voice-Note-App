@@ -12,6 +12,8 @@ struct Home: View {
     @StateObject var mapData = MapViewModel()
     //Location Manager...
     @State var locationManager = CLLocationManager()
+    let buttonColor = #colorLiteral(red: 0.1764705926, green: 0.01176470611, blue: 0.5607843399, alpha: 1)
+
     var body: some View {
         ZStack{
             
@@ -21,17 +23,8 @@ struct Home: View {
                 .ignoresSafeArea(.all, edges: .all)
             
             VStack {
-                HStack {
-                    Image(systemName: "magnifyingglass")
-                        .foregroundColor(.gray)
-                    
-                    TextField("Search", text: $mapData.searchText)
-                    
-                }
-                .padding(.vertical, 10)
-                .padding(.horizontal)
-                .background(Color.white)
-                .padding()
+                
+                SearchOptionsBar(searchQuery: $mapData.searchText)
                 
                 Spacer()
                 
@@ -42,6 +35,7 @@ struct Home: View {
                             .font(.title2)
                             .padding(10)
                             .clipShape(Circle())
+                            .foregroundColor(Color(buttonColor))
                     })
                     
                     Button(action: mapData.updateMapType, label: {
@@ -50,9 +44,11 @@ struct Home: View {
                             .font(.title2)
                             .padding(10)
                             .clipShape(Circle())
+                            .foregroundColor(Color(buttonColor))
                     })
                 }
                 .frame(maxWidth: .infinity, alignment: .trailing)
+                .padding(.bottom, 100)
             }
         }
         .onAppear(perform: {

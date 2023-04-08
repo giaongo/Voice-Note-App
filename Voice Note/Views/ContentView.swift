@@ -20,7 +20,6 @@ struct ContentView: View {
         }
         .background(
             Home()
-                .ignoresSafeArea()
         )
         
     }
