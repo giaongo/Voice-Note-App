@@ -11,7 +11,7 @@ struct BottomBarView: View {
     @EnvironmentObject var voiceNoteViewModel: VoiceNoteViewModel
     @EnvironmentObject var speechRecognizer: SpeechRecognizer
     @Binding var showSheet:Bool
-
+    
     let buttonColor = #colorLiteral(red: 0.1764705926, green: 0.01176470611, blue: 0.5607843399, alpha: 1)
     
     var body: some View {
@@ -27,9 +27,9 @@ struct BottomBarView: View {
                             .foregroundColor(Color(buttonColor))
                     }
                 }
-
+                
                 Spacer()
-
+                
                 Button {
                     clickAudioButton()
                 } label: {
@@ -44,7 +44,7 @@ struct BottomBarView: View {
                 )
                 .offset(y:-30)
                 Spacer()
-
+                
                 Button(action: {
                     if voiceNoteViewModel.isRecordingPaused {
                         voiceNoteViewModel.resumeRecording()
@@ -55,16 +55,18 @@ struct BottomBarView: View {
                     Image(systemName: "\(voiceNoteViewModel.isRecordingPaused ? "play.fill" : "pause.fill")")
                         .font(.system(size: 30))
                         .foregroundColor(.white)
-                }).disabled(!voiceNoteViewModel.isRecording)
+                }).disabled(!voiceNoteViewModel.isRecording || !voiceNoteViewModel.isMicPressed)
                 .padding(.all,20)
                 .background(
                     Circle()
                         .fill(Color(buttonColor))
                 )
                 .offset(y:-30)
+                .opacity(voiceNoteViewModel.isMicPressed ? 1.0 : 0.0) // Add this line to control the opacity
 
+                
                 Spacer()
-
+                
                 NavigationLink {
                     RecordingListView()
                 } label: {
@@ -74,23 +76,24 @@ struct BottomBarView: View {
                             .foregroundColor(Color(buttonColor))
                             .padding(.bottom,3)
                     }
-
+                    
                 }
                 Spacer()
             }
             .background(
-                    VStack {
-                        Divider()
-                                .overlay(.black)
-                        Spacer()
-                    }.background(.white)
+                VStack {
+                    Divider()
+                        .overlay(.black)
+                    Spacer()
+                }.background(.white)
             )
             .frame(height: 60)
         }
     }
-
+    
     private func clickAudioButton() {
         voiceNoteViewModel.isRecording.toggle()
+        voiceNoteViewModel.isMicPressed.toggle()
         print("Recording bool: \( voiceNoteViewModel.isRecording)")
         if voiceNoteViewModel.isRecording {
             withAnimation {
@@ -99,7 +102,6 @@ struct BottomBarView: View {
             speechRecognizer.reset()
             speechRecognizer.transcriptionText = ""
             voiceNoteViewModel.startRecording()
-            
         } else {
             voiceNoteViewModel.stopRecording()
             if let newestRecordUrl = voiceNoteViewModel.fileUrlList.last {
@@ -109,7 +111,6 @@ struct BottomBarView: View {
         }
     }
 }
-
 struct BottomBarView_Previews: PreviewProvider {
     static var previews: some View {
         BottomBarView(showSheet: .constant(false)).environmentObject(VoiceNoteViewModel(numberOfSample: samples)).environmentObject(SpeechRecognizer())
