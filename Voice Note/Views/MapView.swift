@@ -1,12 +1,44 @@
 //
-// Created by Anwar Ulhaq on 1.4.2023.
+//  MapView.swift
+//  Voice Note
+//
+//  Created by Tai Nguyen on 2.4.2023.
 //
 
 import SwiftUI
+import MapKit
 
-struct MapView: View {
+struct MapView: UIViewRepresentable {
 
-    var body: some View {
-        Text("Hello, from MapView!")
+    func updateUIView(_ uiView: UIViewType, context: Context) {
+        return
+    }
+
+
+    @EnvironmentObject var mapData: MapViewModel
+
+    func makeCoordinator() -> Coordinator {
+        return MapView.Coordinator()
+    }
+    
+    func makeUIView(context: Context) -> some UIView {
+        let view = mapData.mapView
+
+        view.showsUserLocation = true
+        view.delegate = context.coordinator
+
+        return view
+    }
+
+
+    class Coordinator: NSObject, MKMapViewDelegate {
+
+    }
+
+}
+
+struct MapView_Previews: PreviewProvider {
+    static var previews: some View {
+        MapView().environmentObject(MapViewModel())
     }
 }
