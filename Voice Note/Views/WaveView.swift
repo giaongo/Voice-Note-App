@@ -9,7 +9,7 @@ import SwiftUI
 
 struct WaveView: View {
     let topWaveColor = #colorLiteral(red: 0.1215686277, green: 0.01176470611, blue: 0.4235294163, alpha: 1)
-    let bottomWaveColor = #colorLiteral(red: 0.5568627715, green: 0.3529411852, blue: 0.9686274529, alpha: 0.4897902533)
+    let bottomWaveColor = #colorLiteral(red: 0.3236978054, green: 0.1063579395, blue: 0.574860394, alpha: 0.7069759748)
     
     var value: CGFloat
     var body: some View {

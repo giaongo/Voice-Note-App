@@ -145,5 +145,35 @@ class VoiceNoteViewModel: ObservableObject {
     private func disableMicriphoneMonitoring() {
         timer?.invalidate()
     }
+    
+    func startPlaying (recordingUrl:URL) {
+            let audioPlayingSession = AVAudioSession.sharedInstance()
+            do {
+                try audioPlayingSession.overrideOutputAudioPort(AVAudioSession.PortOverride.speaker)
+                audioPlayer = try AVAudioPlayer(contentsOf: recordingUrl)
+                if let audioPlayer = audioPlayer {
+                    audioPlayer.prepareToPlay()
+                    audioPlayer.play()
+                }
+                var foundRecording = recordingList.filter { recording in
+                    recording.fileUrl == recordingUrl
+                }
+                for i in 0..<foundRecording.count {
+                    if foundRecording[i].fileUrl == recordingUrl {
+                        foundRecording[i].isPlaying = true
+                    }
+                }
+            } catch {
+                print("Error playing recording \(error.localizedDescription)")
+            }
+        }
+
+        func stopPlaying(recordingUrl: URL) {
+            audioPlayer?.stop()
+            var foundRecording = recordingList.filter { recording in
+                recording.fileUrl == recordingUrl
+            }
+            foundRecording[0].isPlaying = true
+        }
 
 }
