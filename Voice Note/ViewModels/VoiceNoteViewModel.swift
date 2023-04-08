@@ -25,6 +25,7 @@ class VoiceNoteViewModel: NSObject, ObservableObject, AVAudioPlayerDelegate {
     @Published var isMicPressed: Bool = false
     @Published var soundSamples: [Float] = [Float](repeating:.zero, count: VoiceNoteViewModel.numberOfSample)
     @Published var audioIsPlaying:Bool = false
+    @Published var confirmTheVoiceNote: Bool = false
     
     override init () {
         super.init()

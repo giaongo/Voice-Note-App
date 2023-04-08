@@ -11,7 +11,7 @@ struct BottomBarView: View {
     @EnvironmentObject var voiceNoteViewModel: VoiceNoteViewModel
     @EnvironmentObject var speechRecognizer: SpeechRecognizer
     @Binding var showSheet: Bool
-    
+    @State var showConfirmationAlert: Bool = false
     let buttonColor = #colorLiteral(red: 0.1764705926, green: 0.01176470611, blue: 0.5607843399, alpha: 1)
     
     var body: some View {
@@ -20,6 +20,7 @@ struct BottomBarView: View {
                 Spacer()
                 Button {
                     showSheet = false
+                    voiceNoteViewModel.confirmTheVoiceNote = false
                 } label: {
                     VStack {
                         Image(systemName: "house")
@@ -32,9 +33,9 @@ struct BottomBarView: View {
                 
                 VStack {
                     Button {
-                        clickAudioButton()
+                        !voiceNoteViewModel.confirmTheVoiceNote ? clickAudioButton() : confirmToAddTheRecording()
                     } label: {
-                        Image(systemName: "\(voiceNoteViewModel.isRecording ? "stop.fill" : "mic.fill")")
+                        Image(systemName: "\(voiceNoteViewModel.isRecording ? "square.fill" : voiceNoteViewModel.confirmTheVoiceNote ? "checkmark" : "mic.fill")")
                             .font(.system(size: 30))
                             .foregroundColor(.white)
                     }
@@ -44,6 +45,16 @@ struct BottomBarView: View {
                             .fill(Color(buttonColor))
                     )
                     .offset(y: -30)
+                    .alert("Important message", isPresented: $showConfirmationAlert) {
+                        HStack {
+                            Button("SAVE") {
+                                print("Save pressed")
+                            }
+                            Button("CANCEL", role: .cancel) {
+                                print("Cancel pressed")
+                            }
+                        }
+                    }
                     
                     if voiceNoteViewModel.isMicPressed {
                         Button(action: {
@@ -107,8 +118,13 @@ struct BottomBarView: View {
             if let newestRecordUrl = voiceNoteViewModel.fileUrlList.last {
                 print("NewesrRecordUrl is \(newestRecordUrl)")
                 speechRecognizer.transcribeFile(from: newestRecordUrl)
+                voiceNoteViewModel.confirmTheVoiceNote = true
             }
         }
+    }
+    
+    private func confirmToAddTheRecording(){
+        showConfirmationAlert = true
     }
 }
 
