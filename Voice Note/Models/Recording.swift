@@ -12,4 +12,5 @@ struct Recording: Identifiable /*Codable*/ {
     let fileUrl: URL
     let createdAt: Date
     var isPlaying: Bool
+    var duration: TimeInterval?
 }
