@@ -13,6 +13,7 @@ class VoiceNoteViewModel: ObservableObject {
     private var audioPlayer: AVAudioPlayer?
     private var recordingPausedAt: TimeInterval = 0
     private var triggerMeteringInterval: TimeInterval = 0.01
+    private var audioRecordingDuration: TimeInterval = 10.00
     private var timer: Timer?
     private var currentSample: Int
     private let numberOfSample: Int
@@ -62,7 +63,7 @@ class VoiceNoteViewModel: ObservableObject {
             audioRecorder = try AVAudioRecorder(url: audioFileName, settings: settings)
             audioRecorder?.isMeteringEnabled = true
             audioRecorder?.prepareToRecord()
-            audioRecorder?.record()
+            audioRecorder?.record(forDuration: audioRecordingDuration)
             self.enableMicrophoneMonitoring()
             isRecording = true
         } catch {

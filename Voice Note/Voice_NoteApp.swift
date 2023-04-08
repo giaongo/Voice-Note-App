@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-let samples = 10
+let samples = 15
 @main
 struct Voice_NoteApp: App {
     @StateObject var speechRecognizer = SpeechRecognizer()

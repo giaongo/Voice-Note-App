@@ -15,7 +15,7 @@ struct WaveView: View {
     var body: some View {
         RoundedRectangle(cornerRadius: 20)
             .fill(LinearGradient(colors: [Color(topWaveColor), Color(bottomWaveColor)], startPoint: .top, endPoint: .leading))
-            .frame(width: (UIScreen.main.bounds.width - CGFloat(samples) * 20) / CGFloat(samples), height: value)
+            .frame(width: (UIScreen.main.bounds.width - CGFloat(samples) * 15) / CGFloat(samples), height: value)
     }
 }
 

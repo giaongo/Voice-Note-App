@@ -11,7 +11,7 @@ struct AudioConfirmationView: View {
     @EnvironmentObject var speechRecognizer: SpeechRecognizer
     var body: some View {
         VStack{
-            Text("\(speechRecognizer.transcriptionText)").font(.headline).fontWeight(.bold)
+            Text("\(speechRecognizer.transcriptionText)").font(.headline).fontWeight(.bold).padding(.horizontal,10)
         }
     }
 }
