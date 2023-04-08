@@ -22,7 +22,8 @@ class VoiceNoteViewModel: ObservableObject {
     @Published var recordingList = [Recording]()
     @Published var fileUrlList = [URL]()
     @Published var soundSamples: [Float]
-
+    @Published var isMicPressed: Bool = false
+    
     init (numberOfSample: Int) {
         self.numberOfSample = numberOfSample
         self.soundSamples = [Float](repeating:.zero, count:numberOfSample)

@@ -58,7 +58,7 @@ class MapViewModel:NSObject, ObservableObject, CLLocationManagerDelegate {
         //Fetch...
         MKLocalSearch(request: request).start { (response, _) in
             
-            guard response != nil else {return} 
+            guard response != nil else {return}
             
         }
     }
