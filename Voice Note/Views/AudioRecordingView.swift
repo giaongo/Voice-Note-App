@@ -15,29 +15,25 @@ struct AudioRecordingView: View {
         VStack() {
             HStack {
                 ForEach(voiceNoteViewModel.soundSamples, id: \.self) { sampleValue in
-                    WaveView(value: voiceNoteViewModel.normalizeSoundLevel(level: sampleValue))
+                    WaveView(value: voiceNoteViewModel.normalizeSoundLevel(level: sampleValue, barHeight: CGFloat(180)))
                 }
             }
             .frame(maxWidth: UIScreen.main.bounds.width * 0.7)
             .padding()
-            .overlay(
-                RoundedRectangle(cornerRadius: 20)
-                .stroke(Color(borderColor), lineWidth: 2)
-            )
         }
     }
     
 }
 
 extension VoiceNoteViewModel {
-    func normalizeSoundLevel(level:Float) -> CGFloat {
-        let soundLevel = max(0.2, CGFloat(level) + 50) / 2 // scale all received level in between 0.1 to 25
-        return CGFloat(soundLevel * (100/25)) // set original bar height is 100
+    func normalizeSoundLevel(level:Float, barHeight:CGFloat) -> CGFloat {
+          let soundLevel = max(0.2, CGFloat(level) + 50) / 2 // scale all received level in between 0.1 to 25
+          return CGFloat(soundLevel * (barHeight/25))
     }
 }
 
 struct AudioRecordingView_Previews: PreviewProvider {
     static var previews: some View {
-        AudioRecordingView().environmentObject(VoiceNoteViewModel(numberOfSample: samples))
+        AudioRecordingView().environmentObject(VoiceNoteViewModel())
     }
 }

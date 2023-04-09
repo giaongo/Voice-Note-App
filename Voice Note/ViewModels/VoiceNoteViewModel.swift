@@ -8,33 +8,46 @@
 import Foundation
 import AVFoundation
 
-class VoiceNoteViewModel: ObservableObject {
+class VoiceNoteViewModel: NSObject, ObservableObject, AVAudioPlayerDelegate {
     private var audioRecorder: AVAudioRecorder?
     private var audioPlayer: AVAudioPlayer?
     private var recordingPausedAt: TimeInterval = 0
     private var triggerMeteringInterval: TimeInterval = 0.01
+    private var audioRecordingDuration: TimeInterval = 10.00
     private var timer: Timer?
-    private var currentSample: Int
-    private let numberOfSample: Int
-
+    private var currentSample: Int = 0
+    static let numberOfSample: Int = 15
+    
     @Published var isRecording: Bool = false
     @Published var isRecordingPaused: Bool = false
     @Published var recordingList = [Recording]()
     @Published var fileUrlList = [URL]()
-    @Published var soundSamples: [Float]
     @Published var isMicPressed: Bool = false
+    @Published var soundSamples: [Float] = [Float](repeating:.zero, count: VoiceNoteViewModel.numberOfSample)
+    @Published var audioIsPlaying:Bool = false
+    @Published var confirmTheVoiceNote: Bool = false
     
-    init (numberOfSample: Int) {
-        self.numberOfSample = numberOfSample
-        self.soundSamples = [Float](repeating:.zero, count:numberOfSample)
-        self.currentSample = 0
+    override init () {
+        super.init()
         self.fetchAllRecordings()
     }
-
+    
     deinit {
         stopRecording()
     }
-
+    
+    /**
+     Tells the delegate to set the isPlaying to false when the audio finishes playing.
+     */
+    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
+        print("function is called")
+        if let newestRecordUrl = fileUrlList.last {
+            var currentRecording = findTheCurrentRecording(recordingUrl: newestRecordUrl)
+            currentRecording?.isPlaying = false
+            audioIsPlaying = false
+        }
+    }
+    
     func startRecording() {
         let recordingSession = AVAudioSession.sharedInstance()
         do {
@@ -62,7 +75,7 @@ class VoiceNoteViewModel: ObservableObject {
             audioRecorder = try AVAudioRecorder(url: audioFileName, settings: settings)
             audioRecorder?.isMeteringEnabled = true
             audioRecorder?.prepareToRecord()
-            audioRecorder?.record()
+            audioRecorder?.record(forDuration: audioRecordingDuration)
             self.enableMicrophoneMonitoring()
             isRecording = true
         } catch {
@@ -77,14 +90,14 @@ class VoiceNoteViewModel: ObservableObject {
         recorder.pause()
         objectWillChange.send()
     }
-
+    
     func resumeRecording() {
         guard let recorder = audioRecorder else { return }
         isRecordingPaused = false
         recorder.record(atTime: recordingPausedAt)
         objectWillChange.send()
     }
-
+    
     func stopRecording() {
         self.disableMicriphoneMonitoring()
         audioRecorder?.stop()
@@ -94,7 +107,7 @@ class VoiceNoteViewModel: ObservableObject {
     }
     
     /**
-        This method fetches all of the recordings from documentDirectory
+     This method fetches all of the recordings from documentDirectory
      */
     private func fetchAllRecordings() {
         let path = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
@@ -109,7 +122,7 @@ class VoiceNoteViewModel: ObservableObject {
     }
     
     /**
-        This method gets the creation file date of the audio file
+     This method gets the creation file date of the audio file
      */
     private func getFileDate(for file: URL) -> Date {
         if let attributes = try? FileManager.default.attributesOfItem(atPath: file.path) as [FileAttributeKey: Any],
@@ -119,30 +132,60 @@ class VoiceNoteViewModel: ObservableObject {
             return Date()
         }
     }
-
+    
     private func getDuration(for file: URL) -> TimeInterval {
         guard let player = try? AVAudioPlayer(contentsOf: file) else {
             return 0
         }
         return player.duration
     }
-
+    
     /**
-        This method refreshes and returns the average power of chanel 0 of audio recorder through every 0.01s time interval
+     This method refreshes and returns the average power of chanel 0 of audio recorder through every 0.01s time interval
      */
     private func enableMicrophoneMonitoring() {
         timer = Timer.scheduledTimer(withTimeInterval: triggerMeteringInterval, repeats: true, block: { timer in
             self.audioRecorder?.updateMeters()
             self.soundSamples[self.currentSample] = self.audioRecorder?.averagePower(forChannel: 0) ?? 0.0
-            self.currentSample = (self.currentSample + 1) % self.numberOfSample
+            self.currentSample = (self.currentSample + 1) % VoiceNoteViewModel.numberOfSample
         })
     }
-
+    
     /**
-        Stops the timer from ever firing again and requests its removal from its run loop.
+     Stops the timer from ever firing again and requests its removal from its run loop.
      */
     private func disableMicriphoneMonitoring() {
         timer?.invalidate()
     }
-
+    
+    func startPlaying (recordingUrl:URL) {
+        let audioPlayingSession = AVAudioSession.sharedInstance()
+        do {
+            try audioPlayingSession.overrideOutputAudioPort(AVAudioSession.PortOverride.speaker)
+            audioPlayer = try AVAudioPlayer(contentsOf: recordingUrl)
+            if let audioPlayer = audioPlayer {
+                audioPlayer.delegate = self
+                audioPlayer.prepareToPlay()
+                audioPlayer.play()
+            }
+            var currentRecording = findTheCurrentRecording(recordingUrl: recordingUrl)
+            currentRecording?.isPlaying = true
+            audioIsPlaying = true
+        } catch {
+            print("Error playing recording \(error.localizedDescription)")
+        }
+    }
+    
+    func stopPlaying(recordingUrl: URL) {
+        audioPlayer?.stop()
+        var currentRecording = findTheCurrentRecording(recordingUrl: recordingUrl)
+        currentRecording?.isPlaying = false
+        audioIsPlaying = false
+    }
+    func findTheCurrentRecording(recordingUrl: URL) -> Recording? {
+        let foundRecording = recordingList.filter { recording in
+            recording.fileUrl == recordingUrl
+        }
+        return foundRecording.count > 0 ? foundRecording[0] : nil
+    }
 }
