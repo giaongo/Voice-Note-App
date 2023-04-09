@@ -5,12 +5,11 @@
 //  Created by Tai Nguyen on 2.4.2023.
 //
 
-import MapKit
 import SwiftUI
+import MapKit
 import CoreLocation
 
-
-class MapViewModel:NSObject, ObservableObject, CLLocationManagerDelegate {
+class MapViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
         
     @Published var mapView = MKMapView()
     
@@ -21,12 +20,14 @@ class MapViewModel:NSObject, ObservableObject, CLLocationManagerDelegate {
     //Alert
     @Published var permissionDenied = false
     
-    
     //Map type...
     @Published var mapType: MKMapType = .standard
     
     //SearchText...
     @Published var searchText = ""
+    
+    // Searched places
+    @Published var places: [Place] = []
     
     
     //Update Map Type...
@@ -51,6 +52,7 @@ class MapViewModel:NSObject, ObservableObject, CLLocationManagerDelegate {
     //Search Places...
     func searchQuery() {
         
+        places.removeAll()
         
         let request = MKLocalSearch.Request()
         request.naturalLanguageQuery = searchText
@@ -58,9 +60,35 @@ class MapViewModel:NSObject, ObservableObject, CLLocationManagerDelegate {
         //Fetch...
         MKLocalSearch(request: request).start { (response, _) in
             
-            guard response != nil else {return} 
+            guard let result = response else{return}
             
+            self.places = result.mapItems.compactMap {(item) -> Place? in
+                return Place(place: item.placemark)
+            }
         }
+    }
+    
+    //Pick search result
+    func selectPlace(place: Place) {
+        //Show pin on map
+        searchText = ""
+        
+        guard let coordinate = place.place.location?.coordinate else{return}
+        
+        let pointAnnotation = MKPointAnnotation()
+        pointAnnotation.coordinate = coordinate
+        pointAnnotation.title = place.place.name ?? "Name unknown"
+        
+        //Remove old annotations
+        //TODO: don´t delete annotations made by notes
+        mapView.removeAnnotations(mapView.annotations)
+        
+        mapView.addAnnotation(pointAnnotation)
+        
+        //Move map to searched place
+        let coordinateRegion = MKCoordinateRegion(center: coordinate, latitudinalMeters: 5000, longitudinalMeters: 5000)
+        mapView.setRegion(coordinateRegion, animated: true)
+        mapView.setVisibleMapRect(mapView.visibleMapRect, animated: true)
     }
     
  

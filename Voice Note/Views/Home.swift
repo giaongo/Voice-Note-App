@@ -25,6 +25,26 @@ struct Home: View {
             VStack {
                 
                 SearchOptionsBar(searchQuery: $mapData.searchText)
+                if !mapData.places.isEmpty && mapData.searchText != "" {
+                    
+                    ScrollView {
+                        VStack {
+                            ForEach(mapData.places) {place in
+                                Text(place.place.name ?? "")
+                                    .foregroundColor(Color(buttonColor))
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .padding(.leading)
+                                    .onTapGesture{
+                                        mapData.selectPlace(place: place)
+                                    }
+                                
+                                Divider()
+                            }
+                        }
+                        .padding(.top)
+                    }
+                    .background(Color(.systemGray6))
+                }
                 
                 Spacer()
                 
@@ -34,6 +54,7 @@ struct Home: View {
                         Image(systemName: "location.fill")
                             .font(.title2)
                             .padding(10)
+                            .background(Color(.systemGray6))
                             .clipShape(Circle())
                             .foregroundColor(Color(buttonColor))
                     })
@@ -43,6 +64,7 @@ struct Home: View {
                             .standard ? "network" : "map")
                             .font(.title2)
                             .padding(10)
+                            .background(Color(.systemGray6))
                             .clipShape(Circle())
                             .foregroundColor(Color(buttonColor))
                     })
