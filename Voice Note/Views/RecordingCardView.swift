@@ -46,6 +46,6 @@ struct RecordingCardView: View {
 
 struct RecordingCardView_Previews: PreviewProvider {
     static var previews: some View {
-        AudioConfirmationView().environmentObject(VoiceNoteViewModel())
+        RecordingCardView().environmentObject(VoiceNoteViewModel())
     }
 }

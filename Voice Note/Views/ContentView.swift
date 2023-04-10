@@ -14,7 +14,7 @@ struct ContentView: View {
         VStack(spacing:0) {
             Spacer()
             if showSheet {
-                SlidingModalView()
+                SlidingModalView(showSheet: $showSheet)
             }
             BottomBarView(showSheet: $showSheet)
         }

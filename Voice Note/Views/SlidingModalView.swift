@@ -9,6 +9,7 @@ import SwiftUI
 
 struct SlidingModalView: View {
     @EnvironmentObject var voiceNoteViewModel: VoiceNoteViewModel
+    @Binding var showSheet: Bool
     var body: some View {
         ZStack {
             Rectangle()
@@ -19,7 +20,7 @@ struct SlidingModalView: View {
             if voiceNoteViewModel.isRecording {
                 AudioRecordingView()
             } else {
-                AudioConfirmationView().animation(.easeInOut, value: voiceNoteViewModel.isRecording)
+                AudioConfirmationView(showSheet: $showSheet).animation(.easeInOut, value: voiceNoteViewModel.isRecording)
             }
             
         }
@@ -29,6 +30,6 @@ struct SlidingModalView: View {
 
 struct SlidingModalView_Previews: PreviewProvider {
     static var previews: some View {
-        SlidingModalView()
+        SlidingModalView(showSheet: .constant(false))
     }
 }
