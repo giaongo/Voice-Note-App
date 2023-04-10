@@ -12,6 +12,8 @@ struct Home: View {
     @StateObject var mapData = MapViewModel()
     //Location Manager...
     @State var locationManager = CLLocationManager()
+    let buttonColor = #colorLiteral(red: 0.1764705926, green: 0.01176470611, blue: 0.5607843399, alpha: 1)
+
     var body: some View {
         ZStack{
             
@@ -21,17 +23,28 @@ struct Home: View {
                 .ignoresSafeArea(.all, edges: .all)
             
             VStack {
-                HStack {
-                    Image(systemName: "magnifyingglass")
-                        .foregroundColor(.gray)
+                
+                SearchOptionsBar(searchQuery: $mapData.searchText)
+                if !mapData.places.isEmpty && mapData.searchText != "" {
                     
-                    TextField("Search", text: $mapData.searchText)
-                    
+                    ScrollView {
+                        VStack {
+                            ForEach(mapData.places) {place in
+                                Text(place.place.name ?? "")
+                                    .foregroundColor(Color(buttonColor))
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .padding(.leading)
+                                    .onTapGesture{
+                                        mapData.selectPlace(place: place)
+                                    }
+                                
+                                Divider()
+                            }
+                        }
+                        .padding(.top)
+                    }
+                    .background(Color(.systemGray6))
                 }
-                .padding(.vertical, 10)
-                .padding(.horizontal)
-                .background(Color.white)
-                .padding()
                 
                 Spacer()
                 
@@ -41,7 +54,9 @@ struct Home: View {
                         Image(systemName: "location.fill")
                             .font(.title2)
                             .padding(10)
+                            .background(Color(.systemGray6))
                             .clipShape(Circle())
+                            .foregroundColor(Color(buttonColor))
                     })
                     
                     Button(action: mapData.updateMapType, label: {
@@ -49,10 +64,13 @@ struct Home: View {
                             .standard ? "network" : "map")
                             .font(.title2)
                             .padding(10)
+                            .background(Color(.systemGray6))
                             .clipShape(Circle())
+                            .foregroundColor(Color(buttonColor))
                     })
                 }
                 .frame(maxWidth: .infinity, alignment: .trailing)
+                .padding(.bottom, 100)
             }
         }
         .onAppear(perform: {
