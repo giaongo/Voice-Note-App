@@ -182,10 +182,20 @@ class VoiceNoteViewModel: NSObject, ObservableObject, AVAudioPlayerDelegate {
         currentRecording?.isPlaying = false
         audioIsPlaying = false
     }
+    
     func findTheCurrentRecording(recordingUrl: URL) -> Recording? {
         let foundRecording = recordingList.filter { recording in
             recording.fileUrl == recordingUrl
         }
         return foundRecording.count > 0 ? foundRecording[0] : nil
+    }
+    
+    func deleteRecording(url: URL) {
+        do {
+            try FileManager.default.removeItem(at: url)
+            print("Recording is deleted successfully")
+        } catch {
+            print("Error deleting recording \(error.localizedDescription)")
+        }
     }
 }
