@@ -59,7 +59,7 @@ class MapViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
         
         //Fetch...
         MKLocalSearch(request: request).start { (response, _) in
-            
+
             guard let result = response else{return}
             
             self.places = result.mapItems.compactMap {(item) -> Place? in

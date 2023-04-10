@@ -18,6 +18,7 @@ xcuserdata/
 *.moved-aside
 .idea/
 *.xcworkspace
+project.xcworkspace
 !default.xcworkspace
 
 
