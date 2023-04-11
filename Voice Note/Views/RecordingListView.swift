@@ -13,11 +13,11 @@ struct RecordingListView: View {
     var body: some View {
         NavigationStack {
             List {
-                ForEach(voiceNoteViewModel.recordingList) { recording in
+                ForEach((1...10), id: \.self) {
                     ListItem (
                             voiceNote: VoiceNote(
-                                    noteId: recording.id,
-                                    noteTitle: "Note - \(recording.id)",
+                                    noteId: UUID(),
+                                    noteTitle: "Note - \($0)",
                                     noteText: "Rekjh falk sdlfka hsldkj fhkasdh lkfsd",
                                     noteDuration: TimeDuration(size: 3765),
                                     noteCreatedAt: Date.init(),

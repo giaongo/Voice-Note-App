@@ -20,7 +20,6 @@ class VoiceNoteViewModel: NSObject, ObservableObject, AVAudioPlayerDelegate {
     
     @Published var isRecording: Bool = false
     @Published var isRecordingPaused: Bool = false
-    @Published var recordingList = [Recording]()
     @Published var fileUrlList = [URL]()
     @Published var isMicPressed: Bool = false
     @Published var soundSamples: [Float] = [Float](repeating:.zero, count: VoiceNoteViewModel.numberOfSample)
@@ -29,7 +28,6 @@ class VoiceNoteViewModel: NSObject, ObservableObject, AVAudioPlayerDelegate {
     
     override init () {
         super.init()
-        self.fetchAllRecordings()
     }
     
     deinit {
@@ -41,11 +39,7 @@ class VoiceNoteViewModel: NSObject, ObservableObject, AVAudioPlayerDelegate {
      */
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
         print("function is called")
-        if let newestRecordUrl = fileUrlList.last {
-            var currentRecording = findTheCurrentRecording(recordingUrl: newestRecordUrl)
-            currentRecording?.isPlaying = false
-            audioIsPlaying = false
-        }
+        audioIsPlaying = false
     }
     
     func startRecording() {
@@ -107,21 +101,6 @@ class VoiceNoteViewModel: NSObject, ObservableObject, AVAudioPlayerDelegate {
     }
     
     /**
-     This method fetches all of the recordings from documentDirectory
-     */
-    private func fetchAllRecordings() {
-        let path = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        do {
-            let recordingsContent = try FileManager.default.contentsOfDirectory(at: path, includingPropertiesForKeys: nil)
-            for url in recordingsContent {
-                recordingList.append(Recording(id: UUID(), fileUrl: url, createdAt: getFileDate(for: url), isPlaying: false, duration: getDuration(for: url)))
-            }
-        } catch {
-            print("Error fetching all recordings \(error.localizedDescription)")
-        }
-    }
-    
-    /**
      This method gets the creation file date of the audio file
      */
     private func getFileDate(for file: URL) -> Date {
@@ -168,8 +147,6 @@ class VoiceNoteViewModel: NSObject, ObservableObject, AVAudioPlayerDelegate {
                 audioPlayer.prepareToPlay()
                 audioPlayer.play()
             }
-            var currentRecording = findTheCurrentRecording(recordingUrl: recordingUrl)
-            currentRecording?.isPlaying = true
             audioIsPlaying = true
         } catch {
             print("Error playing recording \(error.localizedDescription)")
@@ -178,14 +155,16 @@ class VoiceNoteViewModel: NSObject, ObservableObject, AVAudioPlayerDelegate {
     
     func stopPlaying(recordingUrl: URL) {
         audioPlayer?.stop()
-        var currentRecording = findTheCurrentRecording(recordingUrl: recordingUrl)
-        currentRecording?.isPlaying = false
         audioIsPlaying = false
     }
-    func findTheCurrentRecording(recordingUrl: URL) -> Recording? {
-        let foundRecording = recordingList.filter { recording in
-            recording.fileUrl == recordingUrl
+    
+    
+    func deleteRecording(url: URL) {
+        do {
+            try FileManager.default.removeItem(at: url)
+            print("Recording is deleted successfully")
+        } catch {
+            print("Error deleting recording \(error.localizedDescription)")
         }
-        return foundRecording.count > 0 ? foundRecording[0] : nil
     }
 }
