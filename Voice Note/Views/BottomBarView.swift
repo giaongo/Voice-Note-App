@@ -12,6 +12,8 @@ struct BottomBarView: View {
     @EnvironmentObject var speechRecognizer: SpeechRecognizer
     @Binding var showSheet: Bool
     @State var showConfirmationAlert: Bool = false
+    @Binding var toast:ToastView?
+    
     let buttonColor = #colorLiteral(red: 0.1764705926, green: 0.01176470611, blue: 0.5607843399, alpha: 1)
     
     var body: some View {
@@ -48,7 +50,9 @@ struct BottomBarView: View {
                     .alert("Important message", isPresented: $showConfirmationAlert) {
                         HStack {
                             Button("SAVE") {
-                                print("Save pressed")
+                                toast = ToastView(type: .success, title: "Save Success", message: "Note saved successfully") {
+                                    print("canceled pressed")
+                                }
                             }
                             Button("CANCEL", role: .cancel) {
                                 print("Cancel pressed")
@@ -130,6 +134,8 @@ struct BottomBarView: View {
 
 struct BottomBarView_Previews: PreviewProvider {
     static var previews: some View {
-        BottomBarView(showSheet: .constant(false)).environmentObject(VoiceNoteViewModel()).environmentObject(SpeechRecognizer())
+        BottomBarView(showSheet: .constant(false), toast: .constant(ToastView(type: .success, title: "Save Success", message: "Note saved successfully") {
+            print("canceled pressed")
+        })).environmentObject(VoiceNoteViewModel()).environmentObject(SpeechRecognizer())
     }
 }
