@@ -10,22 +10,22 @@ import SwiftUI
 struct BottomBarView: View {
     @EnvironmentObject var voiceNoteViewModel: VoiceNoteViewModel
     @EnvironmentObject var speechRecognizer: SpeechRecognizer
-    @State var showSheet: Bool = false
     @State var showConfirmationAlert: Bool = false
     @Binding var toast:ToastView?
-    
+    @Binding var showSheet: Bool
+    @Binding var tagSelect: String
     let buttonColor = #colorLiteral(red: 0.1764705926, green: 0.01176470611, blue: 0.5607843399, alpha: 1)
     
     var body: some View {
-        VStack {
+        VStack(spacing:0) {
             if showSheet {
                 SlidingModalView(showSheet: $showSheet, toast: $toast)
+                    .padding(0)
             }
             HStack {
                 Spacer()
                 Button {
-                    showSheet = false
-                    voiceNoteViewModel.confirmTheVoiceNote = false
+                    tagSelect = "house"
                 } label: {
                     VStack {
                         Image(systemName: "house")
@@ -44,6 +44,7 @@ struct BottomBarView: View {
                             .font(.system(size: 30))
                             .foregroundColor(.white)
                     }
+                    .tag("mic.fill")
                     .padding(.all, 20)
                     .background(
                         Circle()
@@ -53,6 +54,7 @@ struct BottomBarView: View {
                     .alert("Please confirm to save!", isPresented: $showConfirmationAlert) {
                         HStack {
                             Button("SAVE") {
+                                voiceNoteViewModel.confirmTheVoiceNote = false
                                 showSheet = false
                                 toast = ToastView(type: .success, title: "Save Success", message: "Note saved successfully") {
                                     print("canceled pressed")
@@ -87,8 +89,8 @@ struct BottomBarView: View {
                 
                 Spacer()
                 
-                NavigationLink {
-                    RecordingListView()
+                Button {
+                   tagSelect = "list.dash"
                 } label: {
                     VStack {
                         Image(systemName: "list.dash")
@@ -106,8 +108,8 @@ struct BottomBarView: View {
                     Spacer()
                 }.background(.white)
             )
-            .frame(height: 60)
-        }
+            .frame(height: 100)
+        } .ignoresSafeArea()
     }
     
     private func clickAudioButton() {
@@ -138,8 +140,11 @@ struct BottomBarView: View {
 
 struct BottomBarView_Previews: PreviewProvider {
     static var previews: some View {
-        BottomBarView(toast: .constant(ToastView(type: .success, title: "Save Success", message: "Note saved successfully") {
+        BottomBarView(
+            toast: .constant(ToastView(type: .success, title: "Save Success", message: "Note saved successfully") {
             print("canceled pressed")
-        })).environmentObject(VoiceNoteViewModel()).environmentObject(SpeechRecognizer())
+            }), showSheet: .constant(false),tagSelect: .constant("house"))
+        .environmentObject(VoiceNoteViewModel())
+        .environmentObject(SpeechRecognizer())
     }
 }

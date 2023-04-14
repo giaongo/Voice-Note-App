@@ -12,10 +12,10 @@ struct SlidingModalView: View {
     @Binding var showSheet: Bool
     @Binding var toast:ToastView?
     var body: some View {
-        ZStack {
+        ZStack() {
             Rectangle()
                 .fill(Color.white)
-                .frame(width: UIScreen.main.bounds.width,height: UIScreen.main.bounds.height * 0.4)
+                .frame(width: UIScreen.main.bounds.width,height: UIScreen.main.bounds.height * 0.3)
                 .transition(.move(edge: .bottom))
                 .cornerRadius(40, corners: [.topLeft, .topRight])
             if voiceNoteViewModel.isRecording {
