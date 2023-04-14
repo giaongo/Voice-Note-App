@@ -24,6 +24,8 @@ struct BottomBarView: View {
             }
             HStack {
                 Spacer()
+                
+                // Home button
                 Button {
                     tagSelect = "house"
                 } label: {
@@ -37,6 +39,7 @@ struct BottomBarView: View {
                 
                 Spacer()
                 
+                // Microphone button
                 VStack {
                     Button {
                         !voiceNoteViewModel.confirmTheVoiceNote ? clickAudioButton() : confirmToAddTheRecording()
@@ -67,6 +70,7 @@ struct BottomBarView: View {
                         }
                     }
                     
+                    // Pause audio button
                     if voiceNoteViewModel.isMicPressed {
                         Button(action: {
                             if voiceNoteViewModel.isRecordingPaused {
@@ -90,8 +94,9 @@ struct BottomBarView: View {
                 
                 Spacer()
                 
+                // Note list button
                 Button {
-                   tagSelect = "list.dash"
+                    tagSelect = "list.dash"
                 } label: {
                     VStack {
                         Image(systemName: "list.dash")
@@ -108,8 +113,8 @@ struct BottomBarView: View {
                         .overlay(.black)
                     Spacer()
                 }
-                .background(.white)
-                .frame(height: 100)
+                    .background(.white)
+                    .frame(height: 100)
             )
         }.ignoresSafeArea(.all)
     }
@@ -144,7 +149,7 @@ struct BottomBarView_Previews: PreviewProvider {
     static var previews: some View {
         BottomBarView(
             toast: .constant(ToastView(type: .success, title: "Save Success", message: "Note saved successfully") {
-            print("canceled pressed")
+                print("canceled pressed")
             }), showSheet: .constant(false),tagSelect: .constant("house"))
         .environmentObject(VoiceNoteViewModel())
         .environmentObject(SpeechRecognizer())
