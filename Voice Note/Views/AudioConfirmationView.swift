@@ -12,6 +12,7 @@ struct AudioConfirmationView: View {
     @EnvironmentObject var voiceNoteViewModel: VoiceNoteViewModel
     @State var showDeleteConfimation: Bool = false
     @Binding var showSheet: Bool
+    @Binding var toast:ToastView?
     
     var body: some View {
         VStack{
@@ -26,17 +27,25 @@ struct AudioConfirmationView: View {
                 }
                 RecordingCardView()
             }
-        }.alert("Are you sure you want to delete", isPresented: $showDeleteConfimation) {
+        }.alert("Are you sure you want to delete?", isPresented: $showDeleteConfimation) {
             HStack {
                 Button("DELETE") {
                     if let newestRecordUrl = voiceNoteViewModel.fileUrlList.last {
                         voiceNoteViewModel.deleteRecording(url: newestRecordUrl)
                         voiceNoteViewModel.confirmTheVoiceNote = false
                         showSheet = false
+                        toast = ToastView(type: .success, title: "Delete success", message: "Delete audio successfully", cancelPressed: {
+                            print("cancel on toast pressed")
+                        })
+                    } else {
+                        toast = ToastView(type:.error, title: "Unable to delete", message: "Deleting audio failed", cancelPressed: {
+                            print("cancel on toast pressed")
+                        })
                     }
+
                 }
                 Button("CANCEL", role: .cancel) {
-                    print("Cancel pressed")
+                    print("Cancel delete pressed")
                 }
             }
         }
@@ -46,6 +55,11 @@ struct AudioConfirmationView: View {
 
 struct AudioConfirmationView_Previews: PreviewProvider {
     static var previews: some View {
-        AudioConfirmationView(showSheet: .constant(false)).environmentObject(SpeechRecognizer()).environmentObject(VoiceNoteViewModel())
+        AudioConfirmationView(
+            showSheet: .constant(false),
+            toast: .constant(ToastView(type: .success, title: "Delete Success", message: "Delete successfully") {
+            print("canceled on toast pressed")
+            }))
+            .environmentObject(SpeechRecognizer()).environmentObject(VoiceNoteViewModel())
     }
 }

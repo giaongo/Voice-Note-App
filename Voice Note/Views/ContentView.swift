@@ -8,16 +8,12 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State var showSheet:Bool = false
     @State var increaseHeight: Bool = false
     @State var toast:ToastView? = nil
     var body: some View {
         VStack(spacing:0) {
             Spacer()
-            if showSheet {
-                SlidingModalView(showSheet: $showSheet)
-            }
-            BottomBarView(showSheet: $showSheet, toast: $toast)
+            BottomBarView(toast: $toast)
         }
         .background(
             Home()

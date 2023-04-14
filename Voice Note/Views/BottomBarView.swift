@@ -10,7 +10,7 @@ import SwiftUI
 struct BottomBarView: View {
     @EnvironmentObject var voiceNoteViewModel: VoiceNoteViewModel
     @EnvironmentObject var speechRecognizer: SpeechRecognizer
-    @Binding var showSheet: Bool
+    @State var showSheet: Bool = false
     @State var showConfirmationAlert: Bool = false
     @Binding var toast:ToastView?
     
@@ -18,6 +18,9 @@ struct BottomBarView: View {
     
     var body: some View {
         VStack {
+            if showSheet {
+                SlidingModalView(showSheet: $showSheet, toast: $toast)
+            }
             HStack {
                 Spacer()
                 Button {
@@ -47,9 +50,10 @@ struct BottomBarView: View {
                             .fill(Color(buttonColor))
                     )
                     .offset(y: -30)
-                    .alert("Important message", isPresented: $showConfirmationAlert) {
+                    .alert("Please confirm to save!", isPresented: $showConfirmationAlert) {
                         HStack {
                             Button("SAVE") {
+                                showSheet = false
                                 toast = ToastView(type: .success, title: "Save Success", message: "Note saved successfully") {
                                     print("canceled pressed")
                                 }
@@ -134,7 +138,7 @@ struct BottomBarView: View {
 
 struct BottomBarView_Previews: PreviewProvider {
     static var previews: some View {
-        BottomBarView(showSheet: .constant(false), toast: .constant(ToastView(type: .success, title: "Save Success", message: "Note saved successfully") {
+        BottomBarView(toast: .constant(ToastView(type: .success, title: "Save Success", message: "Note saved successfully") {
             print("canceled pressed")
         })).environmentObject(VoiceNoteViewModel()).environmentObject(SpeechRecognizer())
     }

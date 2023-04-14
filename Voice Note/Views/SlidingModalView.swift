@@ -10,6 +10,7 @@ import SwiftUI
 struct SlidingModalView: View {
     @EnvironmentObject var voiceNoteViewModel: VoiceNoteViewModel
     @Binding var showSheet: Bool
+    @Binding var toast:ToastView?
     var body: some View {
         ZStack {
             Rectangle()
@@ -20,7 +21,7 @@ struct SlidingModalView: View {
             if voiceNoteViewModel.isRecording {
                 AudioRecordingView()
             } else {
-                AudioConfirmationView(showSheet: $showSheet).animation(.easeInOut, value: voiceNoteViewModel.isRecording)
+                AudioConfirmationView(showSheet: $showSheet, toast: $toast).animation(.easeInOut, value: voiceNoteViewModel.isRecording)
             }
             
         }
@@ -30,6 +31,10 @@ struct SlidingModalView: View {
 
 struct SlidingModalView_Previews: PreviewProvider {
     static var previews: some View {
-        SlidingModalView(showSheet: .constant(false))
+        SlidingModalView(
+            showSheet: .constant(false),
+            toast: .constant(ToastView(type: .success, title: "Delete Success", message: "Delete successfully") {
+            print("cancel on toast pressed")
+            }))
     }
 }
