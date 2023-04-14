@@ -15,12 +15,12 @@ struct BottomBarView: View {
     @Binding var showSheet: Bool
     @Binding var tagSelect: String
     let buttonColor = #colorLiteral(red: 0.1764705926, green: 0.01176470611, blue: 0.5607843399, alpha: 1)
+    let backgroundModalView = #colorLiteral(red: 0.921431005, green: 0.9214526415, blue: 0.9214410186, alpha: 0.4915060081)
     
     var body: some View {
         VStack(spacing:0) {
             if showSheet {
                 SlidingModalView(showSheet: $showSheet, toast: $toast)
-                    .padding(0)
             }
             HStack {
                 Spacer()
@@ -31,6 +31,7 @@ struct BottomBarView: View {
                         Image(systemName: "house")
                             .font(.system(size: 25))
                             .foregroundColor(Color(buttonColor))
+                            .padding(.bottom, 15)
                     }
                 }
                 
@@ -50,7 +51,7 @@ struct BottomBarView: View {
                         Circle()
                             .fill(Color(buttonColor))
                     )
-                    .offset(y: -30)
+                    .offset(y: -50)
                     .alert("Please confirm to save!", isPresented: $showConfirmationAlert) {
                         HStack {
                             Button("SAVE") {
@@ -83,7 +84,7 @@ struct BottomBarView: View {
                                 Circle()
                                     .fill(Color(buttonColor))
                             )
-                            .offset(y: -30)
+                            .offset(y: -50)
                     }
                 }
                 
@@ -96,7 +97,7 @@ struct BottomBarView: View {
                         Image(systemName: "list.dash")
                             .font(.system(size: 25))
                             .foregroundColor(Color(buttonColor))
-                            .padding(.bottom, 3)
+                            .padding(.bottom, 15)
                     }
                 }
                 Spacer()
@@ -106,10 +107,11 @@ struct BottomBarView: View {
                     Divider()
                         .overlay(.black)
                     Spacer()
-                }.background(.white)
+                }
+                .background(.white)
+                .frame(height: 100)
             )
-            .frame(height: 100)
-        } .ignoresSafeArea()
+        }.ignoresSafeArea(.all)
     }
     
     private func clickAudioButton() {
