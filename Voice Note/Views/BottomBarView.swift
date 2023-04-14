@@ -22,6 +22,7 @@ struct BottomBarView: View {
             if showSheet {
                 SlidingModalView(showSheet: $showSheet, toast: $toast)
             }
+            // Custom bottom tab bar
             HStack {
                 Spacer()
                 
