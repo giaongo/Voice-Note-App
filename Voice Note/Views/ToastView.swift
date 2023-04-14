@@ -51,10 +51,10 @@ struct ToastView: View, Equatable {
                 
                 VStack(alignment: .leading) {
                     Text(title)
-                        .font(.system(size: 14, weight: .semibold))
+                        .font(.system(size: 18, weight: .semibold))
                     
                     Text(message)
-                        .font(.system(size: 12))
+                        .font(.system(size: 17))
                         .foregroundColor(Color.black.opacity(0.6))
                 }
                 
@@ -94,7 +94,7 @@ struct ToastViewModifier: ViewModifier {
             .overlay {
                 VStack {
                     mainToastView()
-                        .offset(y: 48)
+                        .offset(y: 60)
                     Spacer()
                 }.animation(.spring(),value:toast)
                     .transition(.move(edge: .top))

@@ -17,7 +17,7 @@ enum RecognizeError: Error {
         case .notAuthorizedToRecognize: return "Not authorized to recognize speech"
         case .notPermittedToRecord: return "Not permitted to record audio"
         case .recognizerIsUnavailable: return "Recognizer is unavailable"
-        case .errorInRecognizing: return "Recognizing encounters error"
+        case .errorInRecognizing: return "No voice is dictated. Recognizing speech encounters error"
         }
     }
 }

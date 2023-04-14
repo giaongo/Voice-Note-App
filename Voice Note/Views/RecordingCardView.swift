@@ -11,11 +11,14 @@ struct RecordingCardView: View {
     @EnvironmentObject var voiceNoteViewModel: VoiceNoteViewModel
     @State var isPlayed: Bool = false
     private let borderColor = #colorLiteral(red: 0.1215686277, green: 0.01176470611, blue: 0.4235294163, alpha: 1)
-    
+
     var body: some View {
         HStack() {
             if voiceNoteViewModel.soundSamples.count != 0 {
-                ForEach(voiceNoteViewModel.soundSamples, id: \.self) { sampleValue in
+                let newList = voiceNoteViewModel.soundSamples.map { number in
+                    return number == -160.0 ? number + 160.2 : number
+                }
+                ForEach(newList, id: \.self) { sampleValue in
                     WaveView(value: voiceNoteViewModel.normalizeSoundLevel(level: sampleValue,barHeight: CGFloat(40)))
                 }
             }
@@ -37,6 +40,9 @@ struct RecordingCardView: View {
                     )
                     .padding(.horizontal, 2)
             }
+        }
+        .onAppear {
+            print("What happened if things end after 10s: \(voiceNoteViewModel.soundSamples.count)")
         }
         .frame(alignment: .leading)
         .padding(.all,10)

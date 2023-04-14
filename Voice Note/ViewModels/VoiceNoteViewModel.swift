@@ -8,7 +8,7 @@
 import Foundation
 import AVFoundation
 
-class VoiceNoteViewModel: NSObject, ObservableObject, AVAudioPlayerDelegate {
+class VoiceNoteViewModel: NSObject, ObservableObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     private var audioRecorder: AVAudioRecorder?
     private var audioPlayer: AVAudioPlayer?
     private var recordingPausedAt: TimeInterval = 0
@@ -16,7 +16,7 @@ class VoiceNoteViewModel: NSObject, ObservableObject, AVAudioPlayerDelegate {
     private var audioRecordingDuration: TimeInterval = 10.00
     private var timer: Timer?
     private var currentSample: Int = 0
-    static let numberOfSample: Int = 15
+    static let numberOfSample: Int = 14
     
     @Published var isRecording: Bool = false
     @Published var isRecordingPaused: Bool = false
@@ -25,7 +25,7 @@ class VoiceNoteViewModel: NSObject, ObservableObject, AVAudioPlayerDelegate {
     @Published var soundSamples: [Float] = [Float](repeating:.zero, count: VoiceNoteViewModel.numberOfSample)
     @Published var audioIsPlaying:Bool = false
     @Published var confirmTheVoiceNote: Bool = false
-    
+
     override init () {
         super.init()
     }
@@ -34,11 +34,16 @@ class VoiceNoteViewModel: NSObject, ObservableObject, AVAudioPlayerDelegate {
         stopRecording()
     }
     
+    func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
+        isRecording = false
+        confirmTheVoiceNote = true
+        isMicPressed = false
+    }
+    
     /**
      Tells the delegate to set the isPlaying to false when the audio finishes playing.
      */
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
-        print("function is called")
         audioIsPlaying = false
     }
     
@@ -67,6 +72,7 @@ class VoiceNoteViewModel: NSObject, ObservableObject, AVAudioPlayerDelegate {
         
         do {
             audioRecorder = try AVAudioRecorder(url: audioFileName, settings: settings)
+            audioRecorder?.delegate = self
             audioRecorder?.isMeteringEnabled = true
             audioRecorder?.prepareToRecord()
             audioRecorder?.record(forDuration: audioRecordingDuration)
@@ -95,7 +101,6 @@ class VoiceNoteViewModel: NSObject, ObservableObject, AVAudioPlayerDelegate {
     func stopRecording() {
         self.disableMicriphoneMonitoring()
         audioRecorder?.stop()
-        isRecording = false
         isRecordingPaused = false
         objectWillChange.send()
     }

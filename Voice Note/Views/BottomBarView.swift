@@ -133,11 +133,6 @@ struct BottomBarView: View {
             
         } else {
             voiceNoteViewModel.stopRecording()
-            if let newestRecordUrl = voiceNoteViewModel.fileUrlList.last {
-                print("NewesrRecordUrl is \(newestRecordUrl)")
-                speechRecognizer.transcribeFile(from: newestRecordUrl)
-                voiceNoteViewModel.confirmTheVoiceNote = true
-            }
         }
     }
     

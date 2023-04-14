@@ -9,6 +9,7 @@ import SwiftUI
 
 struct SlidingModalView: View {
     @EnvironmentObject var voiceNoteViewModel: VoiceNoteViewModel
+    @EnvironmentObject var speechRecognizer: SpeechRecognizer
     @Binding var showSheet: Bool
     @Binding var toast:ToastView?
     
@@ -20,15 +21,18 @@ struct SlidingModalView: View {
                 .transition(.move(edge: .bottom))
                 .cornerRadius(40, corners: [.topLeft, .topRight])
                 .offset(y:50)
-                .shadow(color: .black, radius: 10 , x: 8, y: 8)
+                .shadow(color: .black.opacity(0.6), radius: 10 , x: 8, y: 8)
             if voiceNoteViewModel.isRecording {
                 AudioRecordingView()
             } else {
-                AudioConfirmationView(showSheet: $showSheet, toast: $toast).animation(.easeInOut, value: voiceNoteViewModel.isRecording)
+                AudioConfirmationView(showSheet: $showSheet, toast: $toast)
+                .animation(.easeInOut, value: voiceNoteViewModel.isRecording)
             }
         }
         
     }
+    
+
 }
 
 struct SlidingModalView_Previews: PreviewProvider {

@@ -27,7 +27,14 @@ struct AudioConfirmationView: View {
                 }
                 RecordingCardView()
             }
-        }.alert("Are you sure you want to delete?", isPresented: $showDeleteConfimation) {
+        }
+        .onAppear {
+            if let newestRecordUrl = voiceNoteViewModel.fileUrlList.last {
+                toast = ToastView(type: .info, title: "Recording Activity Ended", message: "Recording stopped by button press or reached 10s limit.") {}
+                speechRecognizer.transcribeFile(from: newestRecordUrl)
+            }
+        }
+        .alert("Are you sure you want to delete?", isPresented: $showDeleteConfimation) {
             HStack {
                 Button("DELETE") {
                     if let newestRecordUrl = voiceNoteViewModel.fileUrlList.last {
@@ -47,6 +54,16 @@ struct AudioConfirmationView: View {
                 Button("CANCEL", role: .cancel) {
                     print("Cancel delete pressed")
                 }
+            }
+            
+        }
+    }
+    
+    private func transcriptionText() {
+        print("this is called")
+        if (!voiceNoteViewModel.isRecording) {
+            if let newestRecordUrl = voiceNoteViewModel.fileUrlList.last {
+                speechRecognizer.transcribeFile(from: newestRecordUrl)
             }
         }
     }
