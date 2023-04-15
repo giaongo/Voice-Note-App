@@ -8,19 +8,21 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State var showSheet:Bool = false
     @State var increaseHeight: Bool = false
+    @State var toast:ToastView? = nil
+    @State var showSheet: Bool = false
+    @State var tagSelect = "house"
     var body: some View {
-        VStack(spacing:0) {
-            Spacer()
-            if showSheet {
-                SlidingModalView(showSheet: $showSheet)
+        ZStack(alignment: .bottom) {
+            TabView(selection:$tagSelect) {
+                Home().tag("house")
+                Color.purple.tag("mic.fill")
+                RecordingListView().tag("list.dash")
             }
-            BottomBarView(showSheet: $showSheet)
+            BottomBarView(toast: $toast,showSheet: $showSheet, tagSelect: $tagSelect)
         }
-        .background(
-            Home()
-        )
+        .toastView(toast: $toast)
+        .ignoresSafeArea()
         
     }
 }

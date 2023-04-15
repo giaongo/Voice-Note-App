@@ -56,7 +56,7 @@ class SpeechRecognizer: ObservableObject {
         } else {
             errorMessage += error.localizedDescription
         }
-        transcriptionText = "Error dictating speech \(errorMessage)"
+        transcriptionText = "Error dictating speech: \(errorMessage)"
     }
     
     /**

@@ -10,27 +10,37 @@ import SwiftUI
 struct BottomBarView: View {
     @EnvironmentObject var voiceNoteViewModel: VoiceNoteViewModel
     @EnvironmentObject var speechRecognizer: SpeechRecognizer
-    @Binding var showSheet: Bool
     @State var showConfirmationAlert: Bool = false
+    @Binding var toast:ToastView?
+    @Binding var showSheet: Bool
+    @Binding var tagSelect: String
     let buttonColor = #colorLiteral(red: 0.1764705926, green: 0.01176470611, blue: 0.5607843399, alpha: 1)
+    let backgroundModalView = #colorLiteral(red: 0.921431005, green: 0.9214526415, blue: 0.9214410186, alpha: 0.4915060081)
     
     var body: some View {
-        VStack {
+        VStack(spacing:0) {
+            if showSheet {
+                SlidingModalView(showSheet: $showSheet, toast: $toast)
+            }
+            // Custom bottom tab bar
             HStack {
                 Spacer()
+                
+                // Home button
                 Button {
-                    showSheet = false
-                    voiceNoteViewModel.confirmTheVoiceNote = false
+                    tagSelect = "house"
                 } label: {
                     VStack {
                         Image(systemName: "house")
                             .font(.system(size: 25))
                             .foregroundColor(Color(buttonColor))
+                            .padding(.bottom, 15)
                     }
                 }
                 
                 Spacer()
                 
+                // Microphone button
                 VStack {
                     Button {
                         !voiceNoteViewModel.confirmTheVoiceNote ? clickAudioButton() : confirmToAddTheRecording()
@@ -39,16 +49,21 @@ struct BottomBarView: View {
                             .font(.system(size: 30))
                             .foregroundColor(.white)
                     }
+                    .tag("mic.fill")
                     .padding(.all, 20)
                     .background(
                         Circle()
                             .fill(Color(buttonColor))
                     )
-                    .offset(y: -30)
-                    .alert("Important message", isPresented: $showConfirmationAlert) {
+                    .offset(y: -50)
+                    .alert("Please confirm to save!", isPresented: $showConfirmationAlert) {
                         HStack {
                             Button("SAVE") {
-                                print("Save pressed")
+                                voiceNoteViewModel.confirmTheVoiceNote = false
+                                showSheet = false
+                                toast = ToastView(type: .success, title: "Save Success", message: "Note saved successfully") {
+                                    print("canceled pressed")
+                                }
                             }
                             Button("CANCEL", role: .cancel) {
                                 print("Cancel pressed")
@@ -56,6 +71,7 @@ struct BottomBarView: View {
                         }
                     }
                     
+                    // Pause audio button
                     if voiceNoteViewModel.isMicPressed {
                         Button(action: {
                             if voiceNoteViewModel.isRecordingPaused {
@@ -73,20 +89,21 @@ struct BottomBarView: View {
                                 Circle()
                                     .fill(Color(buttonColor))
                             )
-                            .offset(y: -30)
+                            .offset(y: -50)
                     }
                 }
                 
                 Spacer()
                 
-                NavigationLink {
-                    RecordingListView()
+                // Note list button
+                Button {
+                    tagSelect = "list.dash"
                 } label: {
                     VStack {
                         Image(systemName: "list.dash")
                             .font(.system(size: 25))
                             .foregroundColor(Color(buttonColor))
-                            .padding(.bottom, 3)
+                            .padding(.bottom, 15)
                     }
                 }
                 Spacer()
@@ -96,10 +113,11 @@ struct BottomBarView: View {
                     Divider()
                         .overlay(.black)
                     Spacer()
-                }.background(.white)
+                }
+                    .background(.white)
+                    .frame(height: 100)
             )
-            .frame(height: 60)
-        }
+        }.ignoresSafeArea(.all)
     }
     
     private func clickAudioButton() {
@@ -115,11 +133,6 @@ struct BottomBarView: View {
             
         } else {
             voiceNoteViewModel.stopRecording()
-            if let newestRecordUrl = voiceNoteViewModel.fileUrlList.last {
-                print("NewesrRecordUrl is \(newestRecordUrl)")
-                speechRecognizer.transcribeFile(from: newestRecordUrl)
-                voiceNoteViewModel.confirmTheVoiceNote = true
-            }
         }
     }
     
@@ -130,6 +143,11 @@ struct BottomBarView: View {
 
 struct BottomBarView_Previews: PreviewProvider {
     static var previews: some View {
-        BottomBarView(showSheet: .constant(false)).environmentObject(VoiceNoteViewModel()).environmentObject(SpeechRecognizer())
+        BottomBarView(
+            toast: .constant(ToastView(type: .success, title: "Save Success", message: "Note saved successfully") {
+                print("canceled pressed")
+            }), showSheet: .constant(false),tagSelect: .constant("house"))
+        .environmentObject(VoiceNoteViewModel())
+        .environmentObject(SpeechRecognizer())
     }
 }
