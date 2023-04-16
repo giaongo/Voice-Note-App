@@ -62,12 +62,22 @@ struct Home: View {
                     Button(action: mapData.updateMapType, label: {
                         Image(systemName: mapData.mapType ==
                             .standard ? "network" : "map")
+                        .font(.title2)
+                        .padding(10)
+                        .background(Color(.systemGray6))
+                        .clipShape(Circle())
+                        .foregroundColor(Color(buttonColor))
+                    })
+                    Button(action: mapData.showRoute, label: {
+                            Image(systemName: mapData.mapType ==
+                                .standard ? "network" : "map")
                             .font(.title2)
                             .padding(10)
                             .background(Color(.systemGray6))
                             .clipShape(Circle())
                             .foregroundColor(Color(buttonColor))
                     })
+                    
                 }
                 .frame(maxWidth: .infinity, alignment: .trailing)
                 .padding(.bottom, 100)

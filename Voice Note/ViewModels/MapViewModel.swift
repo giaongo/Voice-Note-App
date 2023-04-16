@@ -11,6 +11,7 @@ import CoreLocation
 
 class MapViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
         
+    
     @Published var mapView = MKMapView()
     
     //Region
@@ -29,6 +30,8 @@ class MapViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
     // Searched places
     @Published var places: [Place] = []
     
+    //Set searchjed locations
+    private var searchedLocations = [MKPlacemark]()
     
     //Update Map Type...
     func updateMapType() {
@@ -41,6 +44,14 @@ class MapViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
         }
     }
     
+    //Get Location
+    func getUserLocation(for mapView: MKMapView) -> CLLocation {
+        let lattitude = mapView.region.center.latitude
+        let longitude = mapView.region.center.longitude
+        
+        return CLLocation(latitude: lattitude, longitude: longitude)
+    }
+    
     //Focus Location...
     func focusLocation() {
         guard let _ = region else {return}
@@ -49,6 +60,7 @@ class MapViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
         mapView.setVisibleMapRect(mapView.visibleMapRect, animated: true)
     }
     
+
     //Search Places...
     func searchQuery() {
         
@@ -68,6 +80,15 @@ class MapViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
         }
     }
     
+    func addOverlay(_ overlay: MKOverlay) {
+        mapView.addOverlay(overlay)
+    }
+    
+    func removeOverlay(_ overlay: MKOverlay) {
+        mapView.removeOverlay(overlay)
+    }
+
+    
     //Pick search result
     func selectPlace(place: Place) {
         //Show pin on map
@@ -85,10 +106,35 @@ class MapViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
         
         mapView.addAnnotation(pointAnnotation)
         
+        
+        searchedLocations.append(MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: place.place.location?.coordinate.latitude ?? 0, longitude: place.place.location?.coordinate.longitude ?? 0)))
+        
         //Move map to searched place
         let coordinateRegion = MKCoordinateRegion(center: coordinate, latitudinalMeters: 5000, longitudinalMeters: 5000)
+        print(coordinateRegion.center.longitude, coordinateRegion.center.latitude)
         mapView.setRegion(coordinateRegion, animated: true)
         mapView.setVisibleMapRect(mapView.visibleMapRect, animated: true)
+    }
+    
+    //Show route
+    func showRoute() {
+        let userCoordinate = MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: region.center.latitude, longitude: region.center.longitude))
+
+        let request = MKDirections.Request()
+        request.source = MKMapItem(placemark: userCoordinate)
+        request.destination = MKMapItem(placemark: searchedLocations[searchedLocations.count-1])
+        request.transportType = .automobile
+        
+        
+        print(searchedLocations)
+        
+        let directions = MKDirections(request: request)
+        directions.calculate { response, error in
+            guard let route = response?.routes.first else {return}
+            print(directions)
+            self.addOverlay(route.polyline)
+            self.mapView.setVisibleMapRect(route.polyline.boundingMapRect, animated: true)
+        }
     }
     
  

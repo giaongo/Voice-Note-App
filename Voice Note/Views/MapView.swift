@@ -49,6 +49,17 @@ struct MapView: UIViewRepresentable {
                 return pinAnnotation
             }
         }
+         
+        
+        
+        //Create overlay route
+        
+        func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+            let renderer = MKPolylineRenderer(overlay: overlay)
+            renderer.strokeColor = .systemBlue
+            renderer.lineWidth = 5
+            return renderer
+        }
 
     }
 
