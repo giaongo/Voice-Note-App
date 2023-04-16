@@ -100,7 +100,6 @@ class MapViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
         
         //Move map to searched place
         let coordinateRegion = MKCoordinateRegion(center: coordinate, latitudinalMeters: 5000, longitudinalMeters: 5000)
-        print(coordinateRegion.center.longitude, coordinateRegion.center.latitude)
         mapView.setRegion(coordinateRegion, animated: true)
         mapView.setVisibleMapRect(mapView.visibleMapRect, animated: true)
     }
