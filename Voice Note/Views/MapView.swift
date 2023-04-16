@@ -11,14 +11,14 @@ import MapKit
 struct MapView: UIViewRepresentable {
     let pinColor = #colorLiteral(red: 0.1764705926, green: 0.01176470611, blue: 0.5607843399, alpha: 1)
 
-    @EnvironmentObject var mapData: MapViewModel
+    @EnvironmentObject var mapViewModel: MapViewModel
 
     func makeCoordinator() -> Coordinator {
         return MapView.Coordinator()
     }
     
     func makeUIView(context: Context) -> MKMapView {
-        let view = mapData.mapView
+        let view = mapViewModel.mapView
 
         view.showsUserLocation = true
         view.delegate = context.coordinator
