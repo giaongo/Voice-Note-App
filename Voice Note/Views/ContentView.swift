@@ -15,7 +15,7 @@ struct ContentView: View {
     var body: some View {
         ZStack(alignment: .bottom) {
             TabView(selection:$tagSelect) {
-                Home().tag("house")
+                MapScreen().tag("house")
                 Color.purple.tag("mic.fill")
                 RecordingListView().tag("list.dash")
             }

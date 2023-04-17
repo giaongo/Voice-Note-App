@@ -11,6 +11,8 @@ import CoreLocation
 
 class MapViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
         
+    let locationManager = CLLocationManager()
+    
     @Published var mapView = MKMapView()
     
     //Region
@@ -29,6 +31,8 @@ class MapViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
     // Searched places
     @Published var places: [Place] = []
     
+    //Direction Array
+    private var directionsArray: [MKDirections] = []
     
     //Update Map Type...
     func updateMapType() {
@@ -41,6 +45,14 @@ class MapViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
         }
     }
     
+    //Get Location
+    func getCenterLocation(for mapView: MKMapView) -> CLLocation {
+        let lattitude = mapView.region.center.latitude
+        let longitude = mapView.region.center.longitude
+        
+        return CLLocation(latitude: lattitude, longitude: longitude)
+    }
+    
     //Focus Location...
     func focusLocation() {
         guard let _ = region else {return}
@@ -49,6 +61,7 @@ class MapViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
         mapView.setVisibleMapRect(mapView.visibleMapRect, animated: true)
     }
     
+
     //Search Places...
     func searchQuery() {
         
@@ -91,7 +104,51 @@ class MapViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
         mapView.setVisibleMapRect(mapView.visibleMapRect, animated: true)
     }
     
- 
+    //Get direction
+    func getDirection() {
+        guard let location = locationManager.location?.coordinate else {return}
+        
+        let request = createDirectionRequest(from: location)
+        let directions = MKDirections(request: request)
+        
+        resetMapView(withNew: directions)
+        directions.calculate { [self] (response, error) in
+            //Handle error if needed
+            guard let response = response else {return}
+            
+            for route in response.routes {
+                self.mapView.addOverlay(route.polyline)
+                self.mapView.setVisibleMapRect(route.polyline.boundingMapRect, animated: true)
+            }
+            
+        }
+        
+    }
+    
+    //Create direction request
+    func createDirectionRequest(from coordinate: CLLocationCoordinate2D) -> MKDirections.Request {
+        let destinationCoordinate = getCenterLocation(for: mapView).coordinate
+        let startingLocation = MKPlacemark(coordinate: coordinate)
+        let destination = MKPlacemark(coordinate: destinationCoordinate)
+        
+        let request = MKDirections.Request()
+        request.source = MKMapItem(placemark: startingLocation)
+        request.destination = MKMapItem(placemark: destination)
+        request.transportType = .automobile
+        request.requestsAlternateRoutes = true
+        
+        return request
+    }
+    
+    //reset mapview
+    func resetMapView(withNew directions: MKDirections) {
+        mapView.removeOverlays(mapView.overlays)
+        directionsArray.append(directions)
+        let _ = directionsArray.map{$0.cancel()}
+    }
+     
+
+    
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         //Check with permission
         switch manager.authorizationStatus {

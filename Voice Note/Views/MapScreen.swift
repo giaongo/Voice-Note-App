@@ -1,15 +1,15 @@
 //
-//  Home.swift
+//  MapViewDisplay.swift
 //  Voice Note
 //
-//  Created by iosdev on 4.4.2023.
+//  Created by Tai Nguyen on 4.4.2023.
 //
 
 import SwiftUI
 import CoreLocation
 
-struct Home: View {
-    @StateObject var mapData = MapViewModel()
+struct MapScreen: View {
+    @StateObject var mapViewModel = MapViewModel()
     //Location Manager...
     @State var locationManager = CLLocationManager()
     let buttonColor = #colorLiteral(red: 0.1764705926, green: 0.01176470611, blue: 0.5607843399, alpha: 1)
@@ -19,23 +19,23 @@ struct Home: View {
             
             MapView()
                 //using it as environment object so that it can be used ints subViews
-                .environmentObject(mapData)
+                .environmentObject(mapViewModel)
                 .ignoresSafeArea(.all, edges: .all)
             
             VStack {
                 
-                SearchOptionsBar(searchQuery: $mapData.searchText)
-                if !mapData.places.isEmpty && mapData.searchText != "" {
+                SearchOptionsBar(searchQuery: $mapViewModel.searchText)
+                if !mapViewModel.places.isEmpty && mapViewModel.searchText != "" {
                     
                     ScrollView {
                         VStack {
-                            ForEach(mapData.places) {place in
+                            ForEach(mapViewModel.places) {place in
                                 Text(place.place.name ?? "")
                                     .foregroundColor(Color(buttonColor))
                                     .frame(maxWidth: .infinity, alignment: .leading)
                                     .padding(.leading)
                                     .onTapGesture{
-                                        mapData.selectPlace(place: place)
+                                        mapViewModel.selectPlace(place: place)
                                     }
                                 
                                 Divider()
@@ -50,7 +50,7 @@ struct Home: View {
                 
                 VStack {
                     
-                    Button(action: mapData.focusLocation, label: {
+                    Button(action: mapViewModel.focusLocation, label: {
                         Image(systemName: "location.fill")
                             .font(.title2)
                             .padding(10)
@@ -59,15 +59,24 @@ struct Home: View {
                             .foregroundColor(Color(buttonColor))
                     })
                     
-                    Button(action: mapData.updateMapType, label: {
-                        Image(systemName: mapData.mapType ==
+                    Button(action: mapViewModel.updateMapType, label: {
+                        Image(systemName: mapViewModel.mapType ==
                             .standard ? "network" : "map")
+                        .font(.title2)
+                        .padding(10)
+                        .background(Color(.systemGray6))
+                        .clipShape(Circle())
+                        .foregroundColor(Color(buttonColor))
+                    })
+                    Button(action: mapViewModel.getDirection, label: {
+                            Image(systemName: "arrow.triangle.turn.up.right.diamond.fill")
                             .font(.title2)
                             .padding(10)
                             .background(Color(.systemGray6))
                             .clipShape(Circle())
                             .foregroundColor(Color(buttonColor))
                     })
+                    
                 }
                 .frame(maxWidth: .infinity, alignment: .trailing)
                 .padding(.bottom, 100)
@@ -76,11 +85,11 @@ struct Home: View {
         .onAppear(perform: {
             
             //Setting Delegate
-            locationManager.delegate = mapData
+            locationManager.delegate = mapViewModel
             locationManager.requestWhenInUseAuthorization()
         })
         //Permission Denied Alert
-        .alert(isPresented: $mapData.permissionDenied, content: {
+        .alert(isPresented: $mapViewModel.permissionDenied, content: {
             
             Alert(title: Text("Permission Denied"), message: Text("Please Enable Permission in App Settings"), dismissButton: .default(Text("Go to Settings"), action: {
                 
@@ -88,7 +97,7 @@ struct Home: View {
                 UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
             })
         )})
-        .onChange(of: mapData.searchText, perform: {value in
+        .onChange(of: mapViewModel.searchText, perform: {value in
             //Searching places
             
             
@@ -96,17 +105,17 @@ struct Home: View {
             let delay = 0.3
             
             DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
-                if value == mapData.searchText {
+                if value == mapViewModel.searchText {
                     //Search...
-                    self.mapData.searchQuery()
+                    self.mapViewModel.searchQuery()
                 }
             }
         })
     }
 }
 
-struct Home_Previews: PreviewProvider {
+struct MapScreen_Previews: PreviewProvider {
     static var previews: some View {
-        Home()
+        MapScreen()
     }
 }
