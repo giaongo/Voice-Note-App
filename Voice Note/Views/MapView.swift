@@ -22,7 +22,6 @@ struct MapView: UIViewRepresentable {
 
         view.showsUserLocation = true
         view.delegate = context.coordinator
-
         return view
     }
     
@@ -46,12 +45,20 @@ struct MapView: UIViewRepresentable {
                 pinAnnotation.animatesWhenAdded = true
                 pinAnnotation.canShowCallout = true
                 
+                let viewDetailButton = UIButton()
+                viewDetailButton.frame.size.width = 44
+                viewDetailButton.frame.size.height = 44
+                viewDetailButton.setTitleColor(.black, for: .normal)
+                viewDetailButton.setTitle("Button Clicked", for: .normal)
+                viewDetailButton.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
+                pinAnnotation.detailCalloutAccessoryView = viewDetailButton
                 return pinAnnotation
             }
         }
-         
         
-        
+        @objc func buttonAction() -> Void {
+
+           }
         //Create overlay route
         
         func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
