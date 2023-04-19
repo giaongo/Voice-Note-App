@@ -4,7 +4,8 @@
 // 
 
 import Foundation
+import CoreData
 
 protocol Applicable {
-    func apply(_: String)
+    func apply(_: NSManagedObject)
 }

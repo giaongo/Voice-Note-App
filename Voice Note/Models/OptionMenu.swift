@@ -4,6 +4,7 @@
 //
 
 import Foundation
+import CoreData
 
 enum OptionMenu: String, CaseIterable {
     case EDIT = "Edit"
@@ -17,7 +18,7 @@ extension OptionMenu: Identifiable {
 
 extension OptionMenu: Applicable {
     // TODO pass object that confronts to Handleable protocol
-    func apply(_ selected: String) {
+    func apply(_ item: NSManagedObject) {
         switch self {
 
         case .EDIT:
@@ -28,6 +29,7 @@ extension OptionMenu: Applicable {
         case .DELETE:
             // TODO implement delete functionality here
             print("Print from Enum: DELETE")
+            CoreDataService.localStorage.delete(item)
         }
     }
 }

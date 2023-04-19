@@ -31,8 +31,8 @@ class CoreDataService {
         newVoiceNote.duration = 3765
         newVoiceNote.createdAt = Date.init()
         newVoiceNote.location = Location(context: persistenceController.container.viewContext)
-        newVoiceNote.location?.latitude = 24.444
-        newVoiceNote.location?.longitude = 64.444
+        newVoiceNote.location?.latitude = Double.random(in: 24.600750..<25.30750)//24.444
+        newVoiceNote.location?.longitude = Double.random(in: 60.090760..<60.430440)
         newVoiceNote.weather = Weather(context: persistenceController.container.viewContext)
         newVoiceNote.weather?.temperature = Temperature(context: persistenceController.container.viewContext)
         newVoiceNote.weather?.temperature?.average = 34
@@ -62,6 +62,14 @@ class CoreDataService {
         } catch let error as NSError {
             print("Could not fetch. \(error), \(error.userInfo)")
             //return nil
+        }
+    }
+    func delete(_ item: NSManagedObject) {
+        let managedContext = persistenceController.container.viewContext
+        do {
+            try managedContext.delete(item)
+        } catch let error as NSError {
+            print("Could not fetch. \(error), \(error.userInfo)")
         }
     }
 }

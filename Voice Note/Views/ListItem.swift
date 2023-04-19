@@ -17,6 +17,11 @@ struct ListItem: View {
                 Spacer()
                 Text(voiceNote.title ?? "").bold()
                 Spacer()
+                // TODO, remove later these location parameters
+                Text(String(format: "%.6f", voiceNote.location?.longitude ?? 0.0))
+                Spacer()
+                Text(String(format: "%.6f", voiceNote.location?.latitude ?? 0.0))
+                Spacer()
                 Text(voiceNote.text ?? "")
                 Spacer()
                 HStack {
@@ -27,7 +32,6 @@ struct ListItem: View {
                             }
                     Text("\(voiceNote.near ?? "")")
                 }
-                Spacer()
             }
             Spacer()
             VStack(alignment: .trailing) {
@@ -44,7 +48,7 @@ struct ListItem: View {
                                     defaultSelect = option.rawValue
                                     print("Option selected: \(option)")
                                     print("Type of Option selected: \(type(of: option))")
-                                    option.apply(voiceNote.title ?? "")
+                                    option.apply(voiceNote)
                                 }
                             }
                         }
