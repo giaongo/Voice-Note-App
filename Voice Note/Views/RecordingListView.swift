@@ -34,6 +34,7 @@ struct RecordingListView: View {
                     ToolbarItem {
                         Button(action: addItem) {
                             Label("Add Item", systemImage: "plus")
+                        }
                     }
                 }
                 .padding(0)

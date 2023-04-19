@@ -18,7 +18,7 @@ struct DetailView: View {
     }
     var body: some View {
         VStack {
-            Text("\(voiceNote.text)")
+            Text("voiceNote.text")
                 .padding()
                 .frame(maxWidth: .infinity)
                 .background(Color(textContainer))
@@ -26,7 +26,7 @@ struct DetailView: View {
                 .padding()
             
             RecordingCardView().padding(15)
-            Text("Duration: \(voiceNote.duration.secondsAsTwoDigitString())s")
+            Text("Duration: 23s")
             HStack {
                 // Direction button
                 DetailBtn(clickHander: {
@@ -72,7 +72,7 @@ struct DetailBtn: View {
         }.padding(.horizontal,20).disabled(true)
     }
 }
-struct DetailView_Previews: PreviewProvider {
+/*struct DetailView_Previews: PreviewProvider {
     static var previews: some View {
         DetailView(voiceNote: VoiceNote(
             noteId: UUID(),
@@ -85,3 +85,4 @@ struct DetailView_Previews: PreviewProvider {
         ))
     }
 }
+*/
