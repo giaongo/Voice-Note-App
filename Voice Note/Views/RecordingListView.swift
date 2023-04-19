@@ -9,32 +9,51 @@ import SwiftUI
 import CoreLocation
 
 struct RecordingListView: View {
-    @EnvironmentObject var voiceNoteViewModel:VoiceNoteViewModel
     @State var toast:ToastView? = nil
+    //@Environment(\.managedObjectContext) private var managedObjectContext
+    @Environment(\.coreData) private var coreDataService: CoreDataService
+
+    // Item will get fetched when RecordingListView loads
+    @FetchRequest(
+        sortDescriptors: [NSSortDescriptor(keyPath: \VoiceNote.id, ascending: true)],
+            animation: .default)
+    private var items: FetchedResults<VoiceNote>
     
     var body: some View {
         NavigationStack {
             VStack {
                 List {
-                    ForEach((1...10), id: \.self) {
-                        ListItem (
-                            voiceNote: VoiceNote(
-                                noteId: UUID(),
-                                noteTitle: "Note - \($0)",
-                                noteText: "Rekjh falk sdlfka hsldkj fhkasdh lkfsd",
-                                noteDuration: TimeDuration(size: 3765),
-                                noteCreatedAt: Date.init(),
-                                noteTakenNear: "Ruoholahti",
-                                voiceNoteLocation: CLLocation(latitude: 24.33, longitude: 33.56)
-                            ))
+                    ForEach(items, id: \.self) { item in
+                        ListItem (voiceNote: item)
+                    }.onDelete(perform: deleteItem)
+                }
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        EditButton()
+                    }
+                    ToolbarItem {
+                        Button(action: addItem) {
+                            Label("Add Item", systemImage: "plus")
+                        }
                     }
                 }
                 .padding(0)
             }
-            
         }
         .toastView(toast: $toast)
         .navigationBarTitle("My Voice Notes")
+    }
+
+    private func addItem() {
+        withAnimation {
+            coreDataService.addFakeItem()
+        }
+    }
+
+    private func deleteItem(offsets: IndexSet) {
+        withAnimation {
+            coreDataService.delete(offsets)
+        }
     }
 }
 
