@@ -9,6 +9,7 @@ import SwiftUI
 import CoreLocation
 
 struct DetailView: View {
+    @EnvironmentObject var voiceNoteViewModel: VoiceNoteViewModel
     let textContainer = #colorLiteral(red: 0.4, green: 0.2039215686, blue: 0.4980392157, alpha: 0.2)
     private let voiceNote: VoiceNote
     
@@ -24,8 +25,7 @@ struct DetailView: View {
                 .cornerRadius(20)
                 .padding()
             
-            RecordingCardView().environmentObject(VoiceNoteViewModel())
-                .padding(15)
+            RecordingCardView().padding(15)
             Text("Duration: \(voiceNote.duration.secondsAsTwoDigitString())s")
             HStack {
                 // Direction button
