@@ -26,7 +26,12 @@ struct MapScreen: View {
             MapView(clickOnPin: $clickOnPin)
                 .ignoresSafeArea(.all, edges: .all)
                 .sheet(isPresented: $clickOnPin) {
-                    DetailView(voiceNote: items[0])
+                    // TODO replace this with some thing else
+                    if !items.isEmpty {
+                        DetailView(voiceNote: items[0])
+                    } else {
+                        Text("CoreData is empty")
+                    }
                 }
                 .presentationDetents([.medium, .large])
                 .presentationDragIndicator(.visible)
