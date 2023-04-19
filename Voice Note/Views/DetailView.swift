@@ -6,13 +6,18 @@
 //
 
 import SwiftUI
+import CoreLocation
 
 struct DetailView: View {
     let textContainer = #colorLiteral(red: 0.4, green: 0.2039215686, blue: 0.4980392157, alpha: 0.2)
+    private let voiceNote: VoiceNote
     
+    init(voiceNote:VoiceNote) {
+        self.voiceNote = voiceNote
+    }
     var body: some View {
         VStack {
-            Text("This place is good to come back in the summer. There are a lot of mushrooms and berries to pick up. Take good camera lens with me also for a good lanscape shot")
+            Text("\(voiceNote.text)")
                 .padding()
                 .frame(maxWidth: .infinity)
                 .background(Color(textContainer))
@@ -21,7 +26,7 @@ struct DetailView: View {
             
             RecordingCardView().environmentObject(VoiceNoteViewModel())
                 .padding(15)
-            Text("03:50")
+            Text("Duration: \(voiceNote.duration.secondsAsTwoDigitString())s")
             HStack {
                 // Direction button
                 DetailBtn(clickHander: {
@@ -69,6 +74,14 @@ struct DetailBtn: View {
 }
 struct DetailView_Previews: PreviewProvider {
     static var previews: some View {
-        DetailView()
+        DetailView(voiceNote: VoiceNote(
+            noteId: UUID(),
+            noteTitle: "Note - 1",
+            noteText: "Rekjh falk sdlfka hsldkj fhkasdh lkfsd",
+            noteDuration: TimeDuration(size: 3765),
+            noteCreatedAt: Date.init(),
+            noteTakenNear: "Ruoholahti",
+            voiceNoteLocation: CLLocation(latitude: 24.33, longitude: 33.56)
+        ))
     }
 }

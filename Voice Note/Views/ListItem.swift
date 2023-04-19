@@ -55,6 +55,12 @@ struct ListItem: View {
                         .padding(.bottom, 16.0)
             }
         }
+        .onTapGesture {
+            showDetail = true
+        }
+        .sheet(isPresented: $showDetail) {
+            DetailView(voiceNote: voiceNote)
+        }
     }
 }
 

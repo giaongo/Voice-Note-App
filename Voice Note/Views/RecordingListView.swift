@@ -21,14 +21,12 @@ struct RecordingListView: View {
                             voiceNote: VoiceNote(
                                 noteId: UUID(),
                                 noteTitle: "Note - \($0)",
-                                noteText: "Rekjh falk sdlfka hsldkj fhkasdh lkfsd",
+                                noteText: "This place is good to come back in the summer. There are a lot of mushrooms and berries to pick up. Take good camera lens with me also for a good lanscape shot",
                                 noteDuration: TimeDuration(size: 3765),
                                 noteCreatedAt: Date.init(),
                                 noteTakenNear: "Ruoholahti",
                                 voiceNoteLocation: CLLocation(latitude: 24.33, longitude: 33.56)
-                            )).onTapGesture {
-                               print("Tap")
-                            }
+                            ))
                     }
                 }
                 .padding(0)
