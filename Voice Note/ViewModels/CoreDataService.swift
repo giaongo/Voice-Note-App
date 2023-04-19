@@ -64,4 +64,12 @@ class CoreDataService {
             //return nil
         }
     }
+    func delete(_ item: NSManagedObject) {
+        let managedContext = persistenceController.container.viewContext
+        do {
+            try managedContext.delete(item)
+        } catch let error as NSError {
+            print("Could not fetch. \(error), \(error.userInfo)")
+        }
+    }
 }

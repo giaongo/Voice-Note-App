@@ -43,7 +43,7 @@ struct ListItem: View {
                                     defaultSelect = option.rawValue
                                     print("Option selected: \(option)")
                                     print("Type of Option selected: \(type(of: option))")
-                                    option.apply(voiceNote.title ?? "")
+                                    option.apply(voiceNote)
                                 }
                             }
                         }
