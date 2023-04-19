@@ -39,6 +39,7 @@
 		6AAF52DB29DD749700C36681 /* WaveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AAF52DA29DD749700C36681 /* WaveView.swift */; };
 		E8A8840D29EECF0300C659CB /* VoiceNoteManagedObjectModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E8A8840B29EECF0300C659CB /* VoiceNoteManagedObjectModel.xcdatamodeld */; };
 		E8A8840F29EECF5400C659CB /* PersistenceContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A8840E29EECF5400C659CB /* PersistenceContainer.swift */; };
+		6AEBB78D29EECD10004AF77F /* DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AEBB78C29EECD10004AF77F /* DetailView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -96,6 +97,7 @@
 		6AAF52DA29DD749700C36681 /* WaveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaveView.swift; sourceTree = "<group>"; };
 		E8A8840C29EECF0300C659CB /* VoiceNoteManagedObjectModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = VoiceNoteManagedObjectModel.xcdatamodel; sourceTree = "<group>"; };
 		E8A8840E29EECF5400C659CB /* PersistenceContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceContainer.swift; sourceTree = "<group>"; };
+		6AEBB78C29EECD10004AF77F /* DetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -151,6 +153,7 @@
 				6A7ED37C29E1A9A600C44734 /* SearchOptionsBar.swift */,
 				6A673AD929E4276600CC9DA4 /* RecordingCardView.swift */,
 				6A889A4629E88694000FC5D1 /* ToastView.swift */,
+				6AEBB78C29EECD10004AF77F /* DetailView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -374,6 +377,7 @@
 				6A7ED37F29E210AB00C44734 /* Place.swift in Sources */,
 				6AAF52D329DC5C9100C36681 /* SlidingModalView.swift in Sources */,
 				6A41BB2229D964B70041C42E /* BottomBarView.swift in Sources */,
+				6AEBB78D29EECD10004AF77F /* DetailView.swift in Sources */,
 				6AAF52D129DC5B4900C36681 /* CornerRadiusStyle.swift in Sources */,
 				6A0ADCB429D73CB700FC9621 /* AudioRecordingView.swift in Sources */,
 				E8A8840F29EECF5400C659CB /* PersistenceContainer.swift in Sources */,
