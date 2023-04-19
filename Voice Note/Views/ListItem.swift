@@ -15,9 +15,9 @@ struct ListItem: View {
         HStack {
             VStack(alignment: .leading) {
                 Spacer()
-                Text(voiceNote.title).bold()
+                Text(voiceNote.title ?? "").bold()
                 Spacer()
-                Text(voiceNote.text)
+                Text(voiceNote.text ?? "")
                 Spacer()
                 HStack {
                     Image(systemName: "mappin.and.ellipse")
@@ -25,7 +25,7 @@ struct ListItem: View {
                             .onTapGesture {
                                 print("COMING SOON: Show Voice not on map")
                             }
-                    Text("\(voiceNote.near)")
+                    Text("\(voiceNote.near ?? "")")
                 }
                 Spacer()
             }
@@ -44,14 +44,15 @@ struct ListItem: View {
                                     defaultSelect = option.rawValue
                                     print("Option selected: \(option)")
                                     print("Type of Option selected: \(type(of: option))")
-                                    option.apply(voiceNote.title)
+                                    option.apply(voiceNote.title ?? "")
                                 }
                             }
                         }
                 Spacer()
-                Text("\(voiceNote.duration.hoursAsTwoDigitString()):\(voiceNote.duration.minutesAsTwoDigitString()):\(voiceNote.duration.secondsAsTwoDigitString())")
+                //Text("\(voiceNote.duration.hoursAsTwoDigitString()):\(voiceNote.duration.minutesAsTwoDigitString()):\(voiceNote.duration.secondsAsTwoDigitString())")
+                Text("\(voiceNote.duration):\(voiceNote.duration):\(voiceNote.duration)")
                 Spacer()
-                Text("\(voiceNote.createdAt.formatted(.iso8601.day().month().year()))")
+                Text("\(Date.init().formatted(.iso8601.day().month().year()))")
                         .padding(.bottom, 16.0)
             }
         }
