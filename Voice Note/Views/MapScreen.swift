@@ -21,6 +21,11 @@ struct MapScreen: View {
                 //using it as environment object so that it can be used ints subViews
                 .environmentObject(mapViewModel)
                 .ignoresSafeArea(.all, edges: .all)
+                .sheet(isPresented: .constant(mapViewModel.clickOnPin)) {
+                    DetailView()
+                }
+                .presentationDetents([.medium, .large])
+                .presentationDragIndicator(.visible)
             
             VStack {
                 

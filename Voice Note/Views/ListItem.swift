@@ -10,6 +10,7 @@ struct ListItem: View {
     @State private var isOptionMenu = false
     @State private var isDeleteAlert = false
     @State private var defaultSelect = "None"
+    @State private var showDetail = false
     var body: some View {
         HStack {
             VStack(alignment: .leading) {

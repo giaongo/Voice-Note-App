@@ -9,49 +9,43 @@ import SwiftUI
 
 struct DetailView: View {
     let textContainer = #colorLiteral(red: 0.4, green: 0.2039215686, blue: 0.4980392157, alpha: 0.2)
-    @State var showSheet = false
-    var body: some View {
-            Button("Show sheet", action: {
-                showSheet.toggle()
-            })
-            .sheet(isPresented: $showSheet) {
-                VStack {
-                    Text("This place is good to come back in the summer. There are a lot of mushrooms and berries to pick up. Take good camera lens with me also for a good lanscape shot")
-                        .padding()
-                        .frame(maxWidth: .infinity)
-                        .background(Color(textContainer))
-                        .cornerRadius(20)
-                        .padding()
-
-                    RecordingCardView().environmentObject(VoiceNoteViewModel())
-                        .padding(15)
-                    Text("03:50")
-                    HStack {
-                        // Direction button
-                        DetailBtn(clickHander: {
-                            print("Direction pressed")
-                        }, icon: "arrow.triangle.turn.up.right.diamond.fill")
-                        
-                        //  Edit button
-                        DetailBtn(clickHander: {
-                            print("Edit pressed")
-                        }, icon: "pencil").disabled(true)
-                        
-                        // Delete button
-                        DetailBtn(clickHander: {
-                            print("Delete pressed")
-                        }, icon: "trash")
-                        
-                        // Share button
-                        DetailBtn(clickHander: {
-                            print("Share pressed")
-                        }, icon: "square.and.arrow.up").disabled(true)
-                    }
-                }
-                .presentationDetents([.medium, .large])
-                .presentationDragIndicator(.visible)
-            }
     
+    var body: some View {
+        VStack {
+            Text("This place is good to come back in the summer. There are a lot of mushrooms and berries to pick up. Take good camera lens with me also for a good lanscape shot")
+                .padding()
+                .frame(maxWidth: .infinity)
+                .background(Color(textContainer))
+                .cornerRadius(20)
+                .padding()
+            
+            RecordingCardView().environmentObject(VoiceNoteViewModel())
+                .padding(15)
+            Text("03:50")
+            HStack {
+                // Direction button
+                DetailBtn(clickHander: {
+                    print("Direction pressed")
+                }, icon: "arrow.triangle.turn.up.right.diamond.fill")
+                
+                //  Edit button
+                DetailBtn(clickHander: {
+                    print("Edit pressed")
+                }, icon: "pencil").disabled(true)
+                
+                // Delete button
+                DetailBtn(clickHander: {
+                    print("Delete pressed")
+                }, icon: "trash")
+                
+                // Share button
+                DetailBtn(clickHander: {
+                    print("Share pressed")
+                }, icon: "square.and.arrow.up").disabled(true)
+            }
+        }
+        .presentationDetents([.medium, .large])
+        .presentationDragIndicator(.visible)
     }
 }
 
@@ -62,14 +56,14 @@ struct DetailBtn: View {
     
     var body: some View {
         Button {
-           clickHander()
+            clickHander()
         } label: {
             Image(systemName: icon)
-            .font(.title2)
-            .padding(10)
-            .background(Color(.systemGray6))
-            .clipShape(Circle())
-            .foregroundColor(Color(buttonColor))
+                .font(.title2)
+                .padding(10)
+                .background(Color(.systemGray6))
+                .clipShape(Circle())
+                .foregroundColor(Color(buttonColor))
         }.padding(.horizontal,20).disabled(true)
     }
 }

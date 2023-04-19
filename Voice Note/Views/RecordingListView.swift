@@ -26,7 +26,9 @@ struct RecordingListView: View {
                                 noteCreatedAt: Date.init(),
                                 noteTakenNear: "Ruoholahti",
                                 voiceNoteLocation: CLLocation(latitude: 24.33, longitude: 33.56)
-                            ))
+                            )).onTapGesture {
+                               print("Tap")
+                            }
                     }
                 }
                 .padding(0)
