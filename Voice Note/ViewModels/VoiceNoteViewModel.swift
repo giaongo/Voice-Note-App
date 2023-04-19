@@ -167,7 +167,6 @@ class VoiceNoteViewModel: NSObject, ObservableObject, AVAudioPlayerDelegate, AVA
     func deleteRecording(url: URL) {
         do {
             try FileManager.default.removeItem(at: url)
-            print("Recording is deleted successfully")
         } catch {
             print("Error deleting recording \(error.localizedDescription)")
         }

@@ -9,18 +9,28 @@ import SwiftUI
 import CoreLocation
 
 struct MapScreen: View {
-    @StateObject var mapViewModel = MapViewModel()
-    //Location Manager...
+    @EnvironmentObject var mapViewModel: MapViewModel
+    @State var clickOnPin: Bool = false
     @State var locationManager = CLLocationManager()
     let buttonColor = #colorLiteral(red: 0.1764705926, green: 0.01176470611, blue: 0.5607843399, alpha: 1)
 
     var body: some View {
         ZStack{
-            
-            MapView()
-                //using it as environment object so that it can be used ints subViews
-                .environmentObject(mapViewModel)
+            MapView(clickOnPin: $clickOnPin)
                 .ignoresSafeArea(.all, edges: .all)
+                .sheet(isPresented: $clickOnPin) {
+                    DetailView(voiceNote: VoiceNote(
+                        noteId: UUID(),
+                        noteTitle: "Note - 1",
+                        noteText: "This place is good to come back in the summer. There are a lot of mushrooms and berries to pick up. Take good camera lens with me also for a good lanscape shot",
+                        noteDuration: TimeDuration(size: 3765),
+                        noteCreatedAt: Date.init(),
+                        noteTakenNear: "Ruoholahti",
+                        voiceNoteLocation: CLLocation(latitude: 24.33, longitude: 33.56)
+                    ))
+                }
+                .presentationDetents([.medium, .large])
+                .presentationDragIndicator(.visible)
             
             VStack {
                 
@@ -83,11 +93,11 @@ struct MapScreen: View {
             }
         }
         .onAppear(perform: {
-            
             //Setting Delegate
             locationManager.delegate = mapViewModel
             locationManager.requestWhenInUseAuthorization()
         })
+
         //Permission Denied Alert
         .alert(isPresented: $mapViewModel.permissionDenied, content: {
             
@@ -116,6 +126,6 @@ struct MapScreen: View {
 
 struct MapScreen_Previews: PreviewProvider {
     static var previews: some View {
-        MapScreen()
+        MapScreen().environmentObject(MapViewModel())
     }
 }
