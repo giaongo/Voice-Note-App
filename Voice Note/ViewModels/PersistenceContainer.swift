@@ -15,8 +15,23 @@ struct PersistenceController {
         let result = PersistenceController(inMemory: true)
         let viewContext = result.container.viewContext
         for _ in 0..<10 {
-            let newItem = Item(context: viewContext)
-            newItem.timestamp = Date()
+            let newVoiceNote = VoiceNote(context: viewContext)
+
+            newVoiceNote.id = UUID()
+            newVoiceNote.text = "this is my voicenote text"
+            newVoiceNote.title = "Note title"
+            newVoiceNote.near = "Kamppi"
+            newVoiceNote.fileUrl = URL(fileURLWithPath: "/dev/secure/storage")
+            newVoiceNote.duration = 3765
+            newVoiceNote.createdAt = Date.init()
+            newVoiceNote.location = Location(context: viewContext)
+            newVoiceNote.location?.latitude = 24.444
+            newVoiceNote.location?.longitude = 64.444
+            newVoiceNote.weather = Weather(context: viewContext)
+            newVoiceNote.weather?.temperature = Temperature(context: viewContext)
+            newVoiceNote.weather?.temperature?.average = 34
+            newVoiceNote.weather?.temperature?.maximum = 44
+            newVoiceNote.weather?.temperature?.minimum = 24
         }
         do {
             try viewContext.save()
