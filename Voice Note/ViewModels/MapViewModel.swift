@@ -31,9 +31,6 @@ class MapViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
     // Searched places
     @Published var places: [Place] = []
     
-    // Pin marker clicked
-    @Published var clickOnPin = false
-    
     //Direction Array
     private var directionsArray: [MKDirections] = []
     

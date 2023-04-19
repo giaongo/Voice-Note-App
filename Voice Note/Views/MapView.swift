@@ -11,6 +11,7 @@ import MapKit
 struct MapView: UIViewRepresentable {
     let pinColor = #colorLiteral(red: 0.1764705926, green: 0.01176470611, blue: 0.5607843399, alpha: 1)
     @EnvironmentObject var mapViewModel: MapViewModel
+    @Binding var clickOnPin: Bool
     
     func makeCoordinator() -> Coordinator {
         return MapView.Coordinator(parent: self)
@@ -58,7 +59,7 @@ struct MapView: UIViewRepresentable {
         }
         
         @objc func pinClickAction() {
-            parent.mapViewModel.clickOnPin = true
+            parent.clickOnPin = true
         }
         
         //Create overlay route
@@ -68,13 +69,11 @@ struct MapView: UIViewRepresentable {
             renderer.lineWidth = 5
             return renderer
         }
-        
     }
-    
 }
 
 struct MapView_Previews: PreviewProvider {
     static var previews: some View {
-        MapView().environmentObject(MapViewModel())
+        MapView(clickOnPin: .constant(true)).environmentObject(MapViewModel())
     }
 }
