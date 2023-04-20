@@ -18,7 +18,7 @@ struct DetailView: View {
     }
     var body: some View {
         VStack {
-            Text("voiceNote.text")
+            Text(voiceNote.text ?? "")
                 .padding()
                 .frame(maxWidth: .infinity)
                 .background(Color(textContainer))

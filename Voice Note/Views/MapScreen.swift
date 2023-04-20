@@ -14,12 +14,24 @@ struct MapScreen: View {
     @State var locationManager = CLLocationManager()
     let buttonColor = #colorLiteral(red: 0.1764705926, green: 0.01176470611, blue: 0.5607843399, alpha: 1)
 
+    // Fetch all VoiceNOtes from CoreData
+    // This is done to temporarily pass a single voiceNote to DetailView
+    @FetchRequest(
+            sortDescriptors: [NSSortDescriptor(keyPath: \VoiceNote.id, ascending: true)],
+            animation: .default)
+    private var items: FetchedResults<VoiceNote>
+
     var body: some View {
         ZStack{
             MapView(clickOnPin: $clickOnPin)
                 .ignoresSafeArea(.all, edges: .all)
                 .sheet(isPresented: $clickOnPin) {
-                    //DetailView(voiceNote)
+                    // TODO replace this with some thing else
+                    if !items.isEmpty {
+                        DetailView(voiceNote: items[0])
+                    } else {
+                        Text("CoreData is empty")
+                    }
                 }
                 .presentationDetents([.medium, .large])
                 .presentationDragIndicator(.visible)
