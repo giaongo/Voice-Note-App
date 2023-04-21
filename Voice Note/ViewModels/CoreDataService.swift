@@ -11,7 +11,13 @@ class CoreDataService {
     private let persistenceController = PersistenceController.shared
 
     // May be we fetch from remote location in future
-    private init(remoteFetch: Bool = false) {}
+    private init(remoteFetch: Bool = false) {
+        // console logs SQLite file location for viewing DB
+        if let url = FileManager.default.urls(for: .libraryDirectory, in: .userDomainMask).last {
+            print("DataBase SQLite file can be found at this location,")
+            print(url.absoluteString)
+        }
+    }
 
     func getManageObjectContext() -> NSManagedObjectContext {
         persistenceController.container.viewContext
@@ -47,6 +53,10 @@ class CoreDataService {
             let nsError = error as NSError
             fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
         }
+    }
+
+    func loadLatestTemperatures() {
+
     }
 
     func delete(_ offsets: IndexSet) {
