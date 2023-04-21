@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3C7C309CE118578B59DBC786 /* NetworkRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C7C31A4143342C1A12B998D /* NetworkRequest.swift */; };
 		3C7C30A21D5298DF3F4DD5B9 /* Applicable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C7C3E00BEA3470F4C0AA8FC /* Applicable.swift */; };
 		3C7C322DA21BFB8C747B1BD3 /* TimeDuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C7C3E276DDC3A12B4388A13 /* TimeDuration.swift */; };
 		3C7C324037A15A0C56178171 /* MapScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C7C3EF87451CA70924FE6DB /* MapScreen.swift */; };
@@ -64,6 +65,7 @@
 
 /* Begin PBXFileReference section */
 		3C7C318A8FD4D8E185A8DD6F /* Sizeable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sizeable.swift; sourceTree = "<group>"; };
+		3C7C31A4143342C1A12B998D /* NetworkRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkRequest.swift; sourceTree = "<group>"; };
 		3C7C31CF81F922C045E22893 /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		3C7C326226424B1F12594A3A /* OptionMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OptionMenu.swift; sourceTree = "<group>"; };
 		3C7C32A320FA143DE9EC73BE /* CoreDataService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataService.swift; sourceTree = "<group>"; };
@@ -142,6 +144,7 @@
 				E897038929F08CD300CFD0F0 /* Temperature.swift */,
 				3C7C3C26B38266BF3FE51ADF /* APIResponseWrapper.swift */,
 				3C7C3323771A9E23C9D9D1F8 /* APIResource.swift */,
+				3C7C31A4143342C1A12B998D /* NetworkRequest.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -411,6 +414,7 @@
 				3C7C3E716E0A3BAFF0B07101 /* CoreDataService.swift in Sources */,
 				3C7C3B25C5603198DAECC1D7 /* APIResponseWrapper.swift in Sources */,
 				3C7C3DE5C21D60967A14F4CB /* APIResource.swift in Sources */,
+				3C7C309CE118578B59DBC786 /* NetworkRequest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
