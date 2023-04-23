@@ -5,12 +5,15 @@
 //  Created by Giao Ngo on 18.4.2023.
 //
 import SwiftUI
+import CoreData
 import CoreLocation
 
 struct DetailView: View {
     @EnvironmentObject var voiceNoteViewModel: VoiceNoteViewModel
+    @Environment(\.presentationMode) var presentationMode
     let textContainer = #colorLiteral(red: 0.4, green: 0.2039215686, blue: 0.4980392157, alpha: 0.2)
     private let voiceNote: VoiceNote
+    
     
     init(voiceNote:VoiceNote) {
         self.voiceNote = voiceNote
@@ -39,7 +42,7 @@ struct DetailView: View {
                 
                 // Delete button
                 DetailBtn(clickHander: {
-                    print("Delete pressed")
+                    deleteVoiceNote()
                 }, icon: "trash")
                 
                 // Share button
@@ -51,6 +54,12 @@ struct DetailView: View {
         .presentationDetents([.medium, .large])
         .presentationDragIndicator(.visible)
     }
+    
+    private func deleteVoiceNote() {
+            let coreDataService = CoreDataService.localStorage
+            coreDataService.delete(voiceNote)
+            presentationMode.wrappedValue.dismiss()
+        }
 }
 
 struct DetailBtn: View {
@@ -68,7 +77,7 @@ struct DetailBtn: View {
                 .background(Color(.systemGray6))
                 .clipShape(Circle())
                 .foregroundColor(Color(buttonColor))
-        }.padding(.horizontal,20).disabled(true)
+        }.padding(.horizontal,20)
     }
 }
 
