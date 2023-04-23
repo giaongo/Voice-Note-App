@@ -20,6 +20,7 @@ class WeatherViewModel: ObservableObject {
     }
 
     func fetchCurrentWeather(latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
+        print("Latitude: \(latitude), Longitude: \(longitude)") // Print latitude and longitude
         cancellable = weatherService.getWeather(latitude: latitude, longitude: longitude)
             .sink(receiveCompletion: { result in
                 switch result {
@@ -32,4 +33,5 @@ class WeatherViewModel: ObservableObject {
                 self.temperature = weather.current.temperature
             })
     }
+
 }
