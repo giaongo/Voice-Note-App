@@ -7,6 +7,8 @@
 
 import Foundation
 import AVFoundation
+import Combine
+import CoreData
 
 class VoiceNoteViewModel: NSObject, ObservableObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     private var audioRecorder: AVAudioRecorder?
@@ -174,5 +176,41 @@ class VoiceNoteViewModel: NSObject, ObservableObject, AVAudioPlayerDelegate, AVA
         } catch {
             print("Error deleting recording \(error.localizedDescription)")
         }
+    }
+    
+    func fetchTemperature(latitude: Double, longitude: Double, completion: @escaping (Double?) -> Void) {
+            let apiKey = "c55b372ffdf9f6dcc3f535d009f52246"
+            let url = URL(string: "https://api.openweathermap.org/data/2.5/weather?lat=\(latitude)&lon=\(longitude)&appid=\(apiKey)&units=metric")!
+
+            let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+                if let error = error {
+                    print("Error fetching temperature: \(error)")
+                    completion(nil)
+                    return
+                }
+
+                guard let data = data else {
+                    print("No data received.")
+                    completion(nil)
+                    return
+                }
+
+                do {
+                    let weatherData = try JSONDecoder().decode(WeatherData.self, from: data)
+                    completion(weatherData.main.temp)
+                } catch {
+                    print("Error decoding JSON: \(error)")
+                    completion(nil)
+                }
+            }
+            task.resume()
+        }
+    
+    struct WeatherData: Codable {
+        let main: Main
+    }
+
+    struct Main: Codable {
+        let temp: Double
     }
 }
