@@ -11,6 +11,13 @@ struct ListItem: View {
     @State private var isDeleteAlert = false
     @State private var defaultSelect = "None"
     @State private var showDetail = false
+
+    private func formattedDuration(for duration: Int) -> String {
+        let hours = duration / 3600
+        let minutes = (duration % 3600) / 60
+        let seconds = duration % 60
+        return String(format: "%02d:%02d:%02d", hours, minutes, seconds)
+    }
     var body: some View {
         HStack {
             VStack(alignment: .leading) {
@@ -53,8 +60,7 @@ struct ListItem: View {
                             }
                         }
                 Spacer()
-                //Text("\(voiceNote.duration.hoursAsTwoDigitString()):\(voiceNote.duration.minutesAsTwoDigitString()):\(voiceNote.duration.secondsAsTwoDigitString())")
-                Text("\(voiceNote.duration):\(voiceNote.duration):\(voiceNote.duration)")
+                Text(formattedDuration(for: Int(voiceNote.duration)))
                 Spacer()
                 Text("\(Date.init().formatted(.iso8601.day().month().year()))")
                         .padding(.bottom, 16.0)
@@ -68,4 +74,3 @@ struct ListItem: View {
         }
     }
 }
-

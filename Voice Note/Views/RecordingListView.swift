@@ -10,21 +10,19 @@ import CoreLocation
 
 struct RecordingListView: View {
     @State var toast:ToastView? = nil
-    //@Environment(\.managedObjectContext) private var managedObjectContext
     @Environment(\.coreData) private var coreDataService: CoreDataService
 
-    // Item will get fetched when RecordingListView loads
     @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \VoiceNote.id, ascending: true)],
-            animation: .default)
+        sortDescriptors: [NSSortDescriptor(keyPath: \VoiceNote.createdAt, ascending: false)],
+        animation: .default)
     private var items: FetchedResults<VoiceNote>
-    
+
     var body: some View {
         NavigationStack {
             VStack {
                 List {
                     ForEach(items, id: \.self) { item in
-                        ListItem (voiceNote: item)
+                        ListItem(voiceNote: item)
                     }.onDelete(perform: deleteItem)
                 }
                 .toolbar {

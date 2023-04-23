@@ -122,28 +122,33 @@ struct BottomBarView: View {
                     .frame(height: 100)
             )
         }.ignoresSafeArea(.all)
+        
+        
     }
     func saveVoiceNote() {
         guard let url = voiceNoteViewModel.fileUrlList.last else {
             return
         }
 
-        let newVoiceNote = VoiceNote(context: managedObjectContext)
-            newVoiceNote.id = UUID()
-            newVoiceNote.text = speechRecognizer.transcriptionText
-            newVoiceNote.title = "Note Title"
-            newVoiceNote.fileUrl = url
-            newVoiceNote.createdAt = Date()
-            newVoiceNote.duration = 3765
-            newVoiceNote.location = Location(context: managedObjectContext)
-            newVoiceNote.location?.latitude = 24.444
-            newVoiceNote.location?.longitude = 64.444
-            newVoiceNote.weather = Weather(context: managedObjectContext)
-            newVoiceNote.weather?.temperature = Temperature(context: managedObjectContext)
-            newVoiceNote.weather?.temperature?.average = 34
-            newVoiceNote.weather?.temperature?.maximum = 44 
-            newVoiceNote.weather?.temperature?.minimum = 24
+        let durationInSeconds = voiceNoteViewModel.getDuration(for: url)
 
+   
+
+        let newVoiceNote = VoiceNote(context: managedObjectContext)
+        newVoiceNote.id = UUID()
+        newVoiceNote.text = speechRecognizer.transcriptionText
+        newVoiceNote.title = "Note Title"
+        newVoiceNote.fileUrl = url
+        newVoiceNote.createdAt = Date()
+        newVoiceNote.duration = durationInSeconds
+        newVoiceNote.location = Location(context: managedObjectContext)
+        newVoiceNote.location?.latitude = 24.444
+        newVoiceNote.location?.longitude = 64.444
+        newVoiceNote.weather = Weather(context: managedObjectContext)
+        newVoiceNote.weather?.temperature = Temperature(context: managedObjectContext)
+        newVoiceNote.weather?.temperature?.average = 34
+        newVoiceNote.weather?.temperature?.maximum = 44
+        newVoiceNote.weather?.temperature?.minimum = 24
 
         do {
             try managedObjectContext.save()
@@ -151,6 +156,7 @@ struct BottomBarView: View {
             print("Error saving voice note: \(error)")
         }
     }
+
 
     private func clickAudioButton() {
         voiceNoteViewModel.isRecording.toggle()

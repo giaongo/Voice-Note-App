@@ -25,6 +25,8 @@ class VoiceNoteViewModel: NSObject, ObservableObject, AVAudioPlayerDelegate, AVA
     @Published var soundSamples: [Float] = [Float](repeating:.zero, count: VoiceNoteViewModel.numberOfSample)
     @Published var audioIsPlaying:Bool = false
     @Published var confirmTheVoiceNote: Bool = false
+    
+
 
     override init () {
         super.init()
@@ -82,6 +84,13 @@ class VoiceNoteViewModel: NSObject, ObservableObject, AVAudioPlayerDelegate, AVA
             print("Error Setting Up Recorder \(error.localizedDescription)")
         }
     }
+    func getDuration(for file: URL) -> TimeInterval {
+        guard let player = try? AVAudioPlayer(contentsOf: file) else {
+            return 0
+        }
+        return player.duration
+    }
+
     
     func pauseRecording() {
         guard let recorder = audioRecorder else { return }
@@ -117,12 +126,7 @@ class VoiceNoteViewModel: NSObject, ObservableObject, AVAudioPlayerDelegate, AVA
         }
     }
     
-    private func getDuration(for file: URL) -> TimeInterval {
-        guard let player = try? AVAudioPlayer(contentsOf: file) else {
-            return 0
-        }
-        return player.duration
-    }
+  
     
     /**
      This method refreshes and returns the average power of chanel 0 of audio recorder through every 0.01s time interval

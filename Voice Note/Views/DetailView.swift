@@ -4,7 +4,6 @@
 //
 //  Created by Giao Ngo on 18.4.2023.
 //
-
 import SwiftUI
 import CoreLocation
 
@@ -26,7 +25,7 @@ struct DetailView: View {
                 .padding()
             
             RecordingCardView().padding(15)
-            Text("Duration: 23s")
+            Text("Duration: \(voiceNote.duration)s")
             HStack {
                 // Direction button
                 DetailBtn(clickHander: {
@@ -72,6 +71,7 @@ struct DetailBtn: View {
         }.padding(.horizontal,20).disabled(true)
     }
 }
+
 /*struct DetailView_Previews: PreviewProvider {
     static var previews: some View {
         DetailView(voiceNote: VoiceNote(
