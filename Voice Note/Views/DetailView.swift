@@ -5,7 +5,6 @@
 //  Created by Giao Ngo on 18.4.2023.
 //
 import SwiftUI
-import CoreData
 import CoreLocation
 
 struct DetailView: View {
@@ -14,19 +13,32 @@ struct DetailView: View {
     let textContainer = #colorLiteral(red: 0.4, green: 0.2039215686, blue: 0.4980392157, alpha: 0.2)
     private let voiceNote: VoiceNote
     
+    @State private var editableText: String
+    @State private var isEditing = false
     
-    init(voiceNote:VoiceNote) {
+    init(voiceNote: VoiceNote) {
         self.voiceNote = voiceNote
+        self._editableText = State(initialValue: voiceNote.text ?? "")
     }
+    
     var body: some View {
         VStack {
-            Text(voiceNote.text ?? "")
-                .padding()
-                .frame(maxWidth: .infinity)
-                .background(Color(textContainer))
-                .cornerRadius(20)
-                .padding()
-            
+            if isEditing {
+                TextEditor(text: $editableText)
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .background(Color(textContainer))
+                    .cornerRadius(20)
+                    .padding()
+            } else {
+                Text(editableText)
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .background(Color(textContainer))
+                    .cornerRadius(20)
+                    .padding()
+            }
+
             RecordingCardView().padding(15)
             Text("Duration: \(voiceNote.duration)s")
             HStack {
@@ -37,8 +49,8 @@ struct DetailView: View {
                 
                 //  Edit button
                 DetailBtn(clickHander: {
-                    print("Edit pressed")
-                }, icon: "pencil").disabled(true)
+                    toggleEditing()
+                }, icon: "pencil")
                 
                 // Delete button
                 DetailBtn(clickHander: {
@@ -50,16 +62,31 @@ struct DetailView: View {
                     print("Share pressed")
                 }, icon: "square.and.arrow.up").disabled(true)
             }
+
         }
         .presentationDetents([.medium, .large])
         .presentationDragIndicator(.visible)
     }
     
-    private func deleteVoiceNote() {
-            let coreDataService = CoreDataService.localStorage
-            coreDataService.delete(voiceNote)
-            presentationMode.wrappedValue.dismiss()
+    private func toggleEditing() {
+        isEditing.toggle()
+        
+        if !isEditing {
+            voiceNote.text = editableText
+            // Save the changes to the voice note text
+            do {
+                try voiceNote.managedObjectContext?.save()
+            } catch {
+                print("Error saving edited text: \(error)")
+            }
         }
+    }
+    
+    private func deleteVoiceNote() {
+        let coreDataService = CoreDataService.localStorage
+        coreDataService.delete(voiceNote)
+        presentationMode.wrappedValue.dismiss()
+    }
 }
 
 struct DetailBtn: View {
