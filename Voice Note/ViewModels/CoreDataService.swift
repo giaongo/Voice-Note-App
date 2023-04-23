@@ -41,7 +41,7 @@ class CoreDataService {
         newVoiceNote.location?.longitude = Double.random(in: 60.090760..<60.430440)
         newVoiceNote.weather = Weather(context: persistenceController.container.viewContext)
         newVoiceNote.weather?.temperature = Temperature(context: persistenceController.container.viewContext)
-        newVoiceNote.weather?.temperature?.average = 34
+        //newVoiceNote.weather?.temperature?.average = 34
         newVoiceNote.weather?.temperature?.maximum = 44
         newVoiceNote.weather?.temperature?.minimum = 24
 

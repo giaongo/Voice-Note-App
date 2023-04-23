@@ -31,7 +31,7 @@ struct ListItem: View {
                                 print("COMING SOON: Show Voice not on map")
                             }
                     Text("\(voiceNote.near ?? "")")*/
-                    Text("Average: \(String(voiceNote.weather?.temperature?.average ?? 0))")
+                    //Text("Average: \(String(voiceNote.weather?.temperature?.average ?? 0))")
                     Text("Minimum: \(String(voiceNote.weather?.temperature?.minimum ?? 0))")
                     Text("Maximum: \(String(voiceNote.weather?.temperature?.maximum ?? 0))")
                 }
