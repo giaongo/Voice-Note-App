@@ -33,13 +33,12 @@ struct RecordingCardView: View {
             }
             Button {
                 isPlayed.toggle()
-                guard let currentUrl = voiceNoteViewModel.fileUrlList.last else {
-                    return 
+                if (voiceNoteUrl != nil || voiceNoteViewModel.fileUrlList.last != nil) {
+                    isPlayed
+                    ? voiceNoteViewModel.startPlaying(recordingUrl: voiceNoteUrl ?? (voiceNoteViewModel.fileUrlList.last ?? nil))
+                    : voiceNoteViewModel.stopPlaying(recordingUrl: voiceNoteUrl ?? (voiceNoteViewModel.fileUrlList.last ?? nil))
                 }
-
-                isPlayed
-                    ? voiceNoteViewModel.startPlaying(recordingUrl: voiceNoteUrl ?? currentUrl)
-                    : voiceNoteViewModel.stopPlaying(recordingUrl: voiceNoteUrl ?? currentUrl)
+                
                 
             } label: {
                 Image(systemName: voiceNoteViewModel.audioIsPlaying  ? "square.fill" : "play.fill").foregroundColor(.white)
