@@ -40,7 +40,7 @@ struct DetailView: View {
                     .padding()
             }
             
-            RecordingCardView().padding(15)
+            RecordingCardView(voiceNoteUrl: voiceNote.fileUrl).padding(15)
             Text("Duration: \(voiceNote.duration)s")
             HStack {
                 // Direction button
