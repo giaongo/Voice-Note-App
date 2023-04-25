@@ -11,6 +11,7 @@ struct RecordingCardView: View {
     @EnvironmentObject var voiceNoteViewModel: VoiceNoteViewModel
     @State var isPlayed: Bool = false
     private let borderColor = #colorLiteral(red: 0.1215686277, green: 0.01176470611, blue: 0.4235294163, alpha: 1)
+    private var voiceNoteUrl: URL? = nil
     private var newList: [Float] {
         if voiceNoteViewModel.soundSamples.count != 0 {
             return voiceNoteViewModel.soundSamples.map { number in
@@ -20,7 +21,11 @@ struct RecordingCardView: View {
             return [-39.449028, -40.75847, -37.259445, -37.719852, -22.529305, -16.485308,-17.041458,-14.6853,-16.24986, -19.75164]
         }
     }
-
+   
+    init(voiceNoteUrl: URL?) {
+        self.voiceNoteUrl = voiceNoteUrl
+    }
+    
     var body: some View {
         HStack() {
             ForEach(newList, id: \.self) { sampleValue in
@@ -28,11 +33,12 @@ struct RecordingCardView: View {
             }
             Button {
                 isPlayed.toggle()
-                if let newestRecordUrl = voiceNoteViewModel.fileUrlList.last {
+                if (voiceNoteUrl != nil || voiceNoteViewModel.fileUrlList.last != nil) {
                     isPlayed
-                    ? voiceNoteViewModel.startPlaying(recordingUrl: newestRecordUrl)
-                    : voiceNoteViewModel.stopPlaying(recordingUrl: newestRecordUrl)
+                    ? voiceNoteViewModel.startPlaying(recordingUrl: voiceNoteUrl ?? (voiceNoteViewModel.fileUrlList.last ?? nil))
+                    : voiceNoteViewModel.stopPlaying(recordingUrl: voiceNoteUrl ?? (voiceNoteViewModel.fileUrlList.last ?? nil))
                 }
+                
                 
             } label: {
                 Image(systemName: voiceNoteViewModel.audioIsPlaying  ? "square.fill" : "play.fill").foregroundColor(.white)
@@ -53,6 +59,6 @@ struct RecordingCardView: View {
 
 struct RecordingCardView_Previews: PreviewProvider {
     static var previews: some View {
-        RecordingCardView().environmentObject(VoiceNoteViewModel())
+        RecordingCardView(voiceNoteUrl: nil).environmentObject(VoiceNoteViewModel())
     }
 }

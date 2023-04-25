@@ -161,7 +161,10 @@ class VoiceNoteViewModel: NSObject, ObservableObject, AVAudioPlayerDelegate, AVA
         timer?.invalidate()
     }
     
-    func startPlaying (recordingUrl:URL) {
+    func startPlaying (recordingUrl:URL?) {
+        guard let recordingUrl = recordingUrl else {
+            return
+        }
         let audioPlayingSession = AVAudioSession.sharedInstance()
         do {
             try audioPlayingSession.overrideOutputAudioPort(AVAudioSession.PortOverride.speaker)
@@ -177,7 +180,10 @@ class VoiceNoteViewModel: NSObject, ObservableObject, AVAudioPlayerDelegate, AVA
         }
     }
     
-    func stopPlaying(recordingUrl: URL) {
+    func stopPlaying(recordingUrl: URL?) {
+        guard recordingUrl != nil else {
+            return
+        }
         audioPlayer?.stop()
         audioIsPlaying = false
     }
