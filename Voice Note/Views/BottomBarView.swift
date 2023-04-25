@@ -7,6 +7,7 @@
 
 import SwiftUI
 import NaturalLanguage
+import Foundation
 
 struct BottomBarView: View {
     @EnvironmentObject var voiceNoteViewModel: VoiceNoteViewModel
@@ -190,7 +191,9 @@ struct BottomBarView: View {
             voiceNoteViewModel.startRecording()
             
         } else {
-            voiceNoteViewModel.stopRecording()
+            voiceNoteViewModel.stopRecording(completion:{
+                saveVoiceNote()
+            })
         }
     }
     
