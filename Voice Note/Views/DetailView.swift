@@ -9,7 +9,6 @@ import CoreLocation
 
 struct DetailView: View {
         @EnvironmentObject var voiceNoteViewModel: VoiceNoteViewModel
-        @ObservedObject var weatherViewModel = WeatherViewModel()
         @Environment(\.presentationMode) var presentationMode
         @State private var showShareSheet = false
         let textContainer = #colorLiteral(red: 0.4, green: 0.2039215686, blue: 0.4980392157, alpha: 0.2)
@@ -45,7 +44,7 @@ struct DetailView: View {
             RecordingCardView(voiceNoteUrl: voiceNote.fileUrl).padding(15)
             Text("Duration: \(voiceNote.duration)s")
             
-            Text("Current temperature: \(weatherViewModel.temperature, specifier: "%.1f")°C")
+           
             
             HStack {
                 // Direction button
@@ -76,9 +75,7 @@ struct DetailView: View {
             .presentationDetents([.medium, .large])
             .presentationDragIndicator(.visible)
         }
-        .onAppear {
-            weatherViewModel.fetchCurrentWeather(latitude: voiceNote.location?.latitude ?? 0, longitude: voiceNote.location?.longitude ?? 0)
-        }
+        
     }
     
     private func toggleEditing() {

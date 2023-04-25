@@ -36,7 +36,7 @@ class VoiceNoteViewModel: NSObject, ObservableObject, AVAudioPlayerDelegate, AVA
     }
     
     deinit {
-        stopRecording()
+        stopRecording(){}
     }
     
     func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
@@ -122,12 +122,17 @@ class VoiceNoteViewModel: NSObject, ObservableObject, AVAudioPlayerDelegate, AVA
         objectWillChange.send()
     }
     
-    func stopRecording() {
+    func stopRecording(completion: @escaping () -> Void) {
         self.disableMicriphoneMonitoring()
         audioRecorder?.stop()
         isRecordingPaused = false
         objectWillChange.send()
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+            completion()
+        }
     }
+
     
     /**
      This method gets the creation file date of the audio file

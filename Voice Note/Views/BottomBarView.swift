@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import NaturalLanguage
+import Foundation
 
 struct BottomBarView: View {
     @EnvironmentObject var voiceNoteViewModel: VoiceNoteViewModel
@@ -125,19 +127,38 @@ struct BottomBarView: View {
         
         
     }
+    func extractKeywords(from text: String) -> [String] {
+        let tagger = NLTagger(tagSchemes: [.lexicalClass])
+        tagger.string = text
+        let options: NLTagger.Options = [.omitWhitespace, .omitPunctuation, .joinNames]
+
+        let tags = tagger.tags(in: text.startIndex..<text.endIndex, unit: .word, scheme: .lexicalClass, options: options)
+
+        let keywords = tags.compactMap { (tag, tokenRange) -> String? in
+            if tag == .noun || tag == .verb || tag == .adjective {
+                return String(text[tokenRange])
+            }
+            return nil
+        }
+
+        return keywords
+    }
+
     func saveVoiceNote() {
         guard let url = voiceNoteViewModel.fileUrlList.last else {
             return
         }
 
         let durationInSeconds = voiceNoteViewModel.getDuration(for: url)
+        let extractedKeywords = extractKeywords(from: speechRecognizer.transcriptionText)
+        let title = extractedKeywords.first ?? "Note"
 
-   
+
 
         let newVoiceNote = VoiceNote(context: managedObjectContext)
         newVoiceNote.id = UUID()
         newVoiceNote.text = speechRecognizer.transcriptionText
-        newVoiceNote.title = "Note Title"
+        newVoiceNote.title = title
         newVoiceNote.fileUrl = url
         newVoiceNote.createdAt = Date()
         newVoiceNote.duration = durationInSeconds
@@ -170,7 +191,9 @@ struct BottomBarView: View {
             voiceNoteViewModel.startRecording()
             
         } else {
-            voiceNoteViewModel.stopRecording()
+            voiceNoteViewModel.stopRecording(completion:{
+                saveVoiceNote()
+            })
         }
     }
     
