@@ -8,32 +8,33 @@ import SwiftUI
 import CoreLocation
 
 struct DetailView: View {
-    @EnvironmentObject var voiceNoteViewModel: VoiceNoteViewModel
-    @ObservedObject var weatherViewModel = WeatherViewModel()
-    @Environment(\.presentationMode) var presentationMode
-    @State private var showShareSheet = false
-    let textContainer = #colorLiteral(red: 0.4, green: 0.2039215686, blue: 0.4980392157, alpha: 0.2)
-    private let voiceNote: VoiceNote
+        @EnvironmentObject var voiceNoteViewModel: VoiceNoteViewModel
+        @ObservedObject var weatherViewModel = WeatherViewModel()
+        @Environment(\.presentationMode) var presentationMode
+        @State private var showShareSheet = false
+        let textContainer = #colorLiteral(red: 0.4, green: 0.2039215686, blue: 0.4980392157, alpha: 0.2)
+        private let voiceNote: VoiceNote
     
-    @State private var editableText: String
+    //@State private var editableText: String
     @State private var isEditing = false
+    @State private var editText: String
     
     init(voiceNote: VoiceNote) {
         self.voiceNote = voiceNote
-        self._editableText = State(initialValue: voiceNote.text ?? "")
+        _editText = State(initialValue: voiceNote.text ?? "")
     }
     
     var body: some View {
         VStack {
             if isEditing {
-                TextEditor(text: $editableText)
+                TextEditor(text: $editText)
                     .padding()
                     .frame(maxWidth: .infinity)
                     .background(Color(textContainer))
                     .cornerRadius(20)
                     .padding()
             } else {
-                Text(editableText)
+                Text(voiceNote.text ?? "")
                     .padding()
                     .frame(maxWidth: .infinity)
                     .background(Color(textContainer))
@@ -53,9 +54,11 @@ struct DetailView: View {
                 }, icon: "arrow.triangle.turn.up.right.diamond.fill")
                 
                 //  Edit button
+                // Edit button
                 DetailBtn(clickHander: {
                     toggleEditing()
-                }, icon: "pencil")
+                }, icon: isEditing ? "checkmark.circle.fill" : "pencil")
+
                 
                 // Delete button
                 DetailBtn(clickHander: {
@@ -79,61 +82,72 @@ struct DetailView: View {
     }
     
     private func toggleEditing() {
+        if isEditing {
+            saveEditedText()
+            voiceNoteViewModel.fetchVoiceNotes()
+        }
         isEditing.toggle()
-        
-        if !isEditing {
-            voiceNote.text = editableText
-            // Save the changes to the voice note text
-            do {
-                try voiceNote.managedObjectContext?.save()
-            } catch {
-                print("Error saving edited text: \(error)")
-            }
+    }
+
+    
+    private func deleteVoiceNote() {
+        let context = PersistenceController.shared.container.viewContext
+        context.delete(voiceNote)
+        do {
+            try context.save()
+            presentationMode.wrappedValue.dismiss()
+        } catch {
+            print("Error deleting voice note: \(error)")
         }
     }
     
-    private func deleteVoiceNote() {
-        let coreDataService = CoreDataService.localStorage
-        coreDataService.delete(voiceNote)
-        presentationMode.wrappedValue.dismiss()
+    private func saveEditedText() {
+        let context = PersistenceController.shared.container.viewContext
+        voiceNote.text = editText
+        do {
+            try context.save()
+        } catch {
+            print("Error saving edited text: \(error)")
+        }
     }
-}
-
-
-
-
-struct DetailBtn: View {
-    let buttonColor = #colorLiteral(red: 0.1764705926, green: 0.01176470611, blue: 0.5607843399, alpha: 1)
-    let clickHander: () -> Void
-    let icon: String
     
-    var body: some View {
-        Button {
-            clickHander()
-        } label: {
-            Image(systemName: icon)
-                .font(.title2)
-                .padding(10)
-                .background(Color(.systemGray6))
-                .clipShape(Circle())
-                .foregroundColor(Color(buttonColor))
-        }.padding(.horizontal,20)
+    
+    
+    
+    
+    struct DetailBtn: View {
+        let buttonColor = #colorLiteral(red: 0.1764705926, green: 0.01176470611, blue: 0.5607843399, alpha: 1)
+        let clickHander: () -> Void
+        let icon: String
+        
+        var body: some View {
+            Button {
+                clickHander()
+            } label: {
+                Image(systemName: icon)
+                    .font(.title2)
+                    .padding(10)
+                    .background(Color(.systemGray6))
+                    .clipShape(Circle())
+                    .foregroundColor(Color(buttonColor))
+            }.padding(.horizontal,20)
+        }
     }
-}
-
+    
     struct ShareSheet: UIViewControllerRepresentable {
         typealias UIViewControllerType = UIActivityViewController
         var activityItems: [Any]
-
+        
         func makeUIViewController(context: Context) -> UIActivityViewController {
             let controller = UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
             return controller
         }
-
+        
         func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {
             // Nothing to update
         }
     }
+}
 /*struct DetailView_Previews: PreviewProvider {
     static var previews: some View {
         DetailView(voiceNote: VoiceNote(

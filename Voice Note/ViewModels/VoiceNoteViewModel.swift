@@ -27,7 +27,8 @@ class VoiceNoteViewModel: NSObject, ObservableObject, AVAudioPlayerDelegate, AVA
     @Published var soundSamples: [Float] = [Float](repeating:.zero, count: VoiceNoteViewModel.numberOfSample)
     @Published var audioIsPlaying:Bool = false
     @Published var confirmTheVoiceNote: Bool = false
-    
+    @Published var voiceNotes: [URL] = []
+
 
 
     override init () {
@@ -50,6 +51,18 @@ class VoiceNoteViewModel: NSObject, ObservableObject, AVAudioPlayerDelegate, AVA
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
         audioIsPlaying = false
     }
+    
+    func fetchVoiceNotes() {
+            let fileManager = FileManager.default
+            let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
+
+            do {
+                let fileURLs = try fileManager.contentsOfDirectory(at: documentsURL, includingPropertiesForKeys: nil)
+                voiceNotes = fileURLs.filter { $0.pathExtension == "m4a" }
+            } catch {
+                print("Error while fetching voice notes: \(error.localizedDescription)")
+            }
+        }
     
     func startRecording() {
         let recordingSession = AVAudioSession.sharedInstance()
