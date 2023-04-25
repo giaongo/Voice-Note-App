@@ -22,6 +22,7 @@
 		3C7C3AA05E5890D9326FFB53 /* TemperatureAPIRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C7C3C1516DA0A6B6A14D81D /* TemperatureAPIRequest.swift */; };
 		3C7C3B25C5603198DAECC1D7 /* APIResponseWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C7C3C26B38266BF3FE51ADF /* APIResponseWrapper.swift */; };
 		3C7C3C1DC80A369487F62534 /* SpeechRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C7C3F8412397CCCE4212CE0 /* SpeechRecognizer.swift */; };
+		3C7C3D177E5037763E3A386D /* TemperatureDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C7C3489F88471C4AB6C5FA3 /* TemperatureDataService.swift */; };
 		3C7C3DE5C21D60967A14F4CB /* APIResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C7C3323771A9E23C9D9D1F8 /* APIResource.swift */; };
 		3C7C3E716E0A3BAFF0B07101 /* CoreDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C7C32A320FA143DE9EC73BE /* CoreDataService.swift */; };
 		3C7C3EEC8755EBC394A8232A /* VoiceNoteViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C7C33368C78BEE9B95222E3 /* VoiceNoteViewModel.swift */; };
@@ -76,6 +77,7 @@
 		3C7C33368C78BEE9B95222E3 /* VoiceNoteViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VoiceNoteViewModel.swift; sourceTree = "<group>"; };
 		3C7C337A41B2A968A9652FE6 /* ListItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItem.swift; sourceTree = "<group>"; };
 		3C7C33800065D3F69DEA7196 /* TemperatureResource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TemperatureResource.swift; sourceTree = "<group>"; };
+		3C7C3489F88471C4AB6C5FA3 /* TemperatureDataService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TemperatureDataService.swift; sourceTree = "<group>"; };
 		3C7C34EF39EB11EF318951F0 /* MapView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		3C7C350E8C6E0F9AD94B83F1 /* TemperatureResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TemperatureResponse.swift; sourceTree = "<group>"; };
 		3C7C3659A698D3D6EB945C45 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = file.gitignore; path = .gitignore; sourceTree = "<group>"; };
@@ -258,6 +260,7 @@
 				3C7C33368C78BEE9B95222E3 /* VoiceNoteViewModel.swift */,
 				E8A8840E29EECF5400C659CB /* PersistenceContainer.swift */,
 				3C7C32A320FA143DE9EC73BE /* CoreDataService.swift */,
+				3C7C3489F88471C4AB6C5FA3 /* TemperatureDataService.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -427,6 +430,7 @@
 				3C7C38755DECCD07B240D629 /* TemperatureResponse.swift in Sources */,
 				3C7C33E744D14136E7A1972C /* TemperatureResource.swift in Sources */,
 				3C7C3AA05E5890D9326FFB53 /* TemperatureAPIRequest.swift in Sources */,
+				3C7C3D177E5037763E3A386D /* TemperatureDataService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

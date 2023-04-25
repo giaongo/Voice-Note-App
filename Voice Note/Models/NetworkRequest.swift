@@ -7,24 +7,21 @@ import Foundation
 
 protocol NetworkRequest: AnyObject {
     associatedtype ModelType
-    func decode(_ data: Data) -> ModelType?
-    func execute(withCompletion completion: @escaping (ModelType?) -> Void)
+    func decode(_ data: Data) async -> ModelType?
+    func execute(withCompletion completion: @escaping (ModelType?) -> Void) async throws
 }
 
 extension NetworkRequest {
-    func load(_ url: URL, withCompletion completion: @escaping (ModelType?) -> Void) {
-        print("URL: \(url)")
-        let task = URLSession.shared.dataTask(with: url) { [weak self] (data, response , error) -> Void in
-            // TODO handle error
-            // TODO handle response
-            guard let data = data, let value = self?.decode(data) else {
-                print("Error Decoding")
-                // TODO Add different kind of decoding errors
-                DispatchQueue.main.async { completion(nil) }
-                return
-            }
-            DispatchQueue.main.async { completion(value) }
+    func load(_ url: URL, withCompletion completion: @escaping (ModelType?) -> Void) async throws {
+        let request = URLRequest(url: url)
+        let data = try await URLSession.shared.data(for: request, delegate: nil).0
+
+        if let value = await decode(data) {
+            completion(value)
+        } else {
+            completion(nil)
+
         }
-        task.resume()
+
     }
 }

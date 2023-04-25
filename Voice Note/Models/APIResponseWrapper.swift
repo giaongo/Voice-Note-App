@@ -9,11 +9,11 @@ import Foundation
 // Item should confront to Decodable protocol
 struct APIResponseWrapper<T: Decodable> {
     // Other kind of responses can be added
-    let temperatureResponse: [T]?
+    let temperatureResponses: [T]?
 }
 
 extension APIResponseWrapper: Decodable {
     enum CodingKeys: String, CodingKey {
-        case temperatureResponse = "dataseries"
+        case temperatureResponses = "dataseries"
     }
 }

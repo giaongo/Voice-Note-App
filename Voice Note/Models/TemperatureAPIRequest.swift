@@ -18,10 +18,10 @@ extension TemperatureAPIRequest: NetworkRequest {
         let decoder = JSONDecoder()
         decoder.userInfo[CodingUserInfoKey.managedObjectContext] = CoreDataService.localStorage.getManageObjectContext()
         let wrapper = try? decoder.decode(APIResponseWrapper<Resource.ModelType>.self, from: data)
-        return wrapper?.temperatureResponse
+        return wrapper?.temperatureResponses
     }
 
-    func execute(withCompletion completion: @escaping ([Resource.ModelType]?) -> Void) {
-        load(resource.url, withCompletion: completion)
+    func execute(withCompletion completion: @escaping ([Resource.ModelType]?) -> Void) async throws {
+        try await load(resource.url, withCompletion: completion)
     }
 }
