@@ -25,7 +25,7 @@ struct AudioConfirmationView: View {
                         .font(.system(size: 25))
                         .foregroundColor(.black)
                 }
-                RecordingCardView()
+                RecordingCardView(voiceNoteUrl: nil)
             }
         }
         .onAppear {
