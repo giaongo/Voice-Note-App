@@ -33,12 +33,12 @@ struct RecordingCardView: View {
             }
             Button {
                 isPlayed.toggle()
-               /* if (voiceNoteUrl != nil || voiceNoteViewModel.fileUrlList.last != nil) {
+                if (voiceNoteUrl != nil || voiceNoteViewModel.fileUrlList.last != nil) {
                     isPlayed
                     ? voiceNoteViewModel.startPlaying(recordingUrl: voiceNoteUrl ?? (voiceNoteViewModel.fileUrlList.last ?? nil))
                     : voiceNoteViewModel.stopPlaying(recordingUrl: voiceNoteUrl ?? (voiceNoteViewModel.fileUrlList.last ?? nil))
-                }*/
-                guard let currentUrl = voiceNoteViewModel.fileUrlList.last else {
+                }
+               /* guard let currentUrl = voiceNoteViewModel.fileUrlList.last else {
                                    return
                                }
 
@@ -46,7 +46,7 @@ struct RecordingCardView: View {
                                    ? voiceNoteViewModel.startPlaying(recordingUrl: voiceNoteUrl ?? currentUrl)
                                    : voiceNoteViewModel.stopPlaying(recordingUrl: voiceNoteUrl ?? currentUrl)
                 
-                
+                */
             } label: {
                 Image(systemName: voiceNoteViewModel.audioIsPlaying  ? "square.fill" : "play.fill").foregroundColor(.white)
                     .font(.system(size: 15))
