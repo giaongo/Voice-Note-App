@@ -1,14 +1,10 @@
-//
-//  WeatherViewModel.swift
-//  Voice Note
-//
-//  Created by Mohammad Rashid on 23.4.2023.
-//
-
 import Foundation
 import Combine
 import CoreLocation
 
+/**
+    A ViewModel that does API request for weather service 
+ */
 class WeatherViewModel: ObservableObject {
     @Published var temperature: Double = 0.0
 

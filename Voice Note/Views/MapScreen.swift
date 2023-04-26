@@ -1,10 +1,3 @@
-//
-//  MapViewDisplay.swift
-//  Voice Note
-//
-//  Created by Tai Nguyen on 4.4.2023.
-//
-
 import SwiftUI
 import CoreLocation
 

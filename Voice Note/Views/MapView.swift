@@ -1,10 +1,3 @@
-//
-//  MapView.swift
-//  Voice Note
-//
-//  Created by Tai Nguyen on 2.4.2023.
-//
-
 import SwiftUI
 import MapKit
 

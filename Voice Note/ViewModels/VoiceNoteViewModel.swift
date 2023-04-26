@@ -1,15 +1,11 @@
-//
-// Created by Anwar Ulhaq on 1.4.2023, developed by Giao Ngo
-// Learning resource on AVAudioRecorder and AVAudioPlayer:
-// https://mdcode2021.medium.com/audio-recording-in-swiftui-mvvm-with-avfoundation-an-ios-app-6e6c8ddb00cc
-// https://developer.apple.com/documentation/avfaudio/avaudiorecorder/1387176-averagepower
-//
-
 import Foundation
 import AVFoundation
 import Combine
 import CoreData
 
+/**
+    The ViewModel includes functionalities for  recording, playing back audio, and measuring power levels during the recording duration.
+ */
 class VoiceNoteViewModel: NSObject, ObservableObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     private var audioRecorder: AVAudioRecorder?
     private var audioPlayer: AVAudioPlayer?
@@ -36,7 +32,7 @@ class VoiceNoteViewModel: NSObject, ObservableObject, AVAudioPlayerDelegate, AVA
     }
     
     deinit {
-        stopRecording(){}
+        stopRecording()
     }
     
     func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
@@ -122,18 +118,13 @@ class VoiceNoteViewModel: NSObject, ObservableObject, AVAudioPlayerDelegate, AVA
         objectWillChange.send()
     }
     
-    func stopRecording(completion: @escaping () -> Void) {
+    func stopRecording() {
         self.disableMicriphoneMonitoring()
         audioRecorder?.stop()
         isRecordingPaused = false
         objectWillChange.send()
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-            completion()
-        }
     }
 
-    
     /**
      This method gets the creation file date of the audio file
      */
@@ -145,8 +136,6 @@ class VoiceNoteViewModel: NSObject, ObservableObject, AVAudioPlayerDelegate, AVA
             return Date()
         }
     }
-    
-  
     
     /**
      This method refreshes and returns the average power of chanel 0 of audio recorder through every 0.01s time interval

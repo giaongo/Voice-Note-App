@@ -1,11 +1,9 @@
-// 
-// Created by Anwar Ulhaq on 4.4.2023.
-//
-//
-
 import Foundation
 import CoreData
 
+/**
+    This Model defines an enum named OptionMenu that has two cases: EDIT and DELETE
+ */
 enum OptionMenu: String, CaseIterable {
     case EDIT = "Edit"
     case DELETE = "Delete"

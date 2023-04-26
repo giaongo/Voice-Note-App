@@ -1,10 +1,3 @@
-//
-//  ToastView.swift
-//  Voice Note
-//
-//  Created by iosdev on 13.4.2023.
-//
-
 import SwiftUI
 
 enum ToastStyle {
@@ -144,9 +137,6 @@ extension View {
         self.modifier(ToastViewModifier(toast: toast))
     }
 }
-
-
-
 
 struct ToastView_Previews: PreviewProvider {
     static var previews: some View {

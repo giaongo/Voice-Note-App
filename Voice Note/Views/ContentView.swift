@@ -1,10 +1,3 @@
-//
-//  ContentView.swift
-//  Voice Note
-//
-//  Created by iosdev on 22.3.2023.
-//
-
 import SwiftUI
 
 struct ContentView: View {

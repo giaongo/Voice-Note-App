@@ -1,14 +1,10 @@
-//
-//  MapViewModel.swift
-//  Voice Note
-//
-//  Created by Tai Nguyen on 2.4.2023.
-//
-
 import SwiftUI
 import MapKit
 import CoreLocation
 
+/**
+   A ViewModel that contains properties and functionalities, associated with fetching location, searching for places as well as direction routing.
+ */
 class MapViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
         
     let locationManager = CLLocationManager()

@@ -1,10 +1,3 @@
-//
-//  RecordingListView.swift
-//  Voice Note
-//
-//  Created by iosdev on 2.4.2023.
-//
-
 import SwiftUI
 import CoreLocation
 
@@ -41,13 +34,19 @@ struct RecordingListView: View {
         .toastView(toast: $toast)
         .navigationBarTitle("My Voice Notes")
     }
-
+    
+    /**
+        This method displays sample data to the UI
+     */
     private func addItem() {
         withAnimation {
             coreDataService.addFakeItem()
         }
     }
 
+    /**
+        This method removed the selected voice note
+     */
     private func deleteItem(offsets: IndexSet) {
         withAnimation {
             coreDataService.delete(offsets)
