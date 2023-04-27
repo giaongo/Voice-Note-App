@@ -6,10 +6,15 @@
 //
 
 import SwiftUI
+import NaturalLanguage
+import Foundation
 
 struct BottomBarView: View {
     @EnvironmentObject var voiceNoteViewModel: VoiceNoteViewModel
     @EnvironmentObject var speechRecognizer: SpeechRecognizer
+    @Environment(\.coreData) var coreDataService: CoreDataService
+    @Environment(\.managedObjectContext) var managedObjectContext
+
     @State var showConfirmationAlert: Bool = false
     @Binding var toast:ToastView?
     @Binding var showSheet: Bool
@@ -59,6 +64,7 @@ struct BottomBarView: View {
                     .alert("Please confirm to save!", isPresented: $showConfirmationAlert) {
                         HStack {
                             Button("SAVE") {
+                                saveVoiceNote()
                                 voiceNoteViewModel.confirmTheVoiceNote = false
                                 showSheet = false
                                 toast = ToastView(type: .success, title: "Save Success", message: "Note saved successfully") {
@@ -118,8 +124,61 @@ struct BottomBarView: View {
                     .frame(height: 100)
             )
         }.ignoresSafeArea(.all)
+        
+        
     }
-    
+    func extractKeywords(from text: String) -> [String] {
+        let tagger = NLTagger(tagSchemes: [.lexicalClass])
+        tagger.string = text
+        let options: NLTagger.Options = [.omitWhitespace, .omitPunctuation, .joinNames]
+
+        let tags = tagger.tags(in: text.startIndex..<text.endIndex, unit: .word, scheme: .lexicalClass, options: options)
+
+        let keywords = tags.compactMap { (tag, tokenRange) -> String? in
+            if tag == .noun || tag == .verb || tag == .adjective {
+                return String(text[tokenRange])
+            }
+            return nil
+        }
+
+        return keywords
+    }
+
+    func saveVoiceNote() {
+        guard let url = voiceNoteViewModel.fileUrlList.last else {
+            return
+        }
+
+        let durationInSeconds = voiceNoteViewModel.getDuration(for: url)
+        let extractedKeywords = extractKeywords(from: speechRecognizer.transcriptionText)
+        let title = extractedKeywords.first ?? "Note"
+
+
+
+        let newVoiceNote = VoiceNote(context: managedObjectContext)
+        newVoiceNote.id = UUID()
+        newVoiceNote.text = speechRecognizer.transcriptionText
+        newVoiceNote.title = title
+        newVoiceNote.fileUrl = url
+        newVoiceNote.createdAt = Date()
+        newVoiceNote.duration = durationInSeconds
+        newVoiceNote.location = Location(context: managedObjectContext)
+        newVoiceNote.location?.latitude = 24.444
+        newVoiceNote.location?.longitude = 64.444
+        newVoiceNote.weather = Weather(context: managedObjectContext)
+        newVoiceNote.weather?.temperature = Temperature(context: managedObjectContext)
+        newVoiceNote.weather?.temperature?.average = 34
+        newVoiceNote.weather?.temperature?.maximum = 44
+        newVoiceNote.weather?.temperature?.minimum = 24
+
+        do {
+            try managedObjectContext.save()
+        } catch {
+            print("Error saving voice note: \(error)")
+        }
+    }
+
+
     private func clickAudioButton() {
         voiceNoteViewModel.isRecording.toggle()
         voiceNoteViewModel.isMicPressed.toggle()
@@ -132,7 +191,9 @@ struct BottomBarView: View {
             voiceNoteViewModel.startRecording()
             
         } else {
-            voiceNoteViewModel.stopRecording()
+            voiceNoteViewModel.stopRecording(completion:{
+                saveVoiceNote()
+            })
         }
     }
     

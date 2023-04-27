@@ -19,7 +19,7 @@ class SpeechRecognizer: ObservableObject {
     @Published var transcriptionText: String = ""
     
     init() {
-        recognizer = SFSpeechRecognizer()
+        recognizer = SFSpeechRecognizer(locale: Locale.init(identifier: "en"))
         checkAuthorizationStatus()
     }
     

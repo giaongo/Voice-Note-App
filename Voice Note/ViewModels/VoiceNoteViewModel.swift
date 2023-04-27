@@ -7,6 +7,8 @@
 
 import Foundation
 import AVFoundation
+import Combine
+import CoreData
 
 class VoiceNoteViewModel: NSObject, ObservableObject, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     private var audioRecorder: AVAudioRecorder?
@@ -25,13 +27,16 @@ class VoiceNoteViewModel: NSObject, ObservableObject, AVAudioPlayerDelegate, AVA
     @Published var soundSamples: [Float] = [Float](repeating:.zero, count: VoiceNoteViewModel.numberOfSample)
     @Published var audioIsPlaying:Bool = false
     @Published var confirmTheVoiceNote: Bool = false
+    @Published var voiceNotes: [URL] = []
+
+
 
     override init () {
         super.init()
     }
     
     deinit {
-        stopRecording()
+        stopRecording(){}
     }
     
     func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
@@ -46,6 +51,18 @@ class VoiceNoteViewModel: NSObject, ObservableObject, AVAudioPlayerDelegate, AVA
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
         audioIsPlaying = false
     }
+    
+    func fetchVoiceNotes() {
+            let fileManager = FileManager.default
+            let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
+
+            do {
+                let fileURLs = try fileManager.contentsOfDirectory(at: documentsURL, includingPropertiesForKeys: nil)
+                voiceNotes = fileURLs.filter { $0.pathExtension == "m4a" }
+            } catch {
+                print("Error while fetching voice notes: \(error.localizedDescription)")
+            }
+        }
     
     func startRecording() {
         let recordingSession = AVAudioSession.sharedInstance()
@@ -82,6 +99,13 @@ class VoiceNoteViewModel: NSObject, ObservableObject, AVAudioPlayerDelegate, AVA
             print("Error Setting Up Recorder \(error.localizedDescription)")
         }
     }
+    func getDuration(for file: URL) -> TimeInterval {
+        guard let player = try? AVAudioPlayer(contentsOf: file) else {
+            return 0
+        }
+        return player.duration
+    }
+
     
     func pauseRecording() {
         guard let recorder = audioRecorder else { return }
@@ -98,12 +122,17 @@ class VoiceNoteViewModel: NSObject, ObservableObject, AVAudioPlayerDelegate, AVA
         objectWillChange.send()
     }
     
-    func stopRecording() {
+    func stopRecording(completion: @escaping () -> Void) {
         self.disableMicriphoneMonitoring()
         audioRecorder?.stop()
         isRecordingPaused = false
         objectWillChange.send()
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+            completion()
+        }
     }
+
     
     /**
      This method gets the creation file date of the audio file
@@ -117,12 +146,7 @@ class VoiceNoteViewModel: NSObject, ObservableObject, AVAudioPlayerDelegate, AVA
         }
     }
     
-    private func getDuration(for file: URL) -> TimeInterval {
-        guard let player = try? AVAudioPlayer(contentsOf: file) else {
-            return 0
-        }
-        return player.duration
-    }
+  
     
     /**
      This method refreshes and returns the average power of chanel 0 of audio recorder through every 0.01s time interval
@@ -142,7 +166,10 @@ class VoiceNoteViewModel: NSObject, ObservableObject, AVAudioPlayerDelegate, AVA
         timer?.invalidate()
     }
     
-    func startPlaying (recordingUrl:URL) {
+    func startPlaying (recordingUrl:URL?) {
+        guard let recordingUrl = recordingUrl else {
+            return
+        }
         let audioPlayingSession = AVAudioSession.sharedInstance()
         do {
             try audioPlayingSession.overrideOutputAudioPort(AVAudioSession.PortOverride.speaker)
@@ -158,7 +185,10 @@ class VoiceNoteViewModel: NSObject, ObservableObject, AVAudioPlayerDelegate, AVA
         }
     }
     
-    func stopPlaying(recordingUrl: URL) {
+    func stopPlaying(recordingUrl: URL?) {
+        guard recordingUrl != nil else {
+            return
+        }
         audioPlayer?.stop()
         audioIsPlaying = false
     }
@@ -170,5 +200,41 @@ class VoiceNoteViewModel: NSObject, ObservableObject, AVAudioPlayerDelegate, AVA
         } catch {
             print("Error deleting recording \(error.localizedDescription)")
         }
+    }
+    
+    func fetchTemperature(latitude: Double, longitude: Double, completion: @escaping (Double?) -> Void) {
+            let apiKey = "c55b372ffdf9f6dcc3f535d009f52246"
+            let url = URL(string: "https://api.openweathermap.org/data/2.5/weather?lat=\(latitude)&lon=\(longitude)&appid=\(apiKey)&units=metric")!
+
+            let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+                if let error = error {
+                    print("Error fetching temperature: \(error)")
+                    completion(nil)
+                    return
+                }
+
+                guard let data = data else {
+                    print("No data received.")
+                    completion(nil)
+                    return
+                }
+
+                do {
+                    let weatherData = try JSONDecoder().decode(WeatherData.self, from: data)
+                    completion(weatherData.main.temp)
+                } catch {
+                    print("Error decoding JSON: \(error)")
+                    completion(nil)
+                }
+            }
+            task.resume()
+        }
+    
+    struct WeatherData: Codable {
+        let main: Main
+    }
+
+    struct Main: Codable {
+        let temp: Double
     }
 }
