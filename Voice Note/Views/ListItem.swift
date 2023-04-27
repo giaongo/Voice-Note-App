@@ -33,12 +33,15 @@ struct ListItem: View {
                 Text(voiceNote.text ?? "")
                 Spacer()
                 HStack {
-                    Image(systemName: "mappin.and.ellipse")
+                    /*Image(systemName: "mappin.and.ellipse")
                             .foregroundColor(.purple)
                             .onTapGesture {
                                 print("COMING SOON: Show Voice not on map")
                             }
-                    Text("\(voiceNote.near ?? "")")
+                    Text("\(voiceNote.near ?? "")")*/
+                    //Text("Average: \(String(voiceNote.weather?.temperature?.average ?? 0))")
+                    Text("Minimum: \(String(voiceNote.weather?.temperature?.minimum ?? 0))")
+                    Text("Maximum: \(String(voiceNote.weather?.temperature?.maximum ?? 0))")
                 }
             }
             Spacer()
