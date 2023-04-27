@@ -1,20 +1,13 @@
-//
-//  DetailView.swift
-//  Voice Note
-//
-//  Created by Giao Ngo on 18.4.2023.
-//
 import SwiftUI
 import CoreLocation
 
 struct DetailView: View {
-        @EnvironmentObject var voiceNoteViewModel: VoiceNoteViewModel
-        @Environment(\.presentationMode) var presentationMode
-        @State private var showShareSheet = false
-        let textContainer = #colorLiteral(red: 0.4, green: 0.2039215686, blue: 0.4980392157, alpha: 0.2)
-        private let voiceNote: VoiceNote
+    @EnvironmentObject var voiceNoteViewModel: VoiceNoteViewModel
+    @Environment(\.presentationMode) var presentationMode
+    @State private var showShareSheet = false
+    let textContainer = #colorLiteral(red: 0.4, green: 0.2039215686, blue: 0.4980392157, alpha: 0.2)
+    private let voiceNote: VoiceNote
     
-    //@State private var editableText: String
     @State private var isEditing = false
     @State private var editText: String
     
@@ -53,7 +46,6 @@ struct DetailView: View {
                 }, icon: "arrow.triangle.turn.up.right.diamond.fill")
                 
                 //  Edit button
-                // Edit button
                 DetailBtn(clickHander: {
                     toggleEditing()
                 }, icon: isEditing ? "checkmark.circle.fill" : "pencil")
@@ -75,9 +67,11 @@ struct DetailView: View {
             .presentationDetents([.medium, .large])
             .presentationDragIndicator(.visible)
         }
-        
     }
     
+    /**
+        This method toggles editing when edit button is clicked
+     */
     private func toggleEditing() {
         if isEditing {
             saveEditedText()
@@ -86,7 +80,9 @@ struct DetailView: View {
         isEditing.toggle()
     }
 
-    
+    /**
+        This method deletes the voice note from CoreData
+     */
     private func deleteVoiceNote() {
         let context = PersistenceController.shared.container.viewContext
         context.delete(voiceNote)
@@ -98,6 +94,9 @@ struct DetailView: View {
         }
     }
     
+    /**
+        This method update the editted text to CoreData
+     */
     private func saveEditedText() {
         let context = PersistenceController.shared.container.viewContext
         voiceNote.text = editText
@@ -107,10 +106,6 @@ struct DetailView: View {
             print("Error saving edited text: \(error)")
         }
     }
-    
-    
-    
-    
     
     struct DetailBtn: View {
         let buttonColor = #colorLiteral(red: 0.1764705926, green: 0.01176470611, blue: 0.5607843399, alpha: 1)
@@ -145,17 +140,3 @@ struct DetailView: View {
         }
     }
 }
-/*struct DetailView_Previews: PreviewProvider {
-    static var previews: some View {
-        DetailView(voiceNote: VoiceNote(
-            noteId: UUID(),
-            noteTitle: "Note - 1",
-            noteText: "Rekjh falk sdlfka hsldkj fhkasdh lkfsd",
-            noteDuration: TimeDuration(size: 3765),
-            noteCreatedAt: Date.init(),
-            noteTakenNear: "Ruoholahti",
-            voiceNoteLocation: CLLocation(latitude: 24.33, longitude: 33.56)
-        ))
-    }
-}
-*/

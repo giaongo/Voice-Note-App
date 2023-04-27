@@ -1,13 +1,8 @@
-//
-//  PersistenceContainer.swift
-//  Voice Note
-//
-//  Created by Anwar Ulhaq on 18.4.2023.
-//
-
 import CoreData
 
-// This is a Singleton
+/**
+    A Singleton that initialises the NSPersistenceContainer for application CoreData, sets up the static instance reference to PersistenceController and handles potential errors that may occur during initialization or saving. 
+ */
 struct PersistenceController {
     static let shared = PersistenceController()
 

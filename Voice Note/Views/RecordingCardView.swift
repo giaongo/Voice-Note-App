@@ -1,10 +1,3 @@
-//
-//  RecordingCardView.swift
-//  Voice Note
-//
-//  Created by iosdev on 10.4.2023.
-//
-
 import SwiftUI
 
 struct RecordingCardView: View {
@@ -38,15 +31,6 @@ struct RecordingCardView: View {
                     ? voiceNoteViewModel.startPlaying(recordingUrl: voiceNoteUrl ?? (voiceNoteViewModel.fileUrlList.last ?? nil))
                     : voiceNoteViewModel.stopPlaying(recordingUrl: voiceNoteUrl ?? (voiceNoteViewModel.fileUrlList.last ?? nil))
                 }
-               /* guard let currentUrl = voiceNoteViewModel.fileUrlList.last else {
-                                   return
-                               }
-
-                               isPlayed
-                                   ? voiceNoteViewModel.startPlaying(recordingUrl: voiceNoteUrl ?? currentUrl)
-                                   : voiceNoteViewModel.stopPlaying(recordingUrl: voiceNoteUrl ?? currentUrl)
-                
-                */
             } label: {
                 Image(systemName: voiceNoteViewModel.audioIsPlaying  ? "square.fill" : "play.fill").foregroundColor(.white)
                     .font(.system(size: 15))

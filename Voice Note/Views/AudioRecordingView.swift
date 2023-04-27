@@ -1,10 +1,3 @@
-//
-//  AudioRecordingView.swift
-//  Voice Note
-//
-//  Created by Giao Ngo on 31.3.2023.
-//
-
 import SwiftUI
 
 struct AudioRecordingView: View {

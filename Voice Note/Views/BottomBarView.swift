@@ -1,10 +1,3 @@
-//
-//  BottomBarView.swift
-//  Voice Note
-//
-//  Created by Giao Ngo on 2.4.2023.
-//
-
 import SwiftUI
 import NaturalLanguage
 import Foundation
@@ -45,7 +38,7 @@ struct BottomBarView: View {
                 
                 Spacer()
                 
-                // Microphone button
+                // Microphone button, stop recording button and checkmark button
                 VStack {
                     Button {
                         !voiceNoteViewModel.confirmTheVoiceNote ? clickAudioButton() : confirmToAddTheRecording()
@@ -127,6 +120,9 @@ struct BottomBarView: View {
         
         
     }
+    /**
+        This method extracts and returns list of keywords from  text transcription
+     */
     func extractKeywords(from text: String) -> [String] {
         let tagger = NLTagger(tagSchemes: [.lexicalClass])
         tagger.string = text
@@ -143,7 +139,10 @@ struct BottomBarView: View {
 
         return keywords
     }
-
+    
+    /**
+        This method saves the voice note to CoreData
+     */
     func saveVoiceNote() {
         guard let url = voiceNoteViewModel.fileUrlList.last else {
             return
@@ -176,8 +175,10 @@ struct BottomBarView: View {
             print("Error saving voice note: \(error)")
         }
     }
-
-
+    
+    /**
+        This method triggers startRecording, stopRecording and text transcription
+     */
     private func clickAudioButton() {
         voiceNoteViewModel.isRecording.toggle()
         voiceNoteViewModel.isMicPressed.toggle()
@@ -190,12 +191,13 @@ struct BottomBarView: View {
             voiceNoteViewModel.startRecording()
             
         } else {
-            voiceNoteViewModel.stopRecording(completion:{
-                saveVoiceNote()
-            })
+            voiceNoteViewModel.stopRecording()
         }
     }
     
+    /**
+        This method shows confirmation alert
+     */
     private func confirmToAddTheRecording(){
         showConfirmationAlert = true
     }

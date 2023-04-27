@@ -1,11 +1,9 @@
-// 
-// Created by Anwar Ulhaq on 19.4.2023.
-// 
-// 
-
 import Foundation
 import CoreData
 
+/**
+    A class that contains methods associated with CoreData operation
+ */
 class CoreDataService {
     static let localStorage = CoreDataService()
     private let persistenceController = PersistenceController.shared

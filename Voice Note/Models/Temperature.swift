@@ -1,14 +1,11 @@
-//
-//  Temperature.swift
-//  Voice Note
-//
-//  Created by Anwar Ulhaq on 19.4.2023.
-//
-
 import Foundation
 import CoreData
 
-@objc (Temperature)
+
+/**
+ A Model that conforms to the Decodable protocol and is a subclass of NSManagedObject. Upon initialization, this model decodes the JSON data and set the model properties accordingly
+ */
+@objc(Temperature)
 public class Temperature: NSManagedObject, Decodable {
     enum CodingKeys: String, CodingKey {
         case minimum = "min"

@@ -1,14 +1,10 @@
-//
-//  WeatherService.swift
-//  Voice Note
-//
-//  Created by Mohammad Rashid on 23.4.2023.
-//
-
 import Foundation
 import Combine
 import CoreLocation
 
+/**
+    This WeatherService defines method to fetch weather data from OpenWeatherMap API
+ */
 struct WeatherService {
     private let baseUrl = "https://api.openweathermap.org/data/2.5/weather"
     private let apiKey = "c55b372ffdf9f6dcc3f535d009f52246"

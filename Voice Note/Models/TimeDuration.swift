@@ -1,10 +1,8 @@
-// 
-// Created by Anwar Ulhaq on 3.4.2023.
-//
-//
-
 import Foundation
 
+/**
+    A model returns time duration based on hours, minutes and seconds
+ */
 struct TimeDuration: Sizeable {
     var size: Double?
 
