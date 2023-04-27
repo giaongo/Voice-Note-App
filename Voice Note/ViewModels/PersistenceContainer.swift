@@ -24,7 +24,7 @@ struct PersistenceController {
             newVoiceNote.location?.longitude = 64.444
             newVoiceNote.weather = Weather(context: viewContext)
             newVoiceNote.weather?.temperature = Temperature(context: viewContext)
-            newVoiceNote.weather?.temperature?.average = 34
+            //newVoiceNote.weather?.temperature?.average = 34
             newVoiceNote.weather?.temperature?.maximum = 44
             newVoiceNote.weather?.temperature?.minimum = 24
         }

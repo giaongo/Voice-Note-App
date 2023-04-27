@@ -166,7 +166,6 @@ struct BottomBarView: View {
         newVoiceNote.location?.longitude = 64.444
         newVoiceNote.weather = Weather(context: managedObjectContext)
         newVoiceNote.weather?.temperature = Temperature(context: managedObjectContext)
-        newVoiceNote.weather?.temperature?.average = 34
         newVoiceNote.weather?.temperature?.maximum = 44
         newVoiceNote.weather?.temperature?.minimum = 24
 

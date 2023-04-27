@@ -9,7 +9,13 @@ class CoreDataService {
     private let persistenceController = PersistenceController.shared
 
     // May be we fetch from remote location in future
-    private init(remoteFetch: Bool = false) {}
+    private init(remoteFetch: Bool = false) {
+        // console logs SQLite file location for viewing DB
+        if let url = FileManager.default.urls(for: .libraryDirectory, in: .userDomainMask).last {
+            print("DataBase SQLite file can be found at this location,")
+            print(url.absoluteString)
+        }
+    }
 
     func getManageObjectContext() -> NSManagedObjectContext {
         persistenceController.container.viewContext
@@ -33,7 +39,7 @@ class CoreDataService {
         newVoiceNote.location?.longitude = Double.random(in: 60.090760..<60.430440)
         newVoiceNote.weather = Weather(context: persistenceController.container.viewContext)
         newVoiceNote.weather?.temperature = Temperature(context: persistenceController.container.viewContext)
-        newVoiceNote.weather?.temperature?.average = 34
+        //newVoiceNote.weather?.temperature?.average = 34
         newVoiceNote.weather?.temperature?.maximum = 44
         newVoiceNote.weather?.temperature?.minimum = 24
 
@@ -47,6 +53,49 @@ class CoreDataService {
         }
     }
 
+    func loadLatestTemperatures() {
+
+    }
+
+    func fetchAllVoiceNotes() -> [VoiceNote] {
+        var voiceNotes: [VoiceNote] = []
+        let managedContext = persistenceController.container.viewContext
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "VoiceNote")
+        do {
+            voiceNotes = try managedContext.fetch(fetchRequest) as? [VoiceNote] ?? []
+        } catch let error as NSError {
+            print("Could not fetch. \(error), \(error.userInfo)")
+            //return nil
+        }
+        return voiceNotes
+    }
+
+    func getAllLocations() -> [Location] {
+        fetchAllVoiceNotes()
+                .map { voiceNote -> Location? in voiceNote.location}
+                .compactMap {$0}
+    }
+
+    func getVoiceNote(byManagedObjectID managedObjectID: NSManagedObjectID) -> VoiceNote? {
+        let managedContext = getManageObjectContext()
+
+        var fetchedObject = VoiceNote(context: managedContext)
+
+
+        do {
+            fetchedObject = try managedContext.existingObject(with: managedObjectID) as! VoiceNote
+        } catch {
+            // TODO handle error
+        }
+
+        return fetchedObject
+    }
+
+    func getVoiceNote(byFileURL fileURL: URL) {
+
+    }
+
+    // TODO remove this way of deleting, calling method should pass NSManagedObject from offsets.
     func delete(_ offsets: IndexSet) {
         print("Delete item from coredata: \(offsets)")
         let managedContext = persistenceController.container.viewContext
@@ -67,7 +116,7 @@ class CoreDataService {
         do {
             try managedContext.delete(item)
         } catch let error as NSError {
-            print("Could not fetch. \(error), \(error.userInfo)")
+            print("Could not delete. \(error), \(error.userInfo)")
         }
     }
 }
