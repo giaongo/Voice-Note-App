@@ -97,6 +97,20 @@ class CoreDataService {
 
     }
 
+    func getVoiceNote(byUUID uuid: UUID) -> VoiceNote {
+        let managedContext = getManageObjectContext()
+        let requestById: NSFetchRequest<VoiceNote> = VoiceNote.fetchRequest()
+        requestById.predicate = NSPredicate(format: "id == %@", uuid.uuidString )
+        var results: [VoiceNote?] = []
+
+        do {
+            results = try managedContext.fetch(requestById) as [VoiceNote]
+        } catch {
+
+        }
+        return results.compactMap{$0}[0]
+    }
+
     // TODO remove this way of deleting, calling method should pass NSManagedObject from offsets.
     func delete(_ offsets: IndexSet) {
         print("Delete item from coredata: \(offsets)")

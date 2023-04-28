@@ -62,7 +62,9 @@ struct ListItem: View {
             showDetail = true
         }
         .sheet(isPresented: $showDetail) {
-            DetailView(voiceNote: voiceNote)
+            if let id = voiceNote.id {
+                DetailView(voiceNoteUUID: id)
+            }
         }
     }
 }

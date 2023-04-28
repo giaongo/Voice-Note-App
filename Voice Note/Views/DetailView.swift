@@ -6,14 +6,14 @@ struct DetailView: View {
     @Environment(\.presentationMode) var presentationMode
     @State private var showShareSheet = false
     let textContainer = #colorLiteral(red: 0.4, green: 0.2039215686, blue: 0.4980392157, alpha: 0.2)
-    private let voiceNote: VoiceNote
+    private let voiceNote: VoiceNote?
     
     @State private var isEditing = false
     @State private var editText: String
     
-    init(voiceNote: VoiceNote) {
-        self.voiceNote = voiceNote
-        _editText = State(initialValue: voiceNote.text ?? "")
+    init(voiceNoteUUID uuid: UUID) {
+            voiceNote = CoreDataService.localStorage.getVoiceNote(byUUID: uuid)
+        _editText = State(initialValue: voiceNote?.text ?? "Title Missing")
     }
     
     var body: some View {
@@ -26,7 +26,7 @@ struct DetailView: View {
                     .cornerRadius(20)
                     .padding()
             } else {
-                Text(voiceNote.text ?? "")
+                Text(voiceNote?.text ?? "")
                     .padding()
                     .frame(maxWidth: .infinity)
                     .background(Color(textContainer))
@@ -34,34 +34,34 @@ struct DetailView: View {
                     .padding()
             }
             
-            RecordingCardView(voiceNoteUrl: voiceNote.fileUrl).padding(15)
-            Text("Duration: \(voiceNote.duration)s")
+            RecordingCardView(voiceNoteUrl: voiceNote?.fileUrl).padding(15)
+            Text("Duration: \(voiceNote?.duration ?? 0)s")
             
            
             
             HStack {
                 // Direction button
-                DetailBtn(clickHander: {
+                DetailBtn(clickHandler: {
                     print("Direction pressed")
                 }, icon: "arrow.triangle.turn.up.right.diamond.fill")
                 
                 //  Edit button
-                DetailBtn(clickHander: {
+                DetailBtn(clickHandler: {
                     toggleEditing()
                 }, icon: isEditing ? "checkmark.circle.fill" : "pencil")
 
                 
                 // Delete button
-                DetailBtn(clickHander: {
+                DetailBtn(clickHandler: {
                     deleteVoiceNote()
                 }, icon: "trash")
                 
                 // Share button
-                DetailBtn(clickHander: {
+                DetailBtn(clickHandler: {
                     showShareSheet = true
                 }, icon: "square.and.arrow.up")
                 .sheet(isPresented: $showShareSheet, content: {
-                    ShareSheet(activityItems: [voiceNote.text ?? ""])
+                    ShareSheet(activityItems: [voiceNote?.text ?? ""])
                 })
             }
             .presentationDetents([.medium, .large])
@@ -85,21 +85,23 @@ struct DetailView: View {
      */
     private func deleteVoiceNote() {
         let context = PersistenceController.shared.container.viewContext
-        context.delete(voiceNote)
-        do {
-            try context.save()
-            presentationMode.wrappedValue.dismiss()
-        } catch {
-            print("Error deleting voice note: \(error)")
+        if let voiceNote = voiceNote {
+            context.delete(voiceNote)
+            do {
+                try context.save()
+                presentationMode.wrappedValue.dismiss()
+            } catch {
+                print("Error deleting voice note: \(error)")
+            }
         }
     }
     
     /**
-        This method update the editted text to CoreData
+        This method update the edited text to CoreData
      */
     private func saveEditedText() {
         let context = PersistenceController.shared.container.viewContext
-        voiceNote.text = editText
+        voiceNote?.text = editText
         do {
             try context.save()
         } catch {
@@ -109,12 +111,12 @@ struct DetailView: View {
     
     struct DetailBtn: View {
         let buttonColor = #colorLiteral(red: 0.1764705926, green: 0.01176470611, blue: 0.5607843399, alpha: 1)
-        let clickHander: () -> Void
+        let clickHandler: () -> Void
         let icon: String
         
         var body: some View {
             Button {
-                clickHander()
+                clickHandler()
             } label: {
                 Image(systemName: icon)
                     .font(.title2)

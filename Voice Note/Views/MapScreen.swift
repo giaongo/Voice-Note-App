@@ -22,7 +22,7 @@ struct MapScreen: View {
             //Map(coordinateRegion: .constant(region) , showsUserLocation: true, annotationItems: mapViewModel.mapMarkers) { marker in
             Map(coordinateRegion: .constant(mapViewModel.region) , showsUserLocation: true, annotationItems: mapViewModel.mapMarkers) { marker in
                 MapAnnotation(coordinate: marker.coordinate) {
-                    
+
                     if marker.type == AnnotationType.SEARCH_RESULT {
 
                         Image(systemName: "mappin.and.ellipse")
@@ -47,6 +47,10 @@ struct MapScreen: View {
                                     isShowingSheet.toggle()
                                     print("VoiceNote Annotation pressed")
                                     mapViewModel.reCenterRegion(at: marker.coordinate)
+                                }.sheet(isPresented: $isShowingSheet) {
+                                    if let id = marker.id {
+                                        DetailView(voiceNoteUUID: id)
+                                    }
                                 }
                     }
                 }
