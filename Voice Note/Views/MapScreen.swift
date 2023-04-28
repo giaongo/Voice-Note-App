@@ -107,9 +107,7 @@ struct MapScreen: View {
                     })
                     // TODO Center map
                     Button(action: {
-                        if centerMap {
-                            mapViewModel.shouldRegionUpdate.toggle()
-                        }
+                        
                     }, label: {
                         Image(systemName: "smallcircle.filled.circle")
                                 .font(.system(size: 36))

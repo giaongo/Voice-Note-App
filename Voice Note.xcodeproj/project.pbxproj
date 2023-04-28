@@ -17,6 +17,7 @@
 		3C7C32E20DF24CAB3EAA3B62 /* Sizeable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C7C318A8FD4D8E185A8DD6F /* Sizeable.swift */; };
 		3C7C33E744D14136E7A1972C /* TemperatureResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C7C33800065D3F69DEA7196 /* TemperatureResource.swift */; };
 		3C7C3525E5B4658D7369C938 /* OptionMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C7C326226424B1F12594A3A /* OptionMenu.swift */; };
+		3C7C3687C366051F395E5E6E /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C7C35DC677C97248978CDC2 /* LocationService.swift */; };
 		3C7C371260B8F9E2A2E60D17 /* RecognizeError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C7C3899829BFEB454528C09 /* RecognizeError.swift */; };
 		3C7C38755DECCD07B240D629 /* TemperatureResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C7C350E8C6E0F9AD94B83F1 /* TemperatureResponse.swift */; };
 		3C7C3AA05E5890D9326FFB53 /* TemperatureAPIRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C7C3C1516DA0A6B6A14D81D /* TemperatureAPIRequest.swift */; };
@@ -84,6 +85,7 @@
 		3C7C33800065D3F69DEA7196 /* TemperatureResource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TemperatureResource.swift; sourceTree = "<group>"; };
 		3C7C3489F88471C4AB6C5FA3 /* TemperatureDataService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TemperatureDataService.swift; sourceTree = "<group>"; };
 		3C7C350E8C6E0F9AD94B83F1 /* TemperatureResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TemperatureResponse.swift; sourceTree = "<group>"; };
+		3C7C35DC677C97248978CDC2 /* LocationService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
 		3C7C3659A698D3D6EB945C45 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = file.gitignore; path = .gitignore; sourceTree = "<group>"; };
 		3C7C3899829BFEB454528C09 /* RecognizeError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecognizeError.swift; sourceTree = "<group>"; };
 		3C7C3C1516DA0A6B6A14D81D /* TemperatureAPIRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TemperatureAPIRequest.swift; sourceTree = "<group>"; };
@@ -163,11 +165,11 @@
 				3C7C3DCBEAD822469529D401 /* MapMarker.swift */,
 				3C7C300951A045673832FF35 /* AnnotationType.swift */,
 				3C7C3C26B38266BF3FE51ADF /* APIResponseWrapper.swift */,
-                3C7C3323771A9E23C9D9D1F8 /* APIResource.swift */,
-                3C7C31A4143342C1A12B998D /* NetworkRequest.swift */,
-                3C7C350E8C6E0F9AD94B83F1 /* TemperatureResponse.swift */,
-                3C7C33800065D3F69DEA7196 /* TemperatureResource.swift */,
-                3C7C3C1516DA0A6B6A14D81D /* TemperatureAPIRequest.swift */,
+				3C7C3323771A9E23C9D9D1F8 /* APIResource.swift */,
+				3C7C31A4143342C1A12B998D /* NetworkRequest.swift */,
+				3C7C350E8C6E0F9AD94B83F1 /* TemperatureResponse.swift */,
+				3C7C33800065D3F69DEA7196 /* TemperatureResource.swift */,
+				3C7C3C1516DA0A6B6A14D81D /* TemperatureAPIRequest.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -273,6 +275,7 @@
 				3C7C32A320FA143DE9EC73BE /* CoreDataService.swift */,
 				4DCB334529F5C00B006104BA /* WeatherViewModel.swift */,
 				3C7C3489F88471C4AB6C5FA3 /* TemperatureDataService.swift */,
+				3C7C35DC677C97248978CDC2 /* LocationService.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -447,6 +450,7 @@
 				3C7C33E744D14136E7A1972C /* TemperatureResource.swift in Sources */,
 				3C7C3AA05E5890D9326FFB53 /* TemperatureAPIRequest.swift in Sources */,
 				3C7C3D177E5037763E3A386D /* TemperatureDataService.swift in Sources */,
+				3C7C3687C366051F395E5E6E /* LocationService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -153,6 +153,9 @@ struct BottomBarView: View {
 
     //TODO How to repopulate map annotation from here???
     //TODO Saving a note is a ViewModel's responsibility, not View's responsibility
+
+    //TODO pass extractKeywords and speechRecognizer.transcriptionText to ViewModel to save note
+    //TODO ViewModel will have access to location, CodeData and temperature services
     func saveVoiceNote() {
         guard let url = voiceNoteViewModel.fileUrlList.last else {
             return

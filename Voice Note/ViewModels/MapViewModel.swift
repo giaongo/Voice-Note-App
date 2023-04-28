@@ -6,11 +6,8 @@ import CoreData
 /**
    A ViewModel that contains properties and functionalities, associated with fetching location, searching for places as well as direction routing.
  */
-class MapViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
+class MapViewModel: NSObject, ObservableObject {
 
-    private let locationManager = CLLocationManager()
-    @Published var locationStatus: CLAuthorizationStatus?
-    @Published var lastLocation: CLLocation?
     @Published var region = MKCoordinateRegion(
             center: CLLocationCoordinate2D(latitude: 37.334_900, longitude: -122.009_020),
             latitudinalMeters: 2000,
@@ -23,45 +20,12 @@ class MapViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
     @Published var places: [Place] = []
     // Markers that will show on map
     @Published var mapMarkers: [MapMarker] = []
-
-    var statusString: String {
-        guard let status = locationStatus else {
-            return "unknown"
-        }
-
-        switch status {
-        case .notDetermined: return "notDetermined"
-        case .authorizedWhenInUse: return "authorizedWhenInUse"
-        case .authorizedAlways: return "authorizedAlways"
-        case .restricted: return "restricted"
-        case .denied: return "denied"
-        default: return "unknown"
-        }
-    }
+    // Location service singleton
+    private var locationService = LocationService.sharedLocationService
 
     override init() {
         super.init()
-        locationManager.delegate = self
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
-
-        // Request a user’s location once
-        //locationManager.requestLocation()
-
-        // Use requestAlwaysAuthorization if you need location
-        // updates even when your app is running in the background
-        //locationManager.requestAlwaysAuthorization()
-
-        // Use requestWhenInUseAuthorization if you only need
-        // location updates when the user is using your app
-        locationManager.requestWhenInUseAuthorization()
-
-        locationManager.startUpdatingLocation()
-
         populateLocation()
-    }
-
-    deinit {
-        locationManager.stopUpdatingLocation()
     }
 
     //Search Places...
@@ -86,37 +50,6 @@ class MapViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
         mapMarkers.append(transform(from: place.place))
     }
 
-    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-        locationStatus = status
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print(error.localizedDescription)
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let location = locations.last else {return}
-        lastLocation = location
-        if shouldRegionUpdate {
-            region.center = location.coordinate
-        }
-
-        /*
-        // Altitude
-        let altitude = lastLocation.altitude
-
-        // Speed
-        let speed = lastLocation.speed
-
-        // Course, degrees relative to due north
-        let source = lastLocation.course
-
-        // Distance between two CLLocation
-        // Given another CLLocation, otherLocation
-        let distanceDelta = lastLocation.distance(from: otherLocation)
-         */
-    }
-
     func deleteSelectedVoiceNoteFromMap(at location: Double) {
 
     }
@@ -135,6 +68,7 @@ class MapViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
         }
 
     }
+
     func removeSearchItemsFromMap() {
         places.removeAll()
         removeSearchTypeMarkers(from: mapMarkers)
