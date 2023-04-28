@@ -22,21 +22,27 @@ struct MapScreen: View {
             //Map(coordinateRegion: .constant(region) , showsUserLocation: true, annotationItems: mapViewModel.mapMarkers) { marker in
             Map(coordinateRegion: .constant(mapViewModel.region) , showsUserLocation: true, annotationItems: mapViewModel.mapMarkers) { marker in
                 MapAnnotation(coordinate: marker.coordinate) {
-
-                    //TODO re-design shape
+                    
                     if marker.type == AnnotationType.SEARCH_RESULT {
-                        Rectangle().stroke(Color.blue)
-                                .frame(width: 20, height: 20)
+
+                        Image(systemName: "mappin.and.ellipse")
+                                .font(.system(size: 36))
+                                .padding(10)
+                                .background(Color(.systemGray6))
+                                .clipShape(Circle())
+                                .foregroundColor(Color(buttonColor))
                                 .onTapGesture {
                                     print("Result Annotation pressed")
                                     mapViewModel.reCenterRegion(at: marker.coordinate)
                                 }
                     }
-                    //TODO re-design shape
                     if marker.type == AnnotationType.VOICE_NOTE {
-                        Circle()
-                                .stroke(.red, lineWidth: 3)
-                                .frame(width: 44, height: 44)
+                        Image(systemName: "waveform.circle")
+                                .font(.system(size: 36))
+                                .padding(10)
+                                .background(Color(.systemGray6))
+                                .clipShape(Circle())
+                                .foregroundColor(Color(buttonColor))
                                 .onTapGesture {
                                     isShowingSheet.toggle()
                                     print("VoiceNote Annotation pressed")
