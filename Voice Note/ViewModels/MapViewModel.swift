@@ -88,4 +88,16 @@ class MapViewModel: NSObject, ObservableObject {
     private func createMapMarker(id: UUID = UUID(), type: AnnotationType, coordinate: CLLocationCoordinate2D) -> MapMarker {
         MapMarker(id: id, type: type, coordinate: coordinate)
     }
+
+    func reCenterRegionToUserLocation() {
+        reCenterRegion(at: locationService.currentLocation.coordinate)
+    }
+
+    func reCenterRegion(at coordinate: CLLocationCoordinate2D) {
+        region.center = coordinate
+    }
+
+    func getCurrentLocation () -> CLLocationCoordinate2D{
+        locationService.currentLocation.coordinate
+    }
 }

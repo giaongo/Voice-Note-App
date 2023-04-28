@@ -13,7 +13,7 @@ class LocationService: NSObject, CLLocationManagerDelegate {
     static var sharedLocationService = LocationService()
     private let locationManager = CLLocationManager()
     var locationStatus: CLAuthorizationStatus?
-    var currentLocation: CLLocation?
+    var currentLocation: CLLocation = CLLocation(latitude: 37.334_900, longitude: -122.009_020)
 
     private var isLocationUpdate = true
 
@@ -65,7 +65,10 @@ class LocationService: NSObject, CLLocationManagerDelegate {
     }
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let location = locations.last else {return}
+        guard let location = locations.last else {
+            print("Unable to get user coordinate")
+            return
+        }
         currentLocation = location
 
         /*
@@ -92,7 +95,7 @@ class LocationService: NSObject, CLLocationManagerDelegate {
         locationManager.stopUpdatingLocation()
     }
 
-    func getCurrentLocation() {
+    func getCurrentLocationAs() -> CLLocation{
         currentLocation
     }
 }

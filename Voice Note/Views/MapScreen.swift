@@ -29,6 +29,7 @@ struct MapScreen: View {
                                 .frame(width: 20, height: 20)
                                 .onTapGesture {
                                     print("Result Annotation pressed")
+                                    mapViewModel.reCenterRegion(at: marker.coordinate)
                                 }
                     }
                     //TODO re-design shape
@@ -39,6 +40,7 @@ struct MapScreen: View {
                                 .onTapGesture {
                                     isShowingSheet.toggle()
                                     print("VoiceNote Annotation pressed")
+                                    mapViewModel.reCenterRegion(at: marker.coordinate)
                                 }
                     }
                 }
@@ -107,7 +109,7 @@ struct MapScreen: View {
                     })
                     // TODO Center map
                     Button(action: {
-                        
+                         mapViewModel.reCenterRegionToUserLocation()
                     }, label: {
                         Image(systemName: "smallcircle.filled.circle")
                                 .font(.system(size: 36))
