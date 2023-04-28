@@ -8,182 +8,154 @@
 import SwiftUI
 import MapKit
 import CoreLocation
+import CoreData
 
 class MapViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
-        
-    let locationManager = CLLocationManager()
-    
-    @Published var mapView = MKMapView()
-    
-    //Region
-    @Published var region : MKCoordinateRegion!
-    //Based on Location it will set up..
-    
-    //Alert
-    @Published var permissionDenied = false
-    
-    //Map type...
-    @Published var mapType: MKMapType = .standard
-    
+
+    private let locationManager = CLLocationManager()
+    @Published var locationStatus: CLAuthorizationStatus?
+    @Published var lastLocation: CLLocation?
+    @Published var region = MKCoordinateRegion(
+            center: CLLocationCoordinate2D(latitude: 37.334_900, longitude: -122.009_020),
+            latitudinalMeters: 2000,
+            longitudinalMeters: 2000
+    )
+    @Published var shouldRegionUpdate = true
     //SearchText...
     @Published var searchText = ""
-    
     // Searched places
     @Published var places: [Place] = []
-    
-    //Direction Array
-    private var directionsArray: [MKDirections] = []
-    
-    //Update Map Type...
-    func updateMapType() {
-        if mapType == .standard {
-            mapType = .hybrid
-            mapView.mapType = mapType
-        } else {
-            mapType = .standard
-            mapView.mapType = mapType
+    // Markers that will show on map
+    @Published var mapMarkers: [MapMarker] = []
+
+    var statusString: String {
+        guard let status = locationStatus else {
+            return "unknown"
+        }
+
+        switch status {
+        case .notDetermined: return "notDetermined"
+        case .authorizedWhenInUse: return "authorizedWhenInUse"
+        case .authorizedAlways: return "authorizedAlways"
+        case .restricted: return "restricted"
+        case .denied: return "denied"
+        default: return "unknown"
         }
     }
-    
-    //Get Location
-    func getCenterLocation(for mapView: MKMapView) -> CLLocation {
-        let lattitude = mapView.region.center.latitude
-        let longitude = mapView.region.center.longitude
-        
-        return CLLocation(latitude: lattitude, longitude: longitude)
+
+    override init() {
+        super.init()
+        locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+
+        // Request a user’s location once
+        //locationManager.requestLocation()
+
+        // Use requestAlwaysAuthorization if you need location
+        // updates even when your app is running in the background
+        //locationManager.requestAlwaysAuthorization()
+
+        // Use requestWhenInUseAuthorization if you only need
+        // location updates when the user is using your app
+        locationManager.requestWhenInUseAuthorization()
+
+        locationManager.startUpdatingLocation()
+
+        populateLocation()
     }
-    
-    //Focus Location...
-    func focusLocation() {
-        guard let _ = region else {return}
-        
-        mapView.setRegion(region, animated: true)
-        mapView.setVisibleMapRect(mapView.visibleMapRect, animated: true)
+
+    deinit {
+        locationManager.stopUpdatingLocation()
     }
-    
 
     //Search Places...
     func searchQuery() {
-        
-        places.removeAll()
-        
         let request = MKLocalSearch.Request()
         request.naturalLanguageQuery = searchText
-        
         //Fetch...
-        MKLocalSearch(request: request).start { (response, _) in
-
+        MKLocalSearch(request: request).start { [self] (response, _) in
             guard let result = response else{return}
-            
-            self.places = result.mapItems.compactMap {(item) -> Place? in
-                return Place(place: item.placemark)
-            }
+            places = result.mapItems.compactMap{Place(place: $0.placemark)}
         }
+    }
+
+    func removeSearchTypeMarkers(from markers: [MapMarker]) {
+        let newMapMarkers = markers.filter{$0.type == AnnotationType.VOICE_NOTE}
+        mapMarkers = newMapMarkers
     }
     
     //Pick search result
     func selectPlace(place: Place) {
-        //Show pin on map
         searchText = ""
-        
-        guard let coordinate = place.place.location?.coordinate else{return}
-        
-        let pointAnnotation = MKPointAnnotation()
-        pointAnnotation.coordinate = coordinate
-        pointAnnotation.title = place.place.name ?? "Name unknown"
-        
-        //Remove old annotations
-        //TODO: don´t delete annotations made by notes
-        mapView.removeAnnotations(mapView.annotations)
-        
-        mapView.addAnnotation(pointAnnotation)
-        
-        //Move map to searched place
-        let coordinateRegion = MKCoordinateRegion(center: coordinate, latitudinalMeters: 5000, longitudinalMeters: 5000)
-        mapView.setRegion(coordinateRegion, animated: true)
-        mapView.setVisibleMapRect(mapView.visibleMapRect, animated: true)
+        mapMarkers.append(transform(from: place.place))
     }
-    
-    //Get direction
-    func getDirection() {
-        guard let location = locationManager.location?.coordinate else {return}
-        
-        let request = createDirectionRequest(from: location)
-        let directions = MKDirections(request: request)
-        
-        resetMapView(withNew: directions)
-        directions.calculate { [self] (response, error) in
-            //Handle error if needed
-            guard let response = response else {return}
-            
-            for route in response.routes {
-                self.mapView.addOverlay(route.polyline)
-                self.mapView.setVisibleMapRect(route.polyline.boundingMapRect, animated: true)
-            }
-            
-        }
-        
-    }
-    
-    //Create direction request
-    func createDirectionRequest(from coordinate: CLLocationCoordinate2D) -> MKDirections.Request {
-        let destinationCoordinate = getCenterLocation(for: mapView).coordinate
-        let startingLocation = MKPlacemark(coordinate: coordinate)
-        let destination = MKPlacemark(coordinate: destinationCoordinate)
-        
-        let request = MKDirections.Request()
-        request.source = MKMapItem(placemark: startingLocation)
-        request.destination = MKMapItem(placemark: destination)
-        request.transportType = .automobile
-        request.requestsAlternateRoutes = true
-        
-        return request
-    }
-    
-    //reset mapview
-    func resetMapView(withNew directions: MKDirections) {
-        mapView.removeOverlays(mapView.overlays)
-        directionsArray.append(directions)
-        let _ = directionsArray.map{$0.cancel()}
-    }
-     
 
-    
-    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-        //Check with permission
-        switch manager.authorizationStatus {
-            
-        case .notDetermined:
-            //Requesting
-            manager.requestWhenInUseAuthorization()
-        case .authorizedWhenInUse:
-            //If Permission given
-            manager.requestLocation()
-        case .denied:
-            //Alert
-            permissionDenied.toggle()
-        case .restricted,.authorizedAlways:
-            print("Permission is restricted")
-        @unknown default:
-            ()
-        }
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        locationStatus = status
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print(error.localizedDescription)
     }
     
-    //Getting user region
-    
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else {return}
-        
-        self.region = MKCoordinateRegion(center: location.coordinate, latitudinalMeters: 5000, longitudinalMeters: 5000)
-        
-        //Updating Map...
-        self.mapView.setRegion(self.region, animated: true)
-        
-        //Smooth Animations...
-        self.mapView.setVisibleMapRect(self.mapView.visibleMapRect, animated: true)
+        lastLocation = location
+        if shouldRegionUpdate {
+            region.center = location.coordinate
+        }
+
+        /*
+        // Altitude
+        let altitude = lastLocation.altitude
+
+        // Speed
+        let speed = lastLocation.speed
+
+        // Course, degrees relative to due north
+        let source = lastLocation.course
+
+        // Distance between two CLLocation
+        // Given another CLLocation, otherLocation
+        let distanceDelta = lastLocation.distance(from: otherLocation)
+         */
+    }
+
+    func deleteSelectedVoiceNoteFromMap(at location: Double) {
+
+    }
+
+    private func populateLocation() {
+        let managedContext = CoreDataService.localStorage.getManageObjectContext()
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "VoiceNote")
+        do {
+            let voiceNotes = try managedContext.fetch(fetchRequest) as? [VoiceNote] ?? []
+            mapMarkers = voiceNotes
+                    .compactMap{$0}
+                    .map{ voiceNote -> MapMarker? in transform(from: voiceNote) }
+                    .compactMap{$0}
+        } catch let error as NSError {
+            print("Could not fetch. \(error), \(error.userInfo)")
+        }
+
+    }
+    func removeSearchItemsFromMap() {
+        places.removeAll()
+        removeSearchTypeMarkers(from: mapMarkers)
+    }
+
+    private func transform(from voiceNote: VoiceNote) -> MapMarker? {
+        if let id = voiceNote.id, let location = voiceNote.location {
+            return createMapMarker(id: id, type: AnnotationType.VOICE_NOTE, coordinate: CLLocationCoordinate2D(latitude: location.latitude, longitude: location.longitude))
+        }
+        return nil
+    }
+
+    private func transform(from placeMark: MKPlacemark) -> MapMarker {
+        createMapMarker(type: AnnotationType.SEARCH_RESULT, coordinate: placeMark.coordinate)
+    }
+
+    private func createMapMarker(id: UUID = UUID(), type: AnnotationType, coordinate: CLLocationCoordinate2D) -> MapMarker {
+        MapMarker(id: id, type: type, coordinate: coordinate)
     }
 }

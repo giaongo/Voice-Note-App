@@ -9,6 +9,9 @@ import SwiftUI
 
 struct SearchOptionsBar: View {
     @Binding var searchQuery: String
+    var onSearchQuery: () -> Void
+    var onCancelSearch: () -> Void
+    @State private var searchOptionBarText: String = ""
 
     @State private var isEditing = false
     
@@ -45,10 +48,16 @@ struct SearchOptionsBar: View {
                     withAnimation{
                         isEditing.toggle()
                     }
-                }
+                }.onChange(of: searchQuery, perform: {value in
+                        //Searching places
+                        searchQuery = value
+                        onSearchQuery()
+                    })
             
             if isEditing {
                 Button(action: {
+                    print("Cancel Pressed")
+                    onCancelSearch()
                     withAnimation {
                         isEditing.toggle()
                         self.searchQuery = ""
@@ -83,8 +92,8 @@ struct SearchOptionsBar: View {
     }
 }
 
-struct SearchBar_Previews: PreviewProvider {
+/*struct SearchBar_Previews: PreviewProvider {
     static var previews: some View {
-        SearchOptionsBar(searchQuery: .constant(""))
+        //SearchOptionsBar(searchQuery: .constant(""))
     }
-}
+}*/

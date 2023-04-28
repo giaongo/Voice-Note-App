@@ -22,8 +22,9 @@ class CoreDataService {
         print("Fake Item function called")
 
         let newVoiceNote = VoiceNote(context: persistenceController.container.viewContext)
+        let id = UUID()
 
-        newVoiceNote.id = UUID()
+        newVoiceNote.id = id
         newVoiceNote.text = "this is my voicenote text"
         newVoiceNote.title = "Note title"
         newVoiceNote.near = "Kamppi"
@@ -31,8 +32,9 @@ class CoreDataService {
         newVoiceNote.duration = 3765
         newVoiceNote.createdAt = Date.init()
         newVoiceNote.location = Location(context: persistenceController.container.viewContext)
-        newVoiceNote.location?.latitude = Double.random(in: 24.600750..<25.30750)//24.444
-        newVoiceNote.location?.longitude = Double.random(in: 60.090760..<60.430440)
+        newVoiceNote.location?.id = id
+        newVoiceNote.location?.longitude = Double.random(in: 24.600750..<25.30750)//24.444
+        newVoiceNote.location?.latitude = Double.random(in: 60.090760..<60.430440)
         newVoiceNote.weather = Weather(context: persistenceController.container.viewContext)
         newVoiceNote.weather?.temperature = Temperature(context: persistenceController.container.viewContext)
         newVoiceNote.weather?.temperature?.average = 34

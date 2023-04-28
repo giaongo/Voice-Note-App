@@ -7,40 +7,58 @@
 
 import SwiftUI
 import CoreLocation
+import MapKit
 
 struct MapScreen: View {
-    @EnvironmentObject var mapViewModel: MapViewModel
+
+    @StateObject var mapViewModel = MapViewModel()
+
     @State var clickOnPin: Bool = false
-    @State var locationManager = CLLocationManager()
+    @State private var isShowingSheet = false
+
+    // TODO or or NOT-TODO is this be a Singleton
+
     let buttonColor = #colorLiteral(red: 0.1764705926, green: 0.01176470611, blue: 0.5607843399, alpha: 1)
 
-    // Fetch all VoiceNOtes from CoreData
-    // This is done to temporarily pass a single voiceNote to DetailView
-    @FetchRequest(
-            sortDescriptors: [NSSortDescriptor(keyPath: \VoiceNote.id, ascending: true)],
-            animation: .default)
-    private var items: FetchedResults<VoiceNote>
+    @State var centerMap = true
+    @State var locationIndicator = true
 
     var body: some View {
         ZStack{
-            MapView(clickOnPin: $clickOnPin)
-                .ignoresSafeArea(.all, edges: .all)
-                .sheet(isPresented: $clickOnPin) {
-                    // TODO replace this with some thing else
-                    if !items.isEmpty {
-                        DetailView(voiceNote: items[0])
-                    } else {
-                        Text("CoreData is empty")
+             //FIXME: Find a way to handle region
+            //Map(coordinateRegion: .constant(region) , showsUserLocation: true, annotationItems: mapViewModel.mapMarkers) { marker in
+            Map(coordinateRegion: .constant(mapViewModel.region) , showsUserLocation: true, annotationItems: mapViewModel.mapMarkers) { marker in
+                MapAnnotation(coordinate: marker.coordinate) {
+
+                    //TODO re-design shape
+                    if marker.type == AnnotationType.SEARCH_RESULT {
+                        Rectangle().stroke(Color.blue)
+                                .frame(width: 20, height: 20)
+                                .onTapGesture {
+                                    print("Result Annotation pressed")
+                                }
+                    }
+                    //TODO re-design shape
+                    if marker.type == AnnotationType.VOICE_NOTE {
+                        Circle()
+                                .stroke(.red, lineWidth: 3)
+                                .frame(width: 44, height: 44)
+                                .onTapGesture {
+                                    isShowingSheet.toggle()
+                                    print("VoiceNote Annotation pressed")
+                                }
                     }
                 }
-                .presentationDetents([.medium, .large])
-                .presentationDragIndicator(.visible)
-            
+            }
+
             VStack {
-                
-                SearchOptionsBar(searchQuery: $mapViewModel.searchText)
+                 SearchOptionsBar(searchQuery: $mapViewModel.searchText, onSearchQuery: {
+                     let delay = 0.3
+                     DispatchQueue.main.asyncAfter(deadline: .now() + delay) {mapViewModel.searchQuery()}
+                 }, onCancelSearch: {
+                     mapViewModel.removeSearchItemsFromMap()
+                 })
                 if !mapViewModel.places.isEmpty && mapViewModel.searchText != "" {
-                    
                     ScrollView {
                         VStack {
                             ForEach(mapViewModel.places) {place in
@@ -63,73 +81,61 @@ struct MapScreen: View {
                 Spacer()
                 
                 VStack {
-                    
-                    Button(action: mapViewModel.focusLocation, label: {
-                        Image(systemName: "location.fill")
-                            .font(.title2)
+                    Button(action: {
+                        centerMap.toggle()
+                        locationIndicator.toggle()
+                    }, label: {
+                        Image(systemName: locationIndicator ? "location.fill" : "location.slash.fill")
+                            .font(.system(size: 36))
                             .padding(10)
                             .background(Color(.systemGray6))
                             .clipShape(Circle())
                             .foregroundColor(Color(buttonColor))
                     })
-                    
-                    Button(action: mapViewModel.updateMapType, label: {
-                        Image(systemName: mapViewModel.mapType ==
-                            .standard ? "network" : "map")
-                        .font(.title2)
+                    // TODO fix change map type later
+                    Button(action: { (() -> Void).self  }, label: {
+                        Image(systemName: /*mapViewModel.mapType ==
+                            .standard ? "network" :*/ "map")
+                        .font(.system(size: 36))
                         .padding(10)
                         .background(Color(.systemGray6))
                         .clipShape(Circle())
                         .foregroundColor(Color(buttonColor))
                     })
-                    Button(action: mapViewModel.getDirection, label: {
+
+                    // TODO fix it later
+                    Button(action: { (() -> Void).self  }, label: {
                             Image(systemName: "arrow.triangle.turn.up.right.diamond.fill")
-                            .font(.title2)
+                            .font(.system(size: 36))
                             .padding(10)
                             .background(Color(.systemGray6))
                             .clipShape(Circle())
                             .foregroundColor(Color(buttonColor))
                     })
-                    
+                    // TODO Center map
+                    Button(action: {
+                        if centerMap {
+                            mapViewModel.shouldRegionUpdate.toggle()
+                        }
+                    }, label: {
+                        Image(systemName: "smallcircle.filled.circle")
+                                .font(.system(size: 36))
+                                .padding(10)
+                                .background(Color(.systemGray6))
+                                .clipShape(Circle())
+                                .foregroundColor(Color(buttonColor))
+                    })
                 }
                 .frame(maxWidth: .infinity, alignment: .trailing)
+                .padding()
                 .padding(.bottom, 100)
             }
         }
-        .onAppear(perform: {
-            //Setting Delegate
-            locationManager.delegate = mapViewModel
-            locationManager.requestWhenInUseAuthorization()
-        })
-
-        //Permission Denied Alert
-        .alert(isPresented: $mapViewModel.permissionDenied, content: {
-            
-            Alert(title: Text("Permission Denied"), message: Text("Please Enable Permission in App Settings"), dismissButton: .default(Text("Go to Settings"), action: {
-                
-                //Redirecting user to setting
-                UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
-            })
-        )})
-        .onChange(of: mapViewModel.searchText, perform: {value in
-            //Searching places
-            
-            
-            //Delay to avoid continous search
-            let delay = 0.3
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
-                if value == mapViewModel.searchText {
-                    //Search...
-                    self.mapViewModel.searchQuery()
-                }
-            }
-        })
     }
 }
 
 struct MapScreen_Previews: PreviewProvider {
     static var previews: some View {
-        MapScreen().environmentObject(MapViewModel())
+        MapScreen()
     }
 }

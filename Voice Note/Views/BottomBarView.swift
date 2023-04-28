@@ -144,6 +144,8 @@ struct BottomBarView: View {
         return keywords
     }
 
+    //TODO How to repopulate map annotation from here???
+    //TODO Saving a note is a ViewModel's responsibility, not View's responsibility
     func saveVoiceNote() {
         guard let url = voiceNoteViewModel.fileUrlList.last else {
             return
@@ -156,13 +158,16 @@ struct BottomBarView: View {
 
 
         let newVoiceNote = VoiceNote(context: managedObjectContext)
-        newVoiceNote.id = UUID()
+        let id = UUID()
+        newVoiceNote.id = id
         newVoiceNote.text = speechRecognizer.transcriptionText
         newVoiceNote.title = title
         newVoiceNote.fileUrl = url
         newVoiceNote.createdAt = Date()
         newVoiceNote.duration = durationInSeconds
         newVoiceNote.location = Location(context: managedObjectContext)
+        // TODO may DB restructuring needed
+        newVoiceNote.location?.id = id
         newVoiceNote.location?.latitude = 24.444
         newVoiceNote.location?.longitude = 64.444
         newVoiceNote.weather = Weather(context: managedObjectContext)
