@@ -130,49 +130,6 @@ struct BottomBarView: View {
             )
         }.ignoresSafeArea(.all)
         
-        
-    }
-
-    /**
-        This method saves the voice note to CoreData
-     */
-
-    func saveVoiceNote() async {
-        guard let url = voiceNoteViewModel.fileUrlList.last else {
-            return
-        }
-
-        await voiceNoteViewModel.saveVoiceNote(UrlLocation: url, transcribedText: speechRecognizer.transcriptionText)
-
-       /* let durationInSeconds = voiceNoteViewModel.getDuration(for: url)
-        let extractedKeywords = extractKeywords(from: speechRecognizer.transcriptionText)
-        let title = extractedKeywords.first ?? "Note"
-
-
-
-        let newVoiceNote = VoiceNote(context: managedObjectContext)
-        let id = UUID()
-        newVoiceNote.id = id
-        newVoiceNote.text = speechRecognizer.transcriptionText
-        newVoiceNote.title = title
-        newVoiceNote.fileUrl = url
-        newVoiceNote.createdAt = Date()
-        newVoiceNote.duration = durationInSeconds
-        newVoiceNote.location = Location(context: managedObjectContext)
-        // TODO may DB restructuring needed
-        newVoiceNote.location?.id = id
-        newVoiceNote.location?.latitude = 24.444
-        newVoiceNote.location?.longitude = 64.444
-        newVoiceNote.weather = Weather(context: managedObjectContext)
-        newVoiceNote.weather?.temperature = Temperature(context: managedObjectContext)
-        newVoiceNote.weather?.temperature?.maximum = 44
-        newVoiceNote.weather?.temperature?.minimum = 24
-
-        do {
-            try managedObjectContext.save()
-        } catch {
-            print("Error saving voice note: \(error)")
-        }*/
     }
 
     /**
