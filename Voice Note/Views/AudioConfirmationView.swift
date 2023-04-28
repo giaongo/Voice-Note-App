@@ -1,10 +1,3 @@
-//
-//  AudioConfirmationView.swift
-//  Voice Note
-//
-//  Created by iosdev on 5.4.2023.
-//
-
 import SwiftUI
 
 struct AudioConfirmationView: View {
@@ -59,6 +52,9 @@ struct AudioConfirmationView: View {
         }
     }
     
+    /**
+        This method triggers text transcription based on the existing audio file
+     */
     private func transcriptionText() {
         print("this is called")
         if (!voiceNoteViewModel.isRecording) {
@@ -68,7 +64,6 @@ struct AudioConfirmationView: View {
         }
     }
 }
-
 
 struct AudioConfirmationView_Previews: PreviewProvider {
     static var previews: some View {

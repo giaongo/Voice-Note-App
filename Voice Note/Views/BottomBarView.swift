@@ -45,7 +45,7 @@ struct BottomBarView: View {
                 
                 Spacer()
                 
-                // Microphone button
+                // Microphone button, stop recording button and checkmark button
                 VStack {
                     Button {
                         !voiceNoteViewModel.confirmTheVoiceNote ? clickAudioButton() : confirmToAddTheRecording()
@@ -127,6 +127,9 @@ struct BottomBarView: View {
         
         
     }
+    /**
+        This method extracts and returns list of keywords from  text transcription
+     */
     func extractKeywords(from text: String) -> [String] {
         let tagger = NLTagger(tagSchemes: [.lexicalClass])
         tagger.string = text
@@ -143,6 +146,10 @@ struct BottomBarView: View {
 
         return keywords
     }
+
+    /**
+        This method saves the voice note to CoreData
+     */
 
     //TODO How to repopulate map annotation from here???
     //TODO Saving a note is a ViewModel's responsibility, not View's responsibility
@@ -172,7 +179,6 @@ struct BottomBarView: View {
         newVoiceNote.location?.longitude = 64.444
         newVoiceNote.weather = Weather(context: managedObjectContext)
         newVoiceNote.weather?.temperature = Temperature(context: managedObjectContext)
-        newVoiceNote.weather?.temperature?.average = 34
         newVoiceNote.weather?.temperature?.maximum = 44
         newVoiceNote.weather?.temperature?.minimum = 24
 
@@ -183,7 +189,9 @@ struct BottomBarView: View {
         }
     }
 
-
+    /**
+        This method triggers startRecording, stopRecording and text transcription
+     */
     private func clickAudioButton() {
         voiceNoteViewModel.isRecording.toggle()
         voiceNoteViewModel.isMicPressed.toggle()
@@ -196,12 +204,13 @@ struct BottomBarView: View {
             voiceNoteViewModel.startRecording()
             
         } else {
-            voiceNoteViewModel.stopRecording(completion:{
-                saveVoiceNote()
-            })
+            voiceNoteViewModel.stopRecording()
         }
     }
     
+    /**
+        This method shows confirmation alert
+     */
     private func confirmToAddTheRecording(){
         showConfirmationAlert = true
     }

@@ -1,19 +1,12 @@
-//
-//  SpeechRecognizer.swift
-//  Voice Note
-//
-//  Created by Giao Ngo on 31.3.2023.
-//  Learning resource on speech transcription:
-//  1. https://medium.com/@kegoaps/audio-file-speech-transcription-using-sfspeechrecognizer-on-swiftui-5be019c81afe
-//  2. https://developer.apple.com/documentation/speech/sfspeechurlrecognitionrequest
-//
 
 import Foundation
 import AVFoundation
 import Speech
 
+/**
+    The ViewModel that requests recognition, audio recording permission and performs text transcription task.
+ */
 class SpeechRecognizer: ObservableObject {
-    
     private var task: SFSpeechRecognitionTask?
     private let recognizer: SFSpeechRecognizer?
     @Published var transcriptionText: String = ""
@@ -26,7 +19,10 @@ class SpeechRecognizer: ObservableObject {
     deinit {
         reset()
     }
-
+    
+    /**
+     This method checks recording permission on aurio recording and text transcription
+     */
     private func checkAuthorizationStatus() {
         SFSpeechRecognizer.requestAuthorization { authStatus in
             OperationQueue.main.addOperation {
@@ -45,9 +41,9 @@ class SpeechRecognizer: ObservableObject {
             }
         }
     }
-
+    
     /**
-        This method displays the error message handling
+     This method displays the error message handling
      */
     private func displayError(_ error: Error) {
         var errorMessage: String = ""
@@ -60,7 +56,7 @@ class SpeechRecognizer: ObservableObject {
     }
     
     /**
-        This method transcribes the existing audio from document directory
+     This method transcribes the existing audio from document directory
      */
     func transcribeFile(from url:URL){
         DispatchQueue(label:"Speech Recognition Queue", qos:.userInteractive).async {
@@ -84,16 +80,15 @@ class SpeechRecognizer: ObservableObject {
         }
     }
     
-    
     /**
-        This method stops the  text transcription
+     This method stops the  text transcription
      */
     func stopTranscribing () {
         reset()
     }
     
     /**
-        This method removes the speech transcription task
+     This method removes the speech transcription task
      */
     func reset() {
         task?.cancel()
@@ -103,7 +98,7 @@ class SpeechRecognizer: ObservableObject {
 
 extension SFSpeechRecognizer {
     /**
-        This method requests the speech recognition permission
+     This method requests the speech recognition permission
      */
     static func hasAuthorizationToRecognize() async -> Bool {
         await withCheckedContinuation({ continuation in
@@ -116,7 +111,7 @@ extension SFSpeechRecognizer {
 
 extension AVAudioSession {
     /**
-        This method records the audio permission
+     This method records the audio permission
      */
     func hasPermissionToRecord() async -> Bool {
         await withCheckedContinuation({ continuation in

@@ -1,13 +1,9 @@
-//
-//  Place.swift
-//  Voice Note
-//
-//  Created by Darja Polevaja on 9.4.2023.
-//
-
 import SwiftUI
 import MapKit
 
+/**
+    A Model defines location information on map
+ */
 struct Place: Identifiable {
     
     var id = UUID().uuidString

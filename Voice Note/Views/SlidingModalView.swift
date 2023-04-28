@@ -1,10 +1,3 @@
-//
-//  SlidingModalView.swift
-//  Voice Note
-//
-//  Created by iosdev on 4.4.2023.
-//
-
 import SwiftUI
 
 struct SlidingModalView: View {
@@ -26,13 +19,11 @@ struct SlidingModalView: View {
                 AudioRecordingView()
             } else {
                 AudioConfirmationView(showSheet: $showSheet, toast: $toast)
-                .animation(.easeInOut, value: voiceNoteViewModel.isRecording)
+                    .animation(.easeInOut, value: voiceNoteViewModel.isRecording)
             }
         }
         
     }
-    
-
 }
 
 struct SlidingModalView_Previews: PreviewProvider {
@@ -40,7 +31,7 @@ struct SlidingModalView_Previews: PreviewProvider {
         SlidingModalView(
             showSheet: .constant(false),
             toast: .constant(ToastView(type: .success, title: "Delete Success", message: "Delete successfully") {
-            print("cancel on toast pressed")
+                print("cancel on toast pressed")
             })).environmentObject(VoiceNoteViewModel())
     }
 }

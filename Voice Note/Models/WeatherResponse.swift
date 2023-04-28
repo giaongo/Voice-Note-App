@@ -1,12 +1,8 @@
-//
-//  WeatherResponse.swift
-//  Voice Note
-//
-//  Created by Mohammad Rashid on 23.4.2023.
-//
-
 import Foundation
 
+/**
+    A Model defines property that is mapped from JSON key "main"
+ */
 struct WeatherResponse: Codable {
     let current: WeatherCurrent
     enum CodingKeys: String, CodingKey {
@@ -14,6 +10,9 @@ struct WeatherResponse: Codable {
     }
 }
 
+/**
+    A Model defines property that is mapped from JSON key "temp"
+ */
 struct WeatherCurrent: Codable {
     let temperature: Double
     enum CodingKeys: String, CodingKey {

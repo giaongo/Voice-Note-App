@@ -1,10 +1,3 @@
-//
-//  ContentView.swift
-//  Voice Note
-//
-//  Created by iosdev on 22.3.2023.
-//
-
 import SwiftUI
 
 struct ContentView: View {
@@ -12,6 +5,8 @@ struct ContentView: View {
     @State var toast:ToastView? = nil
     @State var showSheet: Bool = false
     @State var tagSelect = "house"
+    @StateObject private var temperatureDataService = TemperatureDataService()
+
     var body: some View {
         ZStack(alignment: .bottom) {
             TabView(selection:$tagSelect) {
@@ -20,6 +15,9 @@ struct ContentView: View {
                 RecordingListView().tag("list.dash")
             }
             BottomBarView(toast: $toast,showSheet: $showSheet, tagSelect: $tagSelect)
+        }
+        .task {
+            await temperatureDataService.fetchLatestTemperatures()
         }
         .toastView(toast: $toast)
         .ignoresSafeArea()

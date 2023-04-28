@@ -1,10 +1,3 @@
-//
-//  SearchOptionsBar.swift
-//  Voice Note
-//
-//  Created by Darja Polevaja on 5.4.2023.
-//
-
 import SwiftUI
 
 struct SearchOptionsBar: View {
