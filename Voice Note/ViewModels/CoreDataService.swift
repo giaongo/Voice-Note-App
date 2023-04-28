@@ -97,6 +97,20 @@ class CoreDataService {
 
     }
 
+    func getVoiceNote(byText text: String) -> [VoiceNote] {
+        let managedContext = getManageObjectContext()
+        let requestById: NSFetchRequest<VoiceNote> = VoiceNote.fetchRequest()
+        requestById.predicate = NSPredicate(format: "id == %@", text )
+        var results: [VoiceNote?] = []
+
+        do {
+            results = try managedContext.fetch(requestById) as [VoiceNote]
+        } catch {
+
+        }
+        return results.compactMap{$0}
+    }
+
     func getVoiceNote(byUUID uuid: UUID) -> VoiceNote {
         let managedContext = getManageObjectContext()
         let requestById: NSFetchRequest<VoiceNote> = VoiceNote.fetchRequest()

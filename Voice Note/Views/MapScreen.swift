@@ -17,7 +17,7 @@ struct MapScreen: View {
     @State var locationIndicator = true
 
     var body: some View {
-        ZStack{
+        ZStack {
              //FIXME: Find a way to handle region
             //Map(coordinateRegion: .constant(region) , showsUserLocation: true, annotationItems: mapViewModel.mapMarkers) { marker in
             Map(coordinateRegion: .constant(mapViewModel.region) , showsUserLocation: true, annotationItems: mapViewModel.mapMarkers) { marker in
@@ -62,18 +62,18 @@ struct MapScreen: View {
                      DispatchQueue.main.asyncAfter(deadline: .now() + delay) {mapViewModel.searchQuery()}
                  }, onCancelSearch: {
                      mapViewModel.removeSearchItemsFromMap()
-                 })
+                 }, searchFilter: $mapViewModel.searchFilter.defaultValue)
                 if !mapViewModel.places.isEmpty && mapViewModel.searchText != "" {
                     ScrollView {
                         VStack {
                             ForEach(mapViewModel.places) {place in
-                                Text(place.place.name ?? "")
+                                Text(place.tags)
                                     .foregroundColor(Color(buttonColor))
                                     .frame(maxWidth: .infinity, alignment: .leading)
                                     .padding(.leading)
                                     .onTapGesture{
                                         mapViewModel.selectPlace(place: place)
-                                    }
+                                    }.textCase(.lowercase)
                                 
                                 Divider()
                             }
