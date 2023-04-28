@@ -64,7 +64,12 @@ struct BottomBarView: View {
                     .alert("Please confirm to save!", isPresented: $showConfirmationAlert) {
                         HStack {
                             Button("SAVE") {
-                                saveVoiceNote()
+                                Task {
+                                    guard let url = voiceNoteViewModel.fileUrlList.last else {
+                                        return
+                                    }
+                                    await voiceNoteViewModel.saveVoiceNote(UrlLocation: url, transcribedText: speechRecognizer.transcriptionText)
+                                }
                                 voiceNoteViewModel.confirmTheVoiceNote = false
                                 showSheet = false
                                 toast = ToastView(type: .success, title: "Save Success", message: "Note saved successfully") {
@@ -127,41 +132,19 @@ struct BottomBarView: View {
         
         
     }
-    /**
-        This method extracts and returns list of keywords from  text transcription
-     */
-    func extractKeywords(from text: String) -> [String] {
-        let tagger = NLTagger(tagSchemes: [.lexicalClass])
-        tagger.string = text
-        let options: NLTagger.Options = [.omitWhitespace, .omitPunctuation, .joinNames]
-
-        let tags = tagger.tags(in: text.startIndex..<text.endIndex, unit: .word, scheme: .lexicalClass, options: options)
-
-        let keywords = tags.compactMap { (tag, tokenRange) -> String? in
-            if tag == .noun || tag == .verb || tag == .adjective {
-                return String(text[tokenRange])
-            }
-            return nil
-        }
-
-        return keywords
-    }
 
     /**
         This method saves the voice note to CoreData
      */
 
-    //TODO How to repopulate map annotation from here???
-    //TODO Saving a note is a ViewModel's responsibility, not View's responsibility
-
-    //TODO pass extractKeywords and speechRecognizer.transcriptionText to ViewModel to save note
-    //TODO ViewModel will have access to location, CodeData and temperature services
-    func saveVoiceNote() {
+    func saveVoiceNote() async {
         guard let url = voiceNoteViewModel.fileUrlList.last else {
             return
         }
 
-        let durationInSeconds = voiceNoteViewModel.getDuration(for: url)
+        await voiceNoteViewModel.saveVoiceNote(UrlLocation: url, transcribedText: speechRecognizer.transcriptionText)
+
+       /* let durationInSeconds = voiceNoteViewModel.getDuration(for: url)
         let extractedKeywords = extractKeywords(from: speechRecognizer.transcriptionText)
         let title = extractedKeywords.first ?? "Note"
 
@@ -189,7 +172,7 @@ struct BottomBarView: View {
             try managedObjectContext.save()
         } catch {
             print("Error saving voice note: \(error)")
-        }
+        }*/
     }
 
     /**
