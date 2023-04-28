@@ -48,13 +48,14 @@ class MapViewModel: NSObject, ObservableObject {
     func selectPlace(place: Place) {
         searchText = ""
         mapMarkers.append(transform(from: place.place))
+        reCenterRegion(at: place.place.coordinate)
     }
 
     func deleteSelectedVoiceNoteFromMap(at location: Double) {
 
     }
 
-    private func populateLocation() {
+    func populateLocation() {
         let managedContext = CoreDataService.localStorage.getManageObjectContext()
         let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "VoiceNote")
         do {
