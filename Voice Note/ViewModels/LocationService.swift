@@ -53,6 +53,7 @@ class LocationService: NSObject, CLLocationManagerDelegate {
     }
 
     deinit {
+        print("Stopping location service.....")
         locationManager.stopUpdatingLocation()
     }
 

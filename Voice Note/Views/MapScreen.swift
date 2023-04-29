@@ -4,15 +4,11 @@ import MapKit
 
 struct MapScreen: View {
 
-    @StateObject var mapViewModel = MapViewModel()
-
-    @State var clickOnPin: Bool = false
-    @State private var isShowingSheet = false
-
-    // TODO or or NOT-TODO is this be a Singleton
-
     let buttonColor = #colorLiteral(red: 0.1764705926, green: 0.01176470611, blue: 0.5607843399, alpha: 1)
 
+    @StateObject var mapViewModel = MapViewModel()
+    @State var clickOnPin: Bool = false
+    @State private var isShowingSheet = false
     @State var centerMap = true
     @State var locationIndicator = true
 
@@ -131,7 +127,10 @@ struct MapScreen: View {
                 .padding()
                 .padding(.bottom, 100)
             }
-        }
+        }.task{
+                    mapViewModel.reCenterRegionToUserLocation()
+
+                }
     }
 }
 
