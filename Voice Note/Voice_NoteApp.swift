@@ -10,11 +10,11 @@ struct Voice_NoteApp: App {
 
     var body: some Scene {
         WindowGroup {
-            NavigationView {
+            //NavigationView {
                 ContentView()
                         .environment(\.managedObjectContext, coreDataService.getManageObjectContext())
-                        .environment(\.coreData, coreDataService)
-            }.environmentObject(speechRecognizer).environmentObject(voiceNoteViewModel).environmentObject(mapViewModel)
+                        .environment(\.coreData, coreDataService).environmentObject(speechRecognizer).environmentObject(voiceNoteViewModel).environmentObject(mapViewModel)
+            //}
         }
     }
 }
