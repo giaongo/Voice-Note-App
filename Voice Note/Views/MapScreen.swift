@@ -32,7 +32,6 @@ struct MapScreen: View {
                                 .clipShape(Circle())
                                 .foregroundColor(Color(buttonColor))
                                 .onTapGesture {
-                                    print("Result Annotation pressed")
                                     mapViewModel.reCenterRegion(at: marker.coordinate)
                                 }
                     }
@@ -45,7 +44,6 @@ struct MapScreen: View {
                                 .foregroundColor(Color(buttonColor))
                                 .onTapGesture {
                                     isShowingSheet.toggle()
-                                    print("VoiceNote Annotation pressed")
                                     mapViewModel.reCenterRegion(at: marker.coordinate)
                                 }.sheet(isPresented: $isShowingSheet, onDismiss: mapViewModel.populateLocation) {
                                     if let id = marker.id {
