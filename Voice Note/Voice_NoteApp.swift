@@ -5,7 +5,7 @@ import SwiftUI
 struct Voice_NoteApp: App {
     @StateObject var speechRecognizer = SpeechRecognizer()
     @StateObject var voiceNoteViewModel = VoiceNoteViewModel()
-    //@StateObject var mapViewModel = MapViewModel()
+    @StateObject var mapViewModel = MapViewModel()
     let coreDataService = CoreDataService.localStorage
 
     var body: some Scene {
@@ -14,7 +14,7 @@ struct Voice_NoteApp: App {
                 ContentView()
                         .environment(\.managedObjectContext, coreDataService.getManageObjectContext())
                         .environment(\.coreData, coreDataService)
-            }.environmentObject(speechRecognizer).environmentObject(voiceNoteViewModel)
+            }.environmentObject(speechRecognizer).environmentObject(voiceNoteViewModel).environmentObject(mapViewModel)
         }
     }
 }

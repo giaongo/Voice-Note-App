@@ -27,6 +27,7 @@
 		3C7C3B25C5603198DAECC1D7 /* APIResponseWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C7C3C26B38266BF3FE51ADF /* APIResponseWrapper.swift */; };
 		3C7C3C1DC80A369487F62534 /* SpeechRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C7C3F8412397CCCE4212CE0 /* SpeechRecognizer.swift */; };
 		3C7C3D177E5037763E3A386D /* TemperatureDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C7C3489F88471C4AB6C5FA3 /* TemperatureDataService.swift */; };
+		3C7C3DDF530F98214AECB576 /* MapButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C7C34589C69E8D9B9F20358 /* MapButtons.swift */; };
 		3C7C3DE5C21D60967A14F4CB /* APIResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C7C3323771A9E23C9D9D1F8 /* APIResource.swift */; };
 		3C7C3E716E0A3BAFF0B07101 /* CoreDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C7C32A320FA143DE9EC73BE /* CoreDataService.swift */; };
 		3C7C3EEC8755EBC394A8232A /* VoiceNoteViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C7C33368C78BEE9B95222E3 /* VoiceNoteViewModel.swift */; };
@@ -86,6 +87,7 @@
 		3C7C33368C78BEE9B95222E3 /* VoiceNoteViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VoiceNoteViewModel.swift; sourceTree = "<group>"; };
 		3C7C337A41B2A968A9652FE6 /* ListItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItem.swift; sourceTree = "<group>"; };
 		3C7C33800065D3F69DEA7196 /* TemperatureResource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TemperatureResource.swift; sourceTree = "<group>"; };
+		3C7C34589C69E8D9B9F20358 /* MapButtons.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapButtons.swift; sourceTree = "<group>"; };
 		3C7C3489F88471C4AB6C5FA3 /* TemperatureDataService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TemperatureDataService.swift; sourceTree = "<group>"; };
 		3C7C350E8C6E0F9AD94B83F1 /* TemperatureResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TemperatureResponse.swift; sourceTree = "<group>"; };
 		3C7C35DC677C97248978CDC2 /* LocationService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
@@ -199,6 +201,7 @@
 				6A673AD929E4276600CC9DA4 /* RecordingCardView.swift */,
 				6A889A4629E88694000FC5D1 /* ToastView.swift */,
 				6AEBB78C29EECD10004AF77F /* DetailView.swift */,
+				3C7C34589C69E8D9B9F20358 /* MapButtons.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -463,6 +466,7 @@
 				3C7C3675520FA8BAF7448855 /* SearchFilterItem.swift in Sources */,
 				3C7C34CC2F2255F858215E64 /* Filterable.swift in Sources */,
 				3C7C30FD28FCABCB6C29D4C9 /* SearchFilter.swift in Sources */,
+				3C7C3DDF530F98214AECB576 /* MapButtons.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
