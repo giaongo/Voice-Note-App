@@ -49,6 +49,6 @@ struct MapButtons: View {
         }
                 .frame(maxWidth: .infinity, alignment: .trailing)
                 .padding()
-                .padding(.bottom, 100)
+                .padding(.bottom, 144)
     }
 }

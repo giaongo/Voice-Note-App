@@ -91,7 +91,7 @@ struct SearchOptionsBar: View {
                 .buttonStyle(.borderedProminent)
                 .tint(Color(.systemGray6))
             }
-        }.padding(.top, 36)
+        }.padding(.top, 52)
     }
 }
 
