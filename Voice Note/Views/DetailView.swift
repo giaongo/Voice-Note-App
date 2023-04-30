@@ -3,7 +3,9 @@ import CoreLocation
 
 struct DetailView: View {
     @EnvironmentObject var voiceNoteViewModel: VoiceNoteViewModel
+    @EnvironmentObject var mapViewModel: MapViewModel
     @Environment(\.presentationMode) var presentationMode
+    @Environment(\.coreData) private var coreDataService: CoreDataService
     @State private var showShareSheet = false
     let textContainer = #colorLiteral(red: 0.4, green: 0.2039215686, blue: 0.4980392157, alpha: 0.2)
     private let voiceNote: VoiceNote?
@@ -84,9 +86,19 @@ struct DetailView: View {
         This method deletes the voice note from CoreData
      */
     private func deleteVoiceNote() {
-        let context = PersistenceController.shared.container.viewContext
+        let context = coreDataService.getManageObjectContext()
         if let voiceNote = voiceNote {
+            let url = voiceNote.fileUrl
+            //delete from DB
             context.delete(voiceNote)
+            //delete local file
+            if let url = url {
+                voiceNoteViewModel.deleteRecording(url: url)
+            }
+            // repopulate file URL array
+            voiceNoteViewModel.fetchVoiceNotes()
+            // repopulate map
+            mapViewModel.populateLocation()
             do {
                 try context.save()
                 presentationMode.wrappedValue.dismiss()

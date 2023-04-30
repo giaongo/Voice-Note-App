@@ -12,6 +12,7 @@ import Foundation
 struct BottomBarView: View {
     @EnvironmentObject var voiceNoteViewModel: VoiceNoteViewModel
     @EnvironmentObject var speechRecognizer: SpeechRecognizer
+    @EnvironmentObject var mapViewModel: MapViewModel
     @Environment(\.coreData) var coreDataService: CoreDataService
     @Environment(\.managedObjectContext) var managedObjectContext
 
@@ -69,6 +70,7 @@ struct BottomBarView: View {
                                         return
                                     }
                                     await voiceNoteViewModel.saveVoiceNote(UrlLocation: url, transcribedText: speechRecognizer.transcriptionText)
+                                    mapViewModel.populateLocation()
                                 }
                                 voiceNoteViewModel.confirmTheVoiceNote = false
                                 showSheet = false
