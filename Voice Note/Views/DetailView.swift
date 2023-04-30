@@ -1,5 +1,6 @@
 import SwiftUI
 import CoreLocation
+import MapKit
 
 struct DetailView: View {
     @EnvironmentObject var voiceNoteViewModel: VoiceNoteViewModel
@@ -45,6 +46,11 @@ struct DetailView: View {
                 // Direction button
                 DetailBtn(clickHandler: {
                     print("Direction pressed")
+                    guard let latitude = voiceNote?.location?.latitude,
+                          let longitude = voiceNote?.location?.longitude,
+                          let title = voiceNote?.title else { return }
+                    let destination = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+                    mapViewModel.openDirectionInAppleMapFromCurrentLocation(to: destination, directionMode: MKLaunchOptionsDirectionsModeDriving, destinationName: title)
                 }, icon: "arrow.triangle.turn.up.right.diamond.fill")
                 
                 //  Edit button

@@ -120,4 +120,25 @@ class MapViewModel: NSObject, ObservableObject {
     func getCurrentLocation() -> CLLocationCoordinate2D {
         locationService.currentLocation.coordinate
     }
+
+    /**
+        Direction for users current location
+     - Parameters:
+       - destination: CLLocationCoordinate2D that represent Destination location
+       - directionMode: MKLaunchOptionsDirectionsModeDriving, MKLaunchOptionsDirectionsModeWalking, MKLaunchOptionsDirectionsModeTransit
+       - destinationName: Sting name that will represent Destination in Apple Map application*/
+    func openDirectionInAppleMapFromCurrentLocation(to destination: CLLocationCoordinate2D, directionMode: String, destinationName: String = "Your Destination") {
+        openDirectionInAppleMap(from: getCurrentLocation(), to: destination, directionMode: directionMode, destinationName: destinationName)
+    }
+
+    func openDirectionInAppleMap(from source: CLLocationCoordinate2D, to destination: CLLocationCoordinate2D, directionMode: String, destinationName: String = "Your Destination") {
+
+        let sourceMapItem = MKMapItem(placemark: MKPlacemark(coordinate: source))
+        sourceMapItem.name = "Current Location"
+
+        let destinationMapItem = MKMapItem(placemark: MKPlacemark(coordinate: destination))
+        destinationMapItem.name = destinationName
+
+        MKMapItem.openMaps(with: [sourceMapItem , destinationMapItem], launchOptions: [MKLaunchOptionsDirectionsModeKey : directionMode])
+    }
 }

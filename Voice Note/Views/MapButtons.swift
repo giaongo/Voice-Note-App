@@ -16,30 +16,10 @@ struct MapButtons: View {
 
     var body: some View {
         VStack {
-            Button(action: { (() -> Void).self  }, label: {
-                Image(systemName: /*mapViewModel.mapType ==
-                            .standard ? "network" :*/ "map")
-                        .font(.system(size: 36))
-                        .padding(10)
-                        .background(Color(.systemGray6))
-                        .clipShape(Circle())
-                        .foregroundColor(Color(buttonColor))
-            })
-
-            // TODO fix it later
-            Button(action: { (() -> Void).self  }, label: {
-                Image(systemName: "arrow.triangle.turn.up.right.diamond.fill")
-                        .font(.system(size: 36))
-                        .padding(10)
-                        .background(Color(.systemGray6))
-                        .clipShape(Circle())
-                        .foregroundColor(Color(buttonColor))
-            })
-            // TODO Center map
             Button(action: {
                 mapViewModel.reCenterRegionToUserLocation()
             }, label: {
-                Image(systemName: "smallcircle.filled.circle")
+                Image(systemName: "location.fill")
                         .font(.system(size: 36))
                         .padding(10)
                         .background(Color(.systemGray6))
