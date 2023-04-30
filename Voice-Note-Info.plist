@@ -9,5 +9,12 @@
 		<key>UISceneConfigurations</key>
 		<dict/>
 	</dict>
+	<key>UILaunchScreen</key>
+	<dict>
+		<key>UIColorName</key>
+		<string>launch-screen-background</string>
+		<key>UIImageName</key>
+		<string>logo-launch</string>
+	</dict>
 </dict>
 </plist>

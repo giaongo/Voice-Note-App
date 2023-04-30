@@ -113,7 +113,7 @@
 		6A41BB2129D964B70041C42E /* BottomBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomBarView.swift; sourceTree = "<group>"; };
 		6A6196DD29CAFA1B008A9405 /* Voice Note.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Voice Note.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6A6196E029CAFA1B008A9405 /* Voice_NoteApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Voice_NoteApp.swift; sourceTree = "<group>"; };
-		6A6196E429CAFA1D008A9405 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		6A6196E429CAFA1D008A9405 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = "Voice Note/Assets.xcassets"; sourceTree = SOURCE_ROOT; };
 		6A6196E729CAFA1D008A9405 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		6A6196ED29CAFA1D008A9405 /* Voice NoteTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Voice NoteTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6A6196F129CAFA1D008A9405 /* Voice_NoteTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Voice_NoteTests.swift; sourceTree = "<group>"; };
@@ -622,6 +622,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Voice Note/Preview Content\"";
@@ -632,9 +633,7 @@
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "This app needs your location to show it on the map";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Audio is recorded to transcribe the note speech";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "The app uses speech recognition to dictate notes";
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -655,6 +654,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Voice Note/Preview Content\"";
@@ -665,9 +665,7 @@
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "This app needs your location to show it on the map";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Audio is recorded to transcribe the note speech";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "The app uses speech recognition to dictate notes";
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
