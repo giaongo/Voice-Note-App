@@ -48,9 +48,10 @@ struct MapScreen: View {
                                     print("VoiceNote Annotation pressed")
                                     mapViewModel.reCenterRegion(at: marker.coordinate)
                                 }.sheet(isPresented: $isShowingSheet) {
-                                    if let id = marker.id {
-                                        DetailView(voiceNoteUUID: id)
-                                    }
+                                    //if let id = marker.id {
+                                    DetailView(voiceNoteUUID: marker.id)
+                                   // }
+                                    
                                 }
                     }
                 }
