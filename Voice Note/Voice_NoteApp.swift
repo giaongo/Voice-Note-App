@@ -3,6 +3,7 @@ import SwiftUI
 
 @main
 struct Voice_NoteApp: App {
+    let locationService = LocationService.sharedLocationService
     @StateObject var speechRecognizer = SpeechRecognizer()
     @StateObject var voiceNoteViewModel = VoiceNoteViewModel()
     @StateObject var mapViewModel = MapViewModel()

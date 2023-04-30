@@ -9,11 +9,11 @@ struct MapScreen: View {
     @EnvironmentObject var mapViewModel: MapViewModel
     @State var clickOnPin: Bool = false
     @State private var isShowingSheet = false
+    @ObservedObject var  locationService = LocationService.sharedLocationService
 
     var body: some View {
+        if locationService.isLocationAuthorized {
         ZStack {
-             //FIXME: Find a way to handle region
-            //Map(coordinateRegion: .constant(region) , showsUserLocation: true, annotationItems: mapViewModel.mapMarkers) { marker in
             Map(coordinateRegion: .constant(mapViewModel.region) , showsUserLocation: true, annotationItems: mapViewModel.mapMarkers) { marker in
                 MapAnnotation(coordinate: marker.coordinate) {
 
@@ -87,6 +87,9 @@ struct MapScreen: View {
                     mapViewModel.reCenterRegionToUserLocation()
 
                 }
+        } else {
+            Text("VoiceNote is not Authorized to access your location")
+        }
     }
 }
 

@@ -21,6 +21,9 @@ struct DetailView: View {
     
     var body: some View {
         VStack {
+            Text("\(voiceNote?.title ?? "Missing Title")")
+                    .font(.largeTitle)
+                    .padding(.top, 8)
             if isEditing {
                 TextEditor(text: $editText)
                     .padding()
@@ -37,7 +40,7 @@ struct DetailView: View {
                     .padding()
             }
             
-            RecordingCardView(voiceNoteUrl: voiceNote?.fileUrl).padding(15)
+            RecordingCardView(voiceNoteUrl: voiceNote?.fileUrl).padding(8)
             Text("Duration: \(TimeDuration(size: voiceNote?.duration ?? 0).getTimeAsHourMinuteSecond())")
             
            

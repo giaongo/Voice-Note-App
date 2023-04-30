@@ -8,14 +8,14 @@ import CoreLocation
 import Combine
 import MapKit
 
-class LocationService: NSObject, CLLocationManagerDelegate {
+class LocationService: NSObject, CLLocationManagerDelegate, ObservableObject {
 
     static var sharedLocationService = LocationService()
     private let locationManager = CLLocationManager()
     var locationStatus: CLAuthorizationStatus?
     var currentLocation: CLLocation = CLLocation(latitude: 37.334_900, longitude: -122.009_020)
 
-    private var isLocationUpdate = true
+    @Published var isLocationAuthorized = false
 
     var statusString: String {
         guard let status = locationStatus else {
@@ -59,6 +59,9 @@ class LocationService: NSObject, CLLocationManagerDelegate {
 
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         locationStatus = status
+        if status == CLAuthorizationStatus.authorizedAlways || status == CLAuthorizationStatus.authorizedWhenInUse {
+            isLocationAuthorized = true
+        }
     }
 
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
