@@ -8,11 +8,7 @@ import CoreData
  */
 class MapViewModel: NSObject, ObservableObject {
 
-    @Published var region = MKCoordinateRegion(
-            center: CLLocationCoordinate2D(latitude: 37.334_900, longitude: -122.009_020),
-            latitudinalMeters: 2000,
-            longitudinalMeters: 2000
-    )
+    @Published var region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 37.334_900, longitude: -122.009_020), latitudinalMeters: 2000, longitudinalMeters: 2000)
     @Published var shouldRegionUpdate = true
     //SearchText...
     @Published var searchText = ""
@@ -23,6 +19,8 @@ class MapViewModel: NSObject, ObservableObject {
     // Location service singleton
     private var locationService = LocationService.sharedLocationService
 
+    @Published var searchFilter: SearchFilter = SearchFilter()
+
     override init() {
         super.init()
         populateLocation()
@@ -30,39 +28,61 @@ class MapViewModel: NSObject, ObservableObject {
 
     //Search Places...
     func searchQuery() {
-        let request = MKLocalSearch.Request()
-        request.naturalLanguageQuery = searchText
-        //Fetch...
-        MKLocalSearch(request: request).start { [self] (response, _) in
-            guard let result = response else{return}
-            places = result.mapItems.compactMap{Place(place: $0.placemark)}
+        if searchFilter.defaultValue == SearchFilterItem.BY_PLACES {
+            let request = MKLocalSearch.Request()
+            request.naturalLanguageQuery = searchText
+            //Fetch...
+            MKLocalSearch(request: request).start { [self] (response, _) in
+                guard let result = response else {
+                    return
+                }
+                places = result.mapItems.compactMap {
+                    Place(place: $0.placemark, tags: $0.placemark.name ?? "")
+                }
+            }
+        }
+        if searchFilter.defaultValue == SearchFilterItem.BY_VOICE_NOTE {
+            places = mapMarkers
+                    .filter{ mapMarker in mapMarker.taggedText.contains(searchText) }
+                    .map{ mapMarker -> Place in
+                        Place(place: MKPlacemark(coordinate: mapMarker.coordinate), tags: mapMarker.taggedText)
+                    }
         }
     }
 
     func removeSearchTypeMarkers(from markers: [MapMarker]) {
-        let newMapMarkers = markers.filter{$0.type == AnnotationType.VOICE_NOTE}
+        let newMapMarkers = markers.filter {
+            $0.type == AnnotationType.VOICE_NOTE
+        }
         mapMarkers = newMapMarkers
     }
-    
+
     //Pick search result
     func selectPlace(place: Place) {
         searchText = ""
+        places.removeAll()
         mapMarkers.append(transform(from: place.place))
+        reCenterRegion(at: place.place.coordinate)
     }
 
     func deleteSelectedVoiceNoteFromMap(at location: Double) {
 
     }
 
-    private func populateLocation() {
+    func populateLocation() {
         let managedContext = CoreDataService.localStorage.getManageObjectContext()
         let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "VoiceNote")
         do {
             let voiceNotes = try managedContext.fetch(fetchRequest) as? [VoiceNote] ?? []
-            mapMarkers = voiceNotes
-                    .compactMap{$0}
-                    .map{ voiceNote -> MapMarker? in transform(from: voiceNote) }
-                    .compactMap{$0}
+            mapMarkers = voiceNotes.compactMap {
+                        $0
+                    }
+                    .map { voiceNote -> MapMarker? in
+                        transform(from: voiceNote)
+                    }
+                    .compactMap {
+                        $0
+                    }
         } catch let error as NSError {
             print("Could not fetch. \(error), \(error.userInfo)")
         }
@@ -75,18 +95,18 @@ class MapViewModel: NSObject, ObservableObject {
     }
 
     private func transform(from voiceNote: VoiceNote) -> MapMarker? {
-        if let id = voiceNote.id, let location = voiceNote.location {
-            return createMapMarker(id: id, type: AnnotationType.VOICE_NOTE, coordinate: CLLocationCoordinate2D(latitude: location.latitude, longitude: location.longitude))
+        if let id = voiceNote.id, let location = voiceNote.location, let text = voiceNote.text {
+            return createMapMarker(id: id, text: text, type: AnnotationType.VOICE_NOTE, coordinate: CLLocationCoordinate2D(latitude: location.latitude, longitude: location.longitude))
         }
         return nil
     }
 
     private func transform(from placeMark: MKPlacemark) -> MapMarker {
-        createMapMarker(type: AnnotationType.SEARCH_RESULT, coordinate: placeMark.coordinate)
+        createMapMarker(text: "", type: AnnotationType.SEARCH_RESULT, coordinate: placeMark.coordinate)
     }
 
-    private func createMapMarker(id: UUID = UUID(), type: AnnotationType, coordinate: CLLocationCoordinate2D) -> MapMarker {
-        MapMarker(id: id, type: type, coordinate: coordinate)
+    private func createMapMarker(id: UUID = UUID(), text taggedText: String, type: AnnotationType, coordinate: CLLocationCoordinate2D) -> MapMarker {
+        MapMarker(id: id, taggedText: taggedText, type: type, coordinate: coordinate)
     }
 
     func reCenterRegionToUserLocation() {
@@ -97,7 +117,28 @@ class MapViewModel: NSObject, ObservableObject {
         region.center = coordinate
     }
 
-    func getCurrentLocation () -> CLLocationCoordinate2D{
+    func getCurrentLocation() -> CLLocationCoordinate2D {
         locationService.currentLocation.coordinate
+    }
+
+    /**
+        Direction for users current location
+     - Parameters:
+       - destination: CLLocationCoordinate2D that represent Destination location
+       - directionMode: MKLaunchOptionsDirectionsModeDriving, MKLaunchOptionsDirectionsModeWalking, MKLaunchOptionsDirectionsModeTransit
+       - destinationName: Sting name that will represent Destination in Apple Map application*/
+    func openDirectionInAppleMapFromCurrentLocation(to destination: CLLocationCoordinate2D, directionMode: String, destinationName: String = "Your Destination") {
+        openDirectionInAppleMap(from: getCurrentLocation(), to: destination, directionMode: directionMode, destinationName: destinationName)
+    }
+
+    func openDirectionInAppleMap(from source: CLLocationCoordinate2D, to destination: CLLocationCoordinate2D, directionMode: String, destinationName: String = "Your Destination") {
+
+        let sourceMapItem = MKMapItem(placemark: MKPlacemark(coordinate: source))
+        sourceMapItem.name = "Current Location"
+
+        let destinationMapItem = MKMapItem(placemark: MKPlacemark(coordinate: destination))
+        destinationMapItem.name = destinationName
+
+        MKMapItem.openMaps(with: [sourceMapItem , destinationMapItem], launchOptions: [MKLaunchOptionsDirectionsModeKey : directionMode])
     }
 }

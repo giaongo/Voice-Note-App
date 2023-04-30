@@ -12,6 +12,7 @@ import Foundation
 struct BottomBarView: View {
     @EnvironmentObject var voiceNoteViewModel: VoiceNoteViewModel
     @EnvironmentObject var speechRecognizer: SpeechRecognizer
+    @EnvironmentObject var mapViewModel: MapViewModel
     @Environment(\.coreData) var coreDataService: CoreDataService
     @Environment(\.managedObjectContext) var managedObjectContext
 
@@ -64,7 +65,13 @@ struct BottomBarView: View {
                     .alert("Please confirm to save!", isPresented: $showConfirmationAlert) {
                         HStack {
                             Button("SAVE") {
-                                saveVoiceNote()
+                                Task {
+                                    guard let url = voiceNoteViewModel.fileUrlList.last else {
+                                        return
+                                    }
+                                    await voiceNoteViewModel.saveVoiceNote(UrlLocation: url, transcribedText: speechRecognizer.transcriptionText)
+                                    mapViewModel.populateLocation()
+                                }
                                 voiceNoteViewModel.confirmTheVoiceNote = false
                                 showSheet = false
                                 toast = ToastView(type: .success, title: "Save Success", message: "Note saved successfully") {
@@ -125,71 +132,6 @@ struct BottomBarView: View {
             )
         }.ignoresSafeArea(.all)
         
-        
-    }
-    /**
-        This method extracts and returns list of keywords from  text transcription
-     */
-    func extractKeywords(from text: String) -> [String] {
-        let tagger = NLTagger(tagSchemes: [.lexicalClass])
-        tagger.string = text
-        let options: NLTagger.Options = [.omitWhitespace, .omitPunctuation, .joinNames]
-
-        let tags = tagger.tags(in: text.startIndex..<text.endIndex, unit: .word, scheme: .lexicalClass, options: options)
-
-        let keywords = tags.compactMap { (tag, tokenRange) -> String? in
-            if tag == .noun || tag == .verb || tag == .adjective {
-                return String(text[tokenRange])
-            }
-            return nil
-        }
-
-        return keywords
-    }
-
-    /**
-        This method saves the voice note to CoreData
-     */
-
-    //TODO How to repopulate map annotation from here???
-    //TODO Saving a note is a ViewModel's responsibility, not View's responsibility
-
-    //TODO pass extractKeywords and speechRecognizer.transcriptionText to ViewModel to save note
-    //TODO ViewModel will have access to location, CodeData and temperature services
-    func saveVoiceNote() {
-        guard let url = voiceNoteViewModel.fileUrlList.last else {
-            return
-        }
-
-        let durationInSeconds = voiceNoteViewModel.getDuration(for: url)
-        let extractedKeywords = extractKeywords(from: speechRecognizer.transcriptionText)
-        let title = extractedKeywords.first ?? "Note"
-
-
-
-        let newVoiceNote = VoiceNote(context: managedObjectContext)
-        let id = UUID()
-        newVoiceNote.id = id
-        newVoiceNote.text = speechRecognizer.transcriptionText
-        newVoiceNote.title = title
-        newVoiceNote.fileUrl = url
-        newVoiceNote.createdAt = Date()
-        newVoiceNote.duration = durationInSeconds
-        newVoiceNote.location = Location(context: managedObjectContext)
-        // TODO may DB restructuring needed
-        newVoiceNote.location?.id = id
-        newVoiceNote.location?.latitude = 24.444
-        newVoiceNote.location?.longitude = 64.444
-        newVoiceNote.weather = Weather(context: managedObjectContext)
-        newVoiceNote.weather?.temperature = Temperature(context: managedObjectContext)
-        newVoiceNote.weather?.temperature?.maximum = 44
-        newVoiceNote.weather?.temperature?.minimum = 24
-
-        do {
-            try managedObjectContext.save()
-        } catch {
-            print("Error saving voice note: \(error)")
-        }
     }
 
     /**

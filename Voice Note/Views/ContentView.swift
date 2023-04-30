@@ -5,14 +5,14 @@ struct ContentView: View {
     @State var toast:ToastView? = nil
     @State var showSheet: Bool = false
     @State var tagSelect = "house"
-    @StateObject private var temperatureDataService = TemperatureDataService()
+    private var temperatureDataService = TemperatureDataService.sharedLocationService
 
     var body: some View {
         ZStack(alignment: .bottom) {
             TabView(selection:$tagSelect) {
-                MapScreen().tag("house")
-                Color.purple.tag("mic.fill")
-                RecordingListView().tag("list.dash")
+                MapScreen().tag("house").ignoresSafeArea()
+                Color.purple.tag("mic.fill").ignoresSafeArea()
+                RecordingListView().tag("list.dash").ignoresSafeArea()
             }
             BottomBarView(toast: $toast,showSheet: $showSheet, tagSelect: $tagSelect)
         }
@@ -20,7 +20,6 @@ struct ContentView: View {
             await temperatureDataService.fetchLatestTemperatures()
         }
         .toastView(toast: $toast)
-        .ignoresSafeArea()
         
     }
 }

@@ -1,9 +1,12 @@
 import SwiftUI
 import CoreLocation
+import MapKit
 
 struct DetailView: View {
     @EnvironmentObject var voiceNoteViewModel: VoiceNoteViewModel
+    @EnvironmentObject var mapViewModel: MapViewModel
     @Environment(\.presentationMode) var presentationMode
+    @Environment(\.coreData) private var coreDataService: CoreDataService
     @State private var showShareSheet = false
     let textContainer = #colorLiteral(red: 0.4, green: 0.2039215686, blue: 0.4980392157, alpha: 0.2)
     private let voiceNote: VoiceNote?
@@ -35,7 +38,7 @@ struct DetailView: View {
             }
             
             RecordingCardView(voiceNoteUrl: voiceNote?.fileUrl).padding(15)
-            Text("Duration: \(voiceNote?.duration ?? 0)s")
+            Text("Duration: \(TimeDuration(size: voiceNote?.duration ?? 0).getTimeAsHourMinuteSecond())")
             
            
             
@@ -43,6 +46,11 @@ struct DetailView: View {
                 // Direction button
                 DetailBtn(clickHandler: {
                     print("Direction pressed")
+                    guard let latitude = voiceNote?.location?.latitude,
+                          let longitude = voiceNote?.location?.longitude,
+                          let title = voiceNote?.title else { return }
+                    let destination = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+                    mapViewModel.openDirectionInAppleMapFromCurrentLocation(to: destination, directionMode: MKLaunchOptionsDirectionsModeDriving, destinationName: title)
                 }, icon: "arrow.triangle.turn.up.right.diamond.fill")
                 
                 //  Edit button
@@ -84,15 +92,17 @@ struct DetailView: View {
         This method deletes the voice note from CoreData
      */
     private func deleteVoiceNote() {
-        let context = PersistenceController.shared.container.viewContext
-        if let voiceNote = voiceNote {
+        let context = coreDataService.getManageObjectContext()
+        if let voiceNote = voiceNote, let url = voiceNote.fileUrl {
+            //delete from DB
             context.delete(voiceNote)
-            do {
-                try context.save()
-                presentationMode.wrappedValue.dismiss()
-            } catch {
-                print("Error deleting voice note: \(error)")
-            }
+            //delete local file
+            voiceNoteViewModel.deleteRecording(url: url)
+            // repopulate file URL array
+            voiceNoteViewModel.fetchVoiceNotes()
+            // repopulate map
+            mapViewModel.populateLocation()
+            presentationMode.wrappedValue.dismiss()
         }
     }
     
@@ -100,7 +110,7 @@ struct DetailView: View {
         This method update the edited text to CoreData
      */
     private func saveEditedText() {
-        let context = PersistenceController.shared.container.viewContext
+        let context = coreDataService.getManageObjectContext()
         voiceNote?.text = editText
         do {
             try context.save()

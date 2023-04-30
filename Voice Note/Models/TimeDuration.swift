@@ -62,4 +62,8 @@ struct TimeDuration: Sizeable {
     func hoursAsTwoDigitString() -> String {
         String(format: "%02d", hours())
     }
+
+    func getTimeAsHourMinuteSecond() -> String {
+        "\(hoursAsTwoDigitString()):\(minutesAsTwoDigitString()):\(secondsAsTwoDigitString())"
+    }
 }

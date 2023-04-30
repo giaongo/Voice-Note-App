@@ -97,6 +97,20 @@ class CoreDataService {
 
     }
 
+    func getVoiceNote(byText text: String) -> [VoiceNote] {
+        let managedContext = getManageObjectContext()
+        let requestById: NSFetchRequest<VoiceNote> = VoiceNote.fetchRequest()
+        requestById.predicate = NSPredicate(format: "id == %@", text )
+        var results: [VoiceNote?] = []
+
+        do {
+            results = try managedContext.fetch(requestById) as [VoiceNote]
+        } catch {
+
+        }
+        return results.compactMap{$0}
+    }
+
     func getVoiceNote(byUUID uuid: UUID) -> VoiceNote {
         let managedContext = getManageObjectContext()
         let requestById: NSFetchRequest<VoiceNote> = VoiceNote.fetchRequest()
@@ -111,22 +125,6 @@ class CoreDataService {
         return results.compactMap{$0}[0]
     }
 
-    // TODO remove this way of deleting, calling method should pass NSManagedObject from offsets.
-    func delete(_ offsets: IndexSet) {
-        print("Delete item from coredata: \(offsets)")
-        let managedContext = persistenceController.container.viewContext
-        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "VoiceNote")
-
-        // TODO remove recording file from file system too.
-        do {
-            let items = try managedContext.fetch(fetchRequest)
-            offsets.map {items[$0] }.forEach(managedContext.delete)
-            try managedContext.save()
-        } catch let error as NSError {
-            print("Could not fetch. \(error), \(error.userInfo)")
-            //return nil
-        }
-    }
     func delete(_ item: NSManagedObject) {
         let managedContext = persistenceController.container.viewContext
         do {

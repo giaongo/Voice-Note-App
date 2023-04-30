@@ -8,4 +8,5 @@ struct Place: Identifiable {
     
     var id = UUID().uuidString
     var place: MKPlacemark
+    var tags: String
 }
