@@ -87,24 +87,16 @@ struct DetailView: View {
      */
     private func deleteVoiceNote() {
         let context = coreDataService.getManageObjectContext()
-        if let voiceNote = voiceNote {
-            let url = voiceNote.fileUrl
+        if let voiceNote = voiceNote, let url = voiceNote.fileUrl {
             //delete from DB
             context.delete(voiceNote)
             //delete local file
-            if let url = url {
-                voiceNoteViewModel.deleteRecording(url: url)
-            }
+            voiceNoteViewModel.deleteRecording(url: url)
             // repopulate file URL array
             voiceNoteViewModel.fetchVoiceNotes()
             // repopulate map
             mapViewModel.populateLocation()
-            do {
-                try context.save()
-                presentationMode.wrappedValue.dismiss()
-            } catch {
-                print("Error deleting voice note: \(error)")
-            }
+            presentationMode.wrappedValue.dismiss()
         }
     }
     
@@ -112,7 +104,7 @@ struct DetailView: View {
         This method update the edited text to CoreData
      */
     private func saveEditedText() {
-        let context = PersistenceController.shared.container.viewContext
+        let context = coreDataService.getManageObjectContext()
         voiceNote?.text = editText
         do {
             try context.save()
