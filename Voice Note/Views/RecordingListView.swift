@@ -20,9 +20,6 @@ struct RecordingListView: View {
     }
     var body: some View {
         NavigationStack {
-             /*List(displayedVoiceNotes.indices, id: \.self) { index in
-                 ListItem(voiceNote: displayedVoiceNotes[index])
-             }*/
              List{
                  // ForEach will give us onDelete feature by swiping Left
                  ForEach(displayedVoiceNotes.indices, id: \.self) { index in
@@ -31,14 +28,14 @@ struct RecordingListView: View {
              }
                         .searchable(text: $searchText)
                 .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing) {
+                    /*ToolbarItem(placement: .navigationBarTrailing) {
                         EditButton()
                     }
                     ToolbarItem {
                         Button(action: addItem) {
                             Label("Add Item", systemImage: "plus")
                         }
-                    }
+                    }*/
                 }.navigationTitle("My Voice notes")
                 .padding(0)
         }
