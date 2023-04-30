@@ -59,6 +59,7 @@ struct PersistenceController {
                  * The store could not be migrated to the current model version.
                  Check the error message to determine what the actual problem was.
                  */
+
                 fatalError("Unresolved error \(error), \(error.userInfo)")
             }
         })
