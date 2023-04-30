@@ -38,7 +38,7 @@ struct DetailView: View {
             }
             
             RecordingCardView(voiceNoteUrl: voiceNote?.fileUrl).padding(15)
-            Text("Duration: \(voiceNote?.duration ?? 0)s")
+            Text("Duration: \(TimeDuration(size: voiceNote?.duration ?? 0).getTimeAsHourMinuteSecond())")
             
            
             
