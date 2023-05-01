@@ -1,17 +1,18 @@
-//
-//  LanguageSelectionView.swift
-//  Voice Note
-//
-//  Created by Mohammad Rashid on 30.4.2023.
-//
+
 
 import SwiftUI
 
 struct LanguageSelectionView: View {
     @EnvironmentObject var speechRecognizer: SpeechRecognizer
     @Binding var isPresented: Bool
-    private let languages = [("English", "en"), ("Bangla", "bn"), ("Finnish", "fi"), ("Swedish", "sv"), ("Chinese", "zh-Hans"), ("Vietnamese", "vi"), ("Russian", "ru"), ("Arabic", "ar"), ("Persian", "fa"), ("Hindi", "hi"), ("Urdu", "ur"), ("Somali", "so"), ("Korean", "ko"), ("Japanese", "ja")]
-
+    
+    // Get the list of available language codes
+    private let languages = Locale.availableIdentifiers
+        .map { Locale(identifier: $0).localizedString(forIdentifier: $0) ?? "" }
+        .filter { !$0.isEmpty }
+        .sorted()
+        .map { ($0, $0) }
+    
     private func dismiss() {
         isPresented = false
     }

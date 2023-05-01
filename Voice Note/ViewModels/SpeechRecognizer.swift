@@ -1,31 +1,39 @@
 import Foundation
 import AVFoundation
 import Speech
+import SwiftUI
 
 class SpeechRecognizer: ObservableObject {
     private var task: SFSpeechRecognitionTask?
     private var recognizer: SFSpeechRecognizer?
     @Published var transcriptionText: String = ""
     @Published var selectedLanguageIndex: Int = 0
-    private let languages = [("English", "en"), ("Bangla", "bn"), ("Finnish", "fi"), ("Swedish", "sv"), ("Chinese", "zh-Hans"), ("Vietnamese", "vi"), ("Russian", "ru"), ("Arabic", "ar"), ("Persian", "fa"), ("Hindi", "hi"), ("Urdu", "ur"), ("Somali", "so"), ("Korean", "ko"), ("Japanese", "ja")]
-
-
+    private var languages: [(name: String, identifier: String)] = []
+    @Published var filteredLanguages: [(name: String, identifier: String)] = []
 
     init() {
-        setLocale(languageCode: languages[selectedLanguageIndex].1)
+        setAvailableLanguages()
+        setLocale(languageCode: languages[selectedLanguageIndex].identifier)
         checkAuthorizationStatus()
+        filterLanguages("")
+    }
+
+    private func setAvailableLanguages() {
+        languages = Locale.availableIdentifiers.compactMap { identifier in
+            guard let languageName = Locale(identifier: identifier).localizedString(forLanguageCode: identifier) else {
+                return nil
+            }
+            return (languageName, identifier)
+        }.sorted { $0.name < $1.name }
     }
 
     func setLocale(languageCode: String) {
-        recognizer = SFSpeechRecognizer(locale: Locale.init(identifier: languageCode))
+        let language = Locale(identifier: languageCode)
+        let locale = Locale(identifier: language.languageCode!)
+        recognizer = SFSpeechRecognizer(locale: locale)
     }
 
-
-    deinit {
-        reset()
-    }
-
-    private func checkAuthorizationStatus() {
+    func checkAuthorizationStatus() {
         SFSpeechRecognizer.requestAuthorization { authStatus in
             OperationQueue.main.addOperation {
                 switch authStatus {
@@ -44,7 +52,7 @@ class SpeechRecognizer: ObservableObject {
         }
     }
 
-    private func displayError(_ error: Error) {
+    func displayError(_ error: Error) {
         var errorMessage: String = ""
         if let error = error as? RecognizeError {
             errorMessage += error.message
@@ -55,8 +63,8 @@ class SpeechRecognizer: ObservableObject {
     }
 
     func transcribeFile(from url: URL) {
-        let languageCode = languages[selectedLanguageIndex].1
-            setLocale(languageCode: languageCode)
+        let languageCode = languages[selectedLanguageIndex].identifier
+        setLocale(languageCode: languageCode)
         DispatchQueue(label: "Speech Recognition Queue", qos: .userInteractive).async {
             [weak self] in
             guard let self = self, let recognizer = self.recognizer, recognizer.isAvailable else {
@@ -86,7 +94,20 @@ class SpeechRecognizer: ObservableObject {
         task?.cancel()
         task = nil
     }
+    
+    func filterLanguages(_ searchText: String) {
+        if searchText.isEmpty {
+            filteredLanguages = languages
+        } else {
+            filteredLanguages = languages.filter { $0.name.lowercased().contains(searchText.lowercased()) }
+        }
+    }
 }
+
+
+
+
+
 
 extension SFSpeechRecognizer {
     /**
