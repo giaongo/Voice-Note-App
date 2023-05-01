@@ -86,3 +86,29 @@ class SpeechRecognizer: ObservableObject {
         task = nil
     }
 }
+
+extension SFSpeechRecognizer {
+    /**
+     This method requests the speech recognition permission
+     */
+    static func hasAuthorizationToRecognize() async -> Bool {
+        await withCheckedContinuation({ continuation in
+            requestAuthorization { status in
+                continuation.resume(returning: status == .authorized)
+            }
+        })
+    }
+}
+
+extension AVAudioSession {
+    /**
+     This method records the audio permission
+     */
+    func hasPermissionToRecord() async -> Bool {
+        await withCheckedContinuation({ continuation in
+            requestRecordPermission { granted in
+                continuation.resume(returning: granted)
+            }
+        })
+    }
+}
