@@ -33,6 +33,7 @@
 		3C7C3EEC8755EBC394A8232A /* VoiceNoteViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C7C33368C78BEE9B95222E3 /* VoiceNoteViewModel.swift */; };
 		3C7C3F8461FA2CE3466244DF /* AnnotationType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C7C300951A045673832FF35 /* AnnotationType.swift */; };
 		4D05E75B29FEC94200DDF95A /* Localizable1.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4D05E75A29FEC8E100DDF95A /* Localizable1.strings */; };
+		4D05E76229FEECEB00DDF95A /* LanguageSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D05E76129FEECEB00DDF95A /* LanguageSelectionView.swift */; };
 		4DCB334629F5C00B006104BA /* WeatherViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DCB334529F5C00B006104BA /* WeatherViewModel.swift */; };
 		4DCB334829F5C039006104BA /* WeatherService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DCB334729F5C039006104BA /* WeatherService.swift */; };
 		4DCB334A29F5C05E006104BA /* WeatherResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DCB334929F5C05E006104BA /* WeatherResponse.swift */; };
@@ -105,6 +106,12 @@
 		3C7C3EF87451CA70924FE6DB /* MapScreen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapScreen.swift; sourceTree = "<group>"; };
 		3C7C3F8412397CCCE4212CE0 /* SpeechRecognizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpeechRecognizer.swift; sourceTree = "<group>"; };
 		4D05E75929FEC8E100DDF95A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable1.strings; sourceTree = "<group>"; };
+		4D05E75C29FED2E500DDF95A /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/Localizable1.strings; sourceTree = "<group>"; };
+		4D05E75D29FED30F00DDF95A /* bn-BD */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "bn-BD"; path = "bn-BD.lproj/Localizable1.strings"; sourceTree = "<group>"; };
+		4D05E75E29FED34100DDF95A /* lv-LV */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "lv-LV"; path = "lv-LV.lproj/Localizable1.strings"; sourceTree = "<group>"; };
+		4D05E75F29FED39B00DDF95A /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/Localizable1.strings; sourceTree = "<group>"; };
+		4D05E76029FED3BE00DDF95A /* ur-Arab-PK */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ur-Arab-PK"; path = "ur-Arab-PK.lproj/Localizable1.strings"; sourceTree = "<group>"; };
+		4D05E76129FEECEB00DDF95A /* LanguageSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageSelectionView.swift; sourceTree = "<group>"; };
 		4DCB334529F5C00B006104BA /* WeatherViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherViewModel.swift; sourceTree = "<group>"; };
 		4DCB334729F5C039006104BA /* WeatherService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherService.swift; sourceTree = "<group>"; };
 		4DCB334929F5C05E006104BA /* WeatherResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherResponse.swift; sourceTree = "<group>"; };
@@ -204,6 +211,7 @@
 				6A889A4629E88694000FC5D1 /* ToastView.swift */,
 				6AEBB78C29EECD10004AF77F /* DetailView.swift */,
 				3C7C34589C69E8D9B9F20358 /* MapButtons.swift */,
+				4D05E76129FEECEB00DDF95A /* LanguageSelectionView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -381,6 +389,11 @@
 			knownRegions = (
 				en,
 				Base,
+				fi,
+				"bn-BD",
+				"lv-LV",
+				vi,
+				"ur-Arab-PK",
 			);
 			mainGroup = 6A6196D429CAFA1B008A9405;
 			productRefGroup = 6A6196DE29CAFA1B008A9405 /* Products */;
@@ -427,6 +440,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6A673ADA29E4276600CC9DA4 /* RecordingCardView.swift in Sources */,
+				4D05E76229FEECEB00DDF95A /* LanguageSelectionView.swift in Sources */,
 				6A6196E129CAFA1B008A9405 /* Voice_NoteApp.swift in Sources */,
 				E897038A29F08CD300CFD0F0 /* Temperature.swift in Sources */,
 				3C7C327B9F8ECD50DC2CE48A /* ContentView.swift in Sources */,
@@ -511,6 +525,11 @@
 			isa = PBXVariantGroup;
 			children = (
 				4D05E75929FEC8E100DDF95A /* en */,
+				4D05E75C29FED2E500DDF95A /* fi */,
+				4D05E75D29FED30F00DDF95A /* bn-BD */,
+				4D05E75E29FED34100DDF95A /* lv-LV */,
+				4D05E75F29FED39B00DDF95A /* vi */,
+				4D05E76029FED3BE00DDF95A /* ur-Arab-PK */,
 			);
 			name = Localizable1.strings;
 			sourceTree = "<group>";
@@ -522,6 +541,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -582,6 +602,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
