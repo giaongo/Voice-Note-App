@@ -7,7 +7,8 @@ class SpeechRecognizer: ObservableObject {
     private var recognizer: SFSpeechRecognizer?
     @Published var transcriptionText: String = ""
     @Published var selectedLanguageIndex: Int = 0
-    private let languages = [("English", "en"), ("Bangla", "bn"), ("Finnish", "fi"), ("Swedish", "sv"), ("Chinese", "zh-Hans"), ("Vietnamese", "vi"), ("Russian", "ru")]
+    private let languages = [("English", "en"), ("Bangla", "bn"), ("Finnish", "fi"), ("Swedish", "sv"), ("Chinese", "zh-Hans"), ("Vietnamese", "vi"), ("Russian", "ru"), ("Arabic", "ar"), ("Persian", "fa"), ("Hindi", "hi"), ("Urdu", "ur"), ("Somali", "so"), ("Korean", "ko"), ("Japanese", "ja")]
+
 
 
     init() {

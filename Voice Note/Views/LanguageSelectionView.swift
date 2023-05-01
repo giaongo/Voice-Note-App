@@ -10,7 +10,7 @@ import SwiftUI
 struct LanguageSelectionView: View {
     @EnvironmentObject var speechRecognizer: SpeechRecognizer
     @Binding var isPresented: Bool
-    private let languages = [("English", "en"), ("Bangla", "bn"), ("Finnish", "fi"), ("Swedish", "sv"), ("Chinese", "zh-Hans"), ("Vietnamese", "vi"), ("Russian", "ru")]
+    private let languages = [("English", "en"), ("Bangla", "bn"), ("Finnish", "fi"), ("Swedish", "sv"), ("Chinese", "zh-Hans"), ("Vietnamese", "vi"), ("Russian", "ru"), ("Arabic", "ar"), ("Persian", "fa"), ("Hindi", "hi"), ("Urdu", "ur"), ("Somali", "so"), ("Korean", "ko"), ("Japanese", "ja")]
 
     private func dismiss() {
         isPresented = false
