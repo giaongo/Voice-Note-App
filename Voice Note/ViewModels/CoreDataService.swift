@@ -26,8 +26,9 @@ class CoreDataService {
         print("Fake Item function called")
 
         let newVoiceNote = VoiceNote(context: persistenceController.container.viewContext)
+        let id = UUID()
 
-        newVoiceNote.id = UUID()
+        newVoiceNote.id = id
         newVoiceNote.text = "this is my voicenote text"
         newVoiceNote.title = "Note title"
         newVoiceNote.near = "Kamppi"
@@ -35,8 +36,9 @@ class CoreDataService {
         newVoiceNote.duration = 3765
         newVoiceNote.createdAt = Date.init()
         newVoiceNote.location = Location(context: persistenceController.container.viewContext)
-        newVoiceNote.location?.latitude = Double.random(in: 24.600750..<25.30750)//24.444
-        newVoiceNote.location?.longitude = Double.random(in: 60.090760..<60.430440)
+        newVoiceNote.location?.id = id
+        newVoiceNote.location?.longitude = Double.random(in: 24.600750..<25.30750)//24.444
+        newVoiceNote.location?.latitude = Double.random(in: 60.090760..<60.430440)
         newVoiceNote.weather = Weather(context: persistenceController.container.viewContext)
         newVoiceNote.weather?.temperature = Temperature(context: persistenceController.container.viewContext)
         //newVoiceNote.weather?.temperature?.average = 34
@@ -95,22 +97,34 @@ class CoreDataService {
 
     }
 
-    // TODO remove this way of deleting, calling method should pass NSManagedObject from offsets.
-    func delete(_ offsets: IndexSet) {
-        print("Delete item from coredata: \(offsets)")
-        let managedContext = persistenceController.container.viewContext
-        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "VoiceNote")
+    func getVoiceNote(byText text: String) -> [VoiceNote] {
+        let managedContext = getManageObjectContext()
+        let requestById: NSFetchRequest<VoiceNote> = VoiceNote.fetchRequest()
+        requestById.predicate = NSPredicate(format: "id == %@", text )
+        var results: [VoiceNote?] = []
 
-        // TODO remove recording file from file system too.
         do {
-            let items = try managedContext.fetch(fetchRequest)
-            offsets.map {items[$0] }.forEach(managedContext.delete)
-            try managedContext.save()
-        } catch let error as NSError {
-            print("Could not fetch. \(error), \(error.userInfo)")
-            //return nil
+            results = try managedContext.fetch(requestById) as [VoiceNote]
+        } catch {
+
         }
+        return results.compactMap{$0}
     }
+
+    func getVoiceNote(byUUID uuid: UUID) -> VoiceNote {
+        let managedContext = getManageObjectContext()
+        let requestById: NSFetchRequest<VoiceNote> = VoiceNote.fetchRequest()
+        requestById.predicate = NSPredicate(format: "id == %@", uuid.uuidString )
+        var results: [VoiceNote?] = []
+
+        do {
+            results = try managedContext.fetch(requestById) as [VoiceNote]
+        } catch {
+
+        }
+        return results.compactMap{$0}[0]
+    }
+
     func delete(_ item: NSManagedObject) {
         let managedContext = persistenceController.container.viewContext
         do {

@@ -2,6 +2,7 @@ import Foundation
 import AVFoundation
 import Combine
 import CoreData
+import NaturalLanguage
 
 /**
     The ViewModel includes functionalities for  recording, playing back audio, and measuring power levels during the recording duration.
@@ -25,6 +26,8 @@ class VoiceNoteViewModel: NSObject, ObservableObject, AVAudioPlayerDelegate, AVA
     @Published var confirmTheVoiceNote: Bool = false
     @Published var voiceNotes: [URL] = []
 
+    private var managedObjectContext = CoreDataService.localStorage.getManageObjectContext()
+    private let temperatureService = TemperatureDataService.sharedLocationService
 
 
     override init () {
@@ -119,7 +122,7 @@ class VoiceNoteViewModel: NSObject, ObservableObject, AVAudioPlayerDelegate, AVA
     }
     
     func stopRecording() {
-        self.disableMicriphoneMonitoring()
+        self.disableMicrophoneMonitoring()
         audioRecorder?.stop()
         isRecordingPaused = false
         objectWillChange.send()
@@ -151,7 +154,7 @@ class VoiceNoteViewModel: NSObject, ObservableObject, AVAudioPlayerDelegate, AVA
     /**
      Stops the timer from ever firing again and requests its removal from its run loop.
      */
-    private func disableMicriphoneMonitoring() {
+    private func disableMicrophoneMonitoring() {
         timer?.invalidate()
     }
     
@@ -181,8 +184,66 @@ class VoiceNoteViewModel: NSObject, ObservableObject, AVAudioPlayerDelegate, AVA
         audioPlayer?.stop()
         audioIsPlaying = false
     }
-    
-    
+
+    func saveVoiceNote(UrlLocation url: URL, transcribedText text: String) async {
+        do {
+            let durationInSeconds = getDuration(for: url)
+            let extractedKeywords = extractKeywords(from: text)
+            let title = extractedKeywords.first ?? "Note"
+            let currentLocation = LocationService.sharedLocationService.currentLocation
+
+            let newVoiceNote = VoiceNote(context: managedObjectContext)
+
+            let id = UUID()
+            newVoiceNote.id = id
+            newVoiceNote.text = "extractedKeywords"
+            newVoiceNote.title = "title"
+            newVoiceNote.fileUrl = url
+            newVoiceNote.createdAt = Date()
+            newVoiceNote.duration = durationInSeconds
+            newVoiceNote.location = Location(context: managedObjectContext)
+            // TODO may DB restructuring needed
+            newVoiceNote.location?.id = id
+            newVoiceNote.location?.latitude = currentLocation.coordinate.latitude
+            newVoiceNote.location?.longitude = currentLocation.coordinate.longitude
+
+            guard let location = newVoiceNote.location else { return }
+            let temperature = try await temperatureService.loadCurrentTemperature(atLocation: location)
+
+            newVoiceNote.weather = Weather(context: managedObjectContext)
+            newVoiceNote.weather?.temperature = Temperature(context: managedObjectContext)
+            newVoiceNote.weather?.temperature = temperature
+
+            do {
+                try managedObjectContext.save()
+            } catch {
+                let nsError = error as NSError
+                print("Unresolved error \(nsError), \(nsError.userInfo)")
+            }
+        } catch {
+            print("error fetching temperature. Error: \(error.localizedDescription)")
+        }
+    }
+
+    /**
+        This method extracts and returns list of keywords from  text transcription
+     */
+    func extractKeywords(from text: String) -> [String] {
+        let tagger = NLTagger(tagSchemes: [.lexicalClass])
+        tagger.string = text
+        let options: NLTagger.Options = [.omitWhitespace, .omitPunctuation, .joinNames]
+
+        let tags = tagger.tags(in: text.startIndex..<text.endIndex, unit: .word, scheme: .lexicalClass, options: options)
+
+        let keywords = tags.compactMap { (tag, tokenRange) -> String? in
+            if tag == .noun || tag == .verb || tag == .adjective {
+                return String(text[tokenRange])
+            }
+            return nil
+        }
+        return keywords
+    }
+
     func deleteRecording(url: URL) {
         do {
             try FileManager.default.removeItem(at: url)

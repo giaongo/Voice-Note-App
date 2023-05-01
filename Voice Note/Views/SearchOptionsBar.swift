@@ -2,7 +2,12 @@ import SwiftUI
 
 struct SearchOptionsBar: View {
     @Binding var searchQuery: String
-
+    var onSearchQuery: () -> Void
+    var onCancelSearch: () -> Void
+    @State private var searchOptionBarText: String = ""
+    @State private var searchFilterOptionMenu = false
+    @State private var defaultFilterSelect = "None"
+    @Binding var searchFilter: SearchFilterItem
     @State private var isEditing = false
     
     let buttonColor = #colorLiteral(red: 0.1764705926, green: 0.01176470611, blue: 0.5607843399, alpha: 1)
@@ -38,10 +43,16 @@ struct SearchOptionsBar: View {
                     withAnimation{
                         isEditing.toggle()
                     }
-                }
+                }.onChange(of: searchQuery, perform: {value in
+                        //Searching places
+                        searchQuery = value
+                        onSearchQuery()
+                    })
             
             if isEditing {
                 Button(action: {
+                    print("Cancel Pressed")
+                    onCancelSearch()
                     withAnimation {
                         isEditing.toggle()
                         self.searchQuery = ""
@@ -62,22 +73,30 @@ struct SearchOptionsBar: View {
                 Button {
                     print("Options menu")
                 } label: {
-                    Image(systemName: "ellipsis")
-                        .font(.system(size: 25))
-                        .foregroundColor(Color(buttonColor))
-                        .rotationEffect(.degrees(90))
-                        .padding([.bottom, .top], 7)
+                    Image(systemName: "list.bullet")
+                            .imageScale(.large)
+                            .foregroundColor(Color(buttonColor))
+                            .onTapGesture {
+                                searchFilterOptionMenu = true
+                            }
+                            .confirmationDialog("Select a filter", isPresented: $searchFilterOptionMenu, titleVisibility: .visible) {
+                                ForEach(SearchFilterItem.allCases) { filter in
+                                    Button(filter.rawValue) {
+                                        searchFilter = filter
+                                    }
+                                }
+                            }
                 }
                 .padding(.horizontal, 10)
                 .buttonStyle(.borderedProminent)
                 .tint(Color(.systemGray6))
             }
-        }
+        }.padding(.top, 52)
     }
 }
 
-struct SearchBar_Previews: PreviewProvider {
+/*struct SearchBar_Previews: PreviewProvider {
     static var previews: some View {
-        SearchOptionsBar(searchQuery: .constant(""))
+        //SearchOptionsBar(searchQuery: .constant(""))
     }
-}
+}*/

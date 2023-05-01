@@ -3,6 +3,7 @@ import SwiftUI
 
 @main
 struct Voice_NoteApp: App {
+    let locationService = LocationService.sharedLocationService
     @StateObject var speechRecognizer = SpeechRecognizer()
     @StateObject var voiceNoteViewModel = VoiceNoteViewModel()
     @StateObject var mapViewModel = MapViewModel()
@@ -10,11 +11,11 @@ struct Voice_NoteApp: App {
 
     var body: some Scene {
         WindowGroup {
-            NavigationView {
+            //NavigationView {
                 ContentView()
                         .environment(\.managedObjectContext, coreDataService.getManageObjectContext())
-                        .environment(\.coreData, coreDataService)
-            }.environmentObject(speechRecognizer).environmentObject(voiceNoteViewModel).environmentObject(MapViewModel())
+                        .environment(\.coreData, coreDataService).environmentObject(speechRecognizer).environmentObject(voiceNoteViewModel).environmentObject(mapViewModel)
+            //}
         }
     }
 }

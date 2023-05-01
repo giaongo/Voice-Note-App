@@ -5,10 +5,11 @@
 
 import Foundation
 
-class TemperatureDataService: ObservableObject {
+class TemperatureDataService/*: ObservableObject*/ {
     @Published private(set) var temperatures: [Temperature] = []
     @Published private(set) var isLoading = false
 
+    static let sharedLocationService = TemperatureDataService()
     private var request: TemperatureAPIRequest<TemperatureResource>?
 
     // TODO should call fetchLatestTemperatures init

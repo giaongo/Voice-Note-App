@@ -4,6 +4,8 @@ import CoreLocation
 struct RecordingListView: View {
     @State var toast:ToastView? = nil
     @Environment(\.coreData) private var coreDataService: CoreDataService
+    @EnvironmentObject var voiceNoteViewModel: VoiceNoteViewModel
+    @EnvironmentObject var mapViewModel: MapViewModel
     @State private var searchText = ""
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \VoiceNote.createdAt, ascending: false)],
@@ -57,7 +59,15 @@ struct RecordingListView: View {
      */
     private func deleteItem(offsets: IndexSet) {
         withAnimation {
-            coreDataService.delete(offsets)
+            offsets.forEach{ listIndex in
+                let managedObject = items[listIndex]
+                if let fileURL = managedObject.fileUrl {
+                    coreDataService.delete(managedObject)
+                    voiceNoteViewModel.deleteRecording(url: fileURL)
+                    voiceNoteViewModel.fetchVoiceNotes()
+                    mapViewModel.populateLocation()
+                }
+            }
         }
     }
 }

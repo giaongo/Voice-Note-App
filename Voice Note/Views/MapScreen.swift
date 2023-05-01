@@ -1,49 +1,75 @@
 import SwiftUI
 import CoreLocation
+import MapKit
 
 struct MapScreen: View {
-    @EnvironmentObject var mapViewModel: MapViewModel
-    @State var clickOnPin: Bool = false
-    @State var locationManager = CLLocationManager()
+
     let buttonColor = #colorLiteral(red: 0.1764705926, green: 0.01176470611, blue: 0.5607843399, alpha: 1)
 
-    // Fetch all VoiceNOtes from CoreData
-    // This is done to temporarily pass a single voiceNote to DetailView
-    @FetchRequest(
-            sortDescriptors: [NSSortDescriptor(keyPath: \VoiceNote.id, ascending: true)],
-            animation: .default)
-    private var items: FetchedResults<VoiceNote>
+    @EnvironmentObject var mapViewModel: MapViewModel
+    @State var clickOnPin: Bool = false
+    @State private var isShowingSheet = false
+    @ObservedObject var  locationService = LocationService.sharedLocationService
 
     var body: some View {
-        ZStack{
-            MapView(clickOnPin: $clickOnPin)
-                .ignoresSafeArea(.all, edges: .all)
-                .sheet(isPresented: $clickOnPin) {
-                    // TODO replace this with some thing else
-                    if !items.isEmpty {
-                        DetailView(voiceNote: items[0])
-                    } else {
-                        Text("CoreData is empty")
+        if locationService.isLocationAuthorized {
+        ZStack {
+            Map(coordinateRegion: .constant(mapViewModel.region) , showsUserLocation: true, annotationItems: mapViewModel.mapMarkers) { marker in
+                MapAnnotation(coordinate: marker.coordinate) {
+
+                    if marker.type == AnnotationType.SEARCH_RESULT {
+
+                        Image(systemName: "mappin.and.ellipse")
+                                .font(.system(size: 36))
+                                .padding(10)
+                                .background(Color(.systemGray6))
+                                .clipShape(Circle())
+                                .foregroundColor(Color(buttonColor))
+                                .onTapGesture {
+                                    mapViewModel.reCenterRegion(at: marker.coordinate)
+                                }
+                    }
+                    if marker.type == AnnotationType.VOICE_NOTE {
+                        Image(systemName: "waveform.circle")
+                                .font(.system(size: 36))
+                                .padding(10)
+                                .background(Color(.systemGray6))
+                                .clipShape(Circle())
+                                .foregroundColor(Color(buttonColor))
+                                .onTapGesture {
+                                    isShowingSheet.toggle()
+                                    mapViewModel.reCenterRegion(at: marker.coordinate)
+                                }.sheet(isPresented: $isShowingSheet, onDismiss: mapViewModel.populateLocation) {
+                                    if let id = marker.id {
+                                        DetailView(voiceNoteUUID: id)
+                                    }
+                                }
                     }
                 }
-                .presentationDetents([.medium, .large])
-                .presentationDragIndicator(.visible)
-            
+            }
+
             VStack {
-                
-                SearchOptionsBar(searchQuery: $mapViewModel.searchText)
+
+                //Custom Search bar on map
+                 SearchOptionsBar(searchQuery: $mapViewModel.searchText, onSearchQuery: {
+                     let delay = 0.3
+                     DispatchQueue.main.asyncAfter(deadline: .now() + delay) {mapViewModel.searchQuery()}
+                 }, onCancelSearch: {
+                     mapViewModel.removeSearchItemsFromMap()
+                 }, searchFilter: $mapViewModel.searchFilter.defaultValue)
+
+                // Search suggestions list
                 if !mapViewModel.places.isEmpty && mapViewModel.searchText != "" {
-                    
                     ScrollView {
                         VStack {
                             ForEach(mapViewModel.places) {place in
-                                Text(place.place.name ?? "")
+                                Text(place.tags)
                                     .foregroundColor(Color(buttonColor))
                                     .frame(maxWidth: .infinity, alignment: .leading)
                                     .padding(.leading)
                                     .onTapGesture{
                                         mapViewModel.selectPlace(place: place)
-                                    }
+                                    }.textCase(.lowercase)
                                 
                                 Divider()
                             }
@@ -52,77 +78,23 @@ struct MapScreen: View {
                     }
                     .background(Color(.systemGray6))
                 }
-                
                 Spacer()
-                
-                VStack {
-                    
-                    Button(action: mapViewModel.focusLocation, label: {
-                        Image(systemName: "location.fill")
-                            .font(.title2)
-                            .padding(10)
-                            .background(Color(.systemGray6))
-                            .clipShape(Circle())
-                            .foregroundColor(Color(buttonColor))
-                    })
-                    
-                    Button(action: mapViewModel.updateMapType, label: {
-                        Image(systemName: mapViewModel.mapType ==
-                            .standard ? "network" : "map")
-                        .font(.title2)
-                        .padding(10)
-                        .background(Color(.systemGray6))
-                        .clipShape(Circle())
-                        .foregroundColor(Color(buttonColor))
-                    })
-                    Button(action: mapViewModel.getDirection, label: {
-                            Image(systemName: "arrow.triangle.turn.up.right.diamond.fill")
-                            .font(.title2)
-                            .padding(10)
-                            .background(Color(.systemGray6))
-                            .clipShape(Circle())
-                            .foregroundColor(Color(buttonColor))
-                    })
-                    
-                }
-                .frame(maxWidth: .infinity, alignment: .trailing)
-                .padding(.bottom, 100)
-            }
-        }
-        .onAppear(perform: {
-            //Setting Delegate
-            locationManager.delegate = mapViewModel
-            locationManager.requestWhenInUseAuthorization()
-        })
 
-        //Permission Denied Alert
-        .alert(isPresented: $mapViewModel.permissionDenied, content: {
-            
-            Alert(title: Text("Permission Denied"), message: Text("Please Enable Permission in App Settings"), dismissButton: .default(Text("Go to Settings"), action: {
-                
-                //Redirecting user to setting
-                UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
-            })
-        )})
-        .onChange(of: mapViewModel.searchText, perform: {value in
-            //Searching places
-            
-            
-            //Delay to avoid continous search
-            let delay = 0.3
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
-                if value == mapViewModel.searchText {
-                    //Search...
-                    self.mapViewModel.searchQuery()
-                }
+                // Side buttons on map
+                MapButtons()
             }
-        })
+        }.task{
+                    mapViewModel.reCenterRegionToUserLocation()
+
+                }
+        } else {
+            Text("VoiceNote is not Authorized to access your location")
+        }
     }
 }
 
 struct MapScreen_Previews: PreviewProvider {
     static var previews: some View {
-        MapScreen().environmentObject(MapViewModel())
+        MapScreen()
     }
 }
