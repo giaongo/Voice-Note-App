@@ -8,7 +8,7 @@ struct ContentView: View {
     @State private var showLanguageSelection = true
     
     private var temperatureDataService = TemperatureDataService.sharedLocationService
-    @EnvironmentObject private var speechRecognizer: SpeechRecognizer // Add this line
+    @EnvironmentObject private var speechRecognizer: SpeechRecognizer
 
     var body: some View {
             ZStack(alignment: .bottom) {
