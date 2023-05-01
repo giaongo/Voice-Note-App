@@ -1,9 +1,4 @@
-//
-//  LanguageSelectionView.swift
-//  Voice Note
-//
-//  Created by Mohammad Rashid on 30.4.2023.
-//
+
 
 import SwiftUI
 
