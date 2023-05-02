@@ -1,5 +1,5 @@
 # Voice Note App
-A iOS mobile app is a group project under Metropolia UAS scope. The app designed for photographers and adventurers, allowing them to create voice notes for current locations during their travels.
+An iOS mobile app is a group project under Metropolia UAS scope. The app designed for photographers and adventurers, allowing them to create voice notes for current locations during their travels.
 
 # Contributors 
 1. Rashid Mohammad
@@ -35,6 +35,14 @@ A iOS mobile app is a group project under Metropolia UAS scope. The app designed
 ## Technologies
 - Swift programming language
 - SwiftUI
+- MapKit
+- CoreData
+- Combine
+- NaturalLanguage
+- Speech
+- Foundation
+- AVFoundation
+- Localization
 - Xcode 
 
 ## Demos
