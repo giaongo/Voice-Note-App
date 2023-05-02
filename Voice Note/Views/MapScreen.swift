@@ -63,25 +63,7 @@ struct MapScreen: View {
                  }, searchFilter: $mapViewModel.searchFilter.defaultValue)
 
                 // Search suggestions list
-                if !mapViewModel.places.isEmpty && mapViewModel.searchText != "" {
-                    ScrollView {
-                        VStack {
-                            ForEach(mapViewModel.places) {place in
-                                Text(place.tags)
-                                    .foregroundColor(Color(buttonColor))
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    .padding(.leading)
-                                    .onTapGesture{
-                                        mapViewModel.selectPlace(place: place)
-                                    }.textCase(.lowercase)
-                                
-                                Divider()
-                            }
-                        }
-                        .padding(.top)
-                    }
-                    .background(Color(.systemGray6))
-                }
+                SearchSuggestionList()
                 Spacer()
 
                 // Side buttons on map

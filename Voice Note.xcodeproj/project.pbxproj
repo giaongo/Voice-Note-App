@@ -11,6 +11,7 @@
 		3C7C30A21D5298DF3F4DD5B9 /* Applicable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C7C3E00BEA3470F4C0AA8FC /* Applicable.swift */; };
 		3C7C30FD28FCABCB6C29D4C9 /* SearchFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C7C3AF7DF6EDC74E7E955B7 /* SearchFilter.swift */; };
 		3C7C3197D98E17AF4B050455 /* MapMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C7C3DCBEAD822469529D401 /* MapMarker.swift */; };
+		3C7C31A9D79DD9FDB9BA4584 /* SearchSuggestionList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C7C3CB95C88C20D3CBFA6A0 /* SearchSuggestionList.swift */; };
 		3C7C322DA21BFB8C747B1BD3 /* TimeDuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C7C3E276DDC3A12B4388A13 /* TimeDuration.swift */; };
 		3C7C324037A15A0C56178171 /* MapScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C7C3EF87451CA70924FE6DB /* MapScreen.swift */; };
 		3C7C327B9F8ECD50DC2CE48A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C7C31CF81F922C045E22893 /* ContentView.swift */; };
@@ -100,6 +101,7 @@
 		3C7C3B9BF3BE087EE4C56711 /* Filterable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Filterable.swift; sourceTree = "<group>"; };
 		3C7C3C1516DA0A6B6A14D81D /* TemperatureAPIRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TemperatureAPIRequest.swift; sourceTree = "<group>"; };
 		3C7C3C26B38266BF3FE51ADF /* APIResponseWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIResponseWrapper.swift; sourceTree = "<group>"; };
+		3C7C3CB95C88C20D3CBFA6A0 /* SearchSuggestionList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchSuggestionList.swift; sourceTree = "<group>"; };
 		3C7C3DCBEAD822469529D401 /* MapMarker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapMarker.swift; sourceTree = "<group>"; };
 		3C7C3E00BEA3470F4C0AA8FC /* Applicable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Applicable.swift; sourceTree = "<group>"; };
 		3C7C3E276DDC3A12B4388A13 /* TimeDuration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeDuration.swift; sourceTree = "<group>"; };
@@ -213,6 +215,7 @@
 				6AEBB78C29EECD10004AF77F /* DetailView.swift */,
 				3C7C34589C69E8D9B9F20358 /* MapButtons.swift */,
 				4D05E76129FEECEB00DDF95A /* LanguageSelectionView.swift */,
+				3C7C3CB95C88C20D3CBFA6A0 /* SearchSuggestionList.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -485,6 +488,7 @@
 				3C7C30FD28FCABCB6C29D4C9 /* SearchFilter.swift in Sources */,
 				3C7C3DDF530F98214AECB576 /* MapButtons.swift in Sources */,
 				3C7C3DF57E43999BEEDD0D1E /* RecognizeError.swift in Sources */,
+				3C7C31A9D79DD9FDB9BA4584 /* SearchSuggestionList.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

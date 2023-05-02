@@ -34,7 +34,7 @@ class CoreDataService {
         newVoiceNote.title = "Note title"
         newVoiceNote.near = "Kamppi"
         newVoiceNote.fileUrl = URL(fileURLWithPath: "/dev/secure/storage")
-        newVoiceNote.duration = 3765
+        newVoiceNote.duration = 3583
         newVoiceNote.createdAt = Date.init()
         newVoiceNote.location = Location(context: persistenceController.container.viewContext)
         newVoiceNote.location?.id = id
