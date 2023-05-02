@@ -6,7 +6,7 @@ import SwiftUI
 struct AudioConfirmationView: View {
     @EnvironmentObject var speechRecognizer: SpeechRecognizer
     @EnvironmentObject var voiceNoteViewModel: VoiceNoteViewModel
-    @State var showDeleteConfimation: Bool = false
+    @State var showDeleteConfirmation: Bool = false
     @Binding var showSheet: Bool
     @Binding var toast:ToastView?
     
@@ -15,7 +15,7 @@ struct AudioConfirmationView: View {
             Text("\(speechRecognizer.transcriptionText)").font(.headline).fontWeight(.bold).padding(.horizontal,10)
             HStack {
                 Button {
-                    showDeleteConfimation = true
+                    showDeleteConfirmation = true
                 } label: {
                     Image(systemName: "trash")
                         .font(.system(size: 25))
@@ -30,7 +30,7 @@ struct AudioConfirmationView: View {
                 speechRecognizer.transcribeFile(from: newestRecordUrl)
             }
         }
-        .alert("Are you sure you want to delete?", isPresented: $showDeleteConfimation) {
+        .alert("Are you sure you want to delete?", isPresented: $showDeleteConfirmation) {
             HStack {
                 Button("DELETE") {
                     if let newestRecordUrl = voiceNoteViewModel.fileUrlList.last {

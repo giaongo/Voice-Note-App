@@ -61,7 +61,7 @@ struct TimeDuration: Sizeable {
         String(format: "%02d", hours())
     }
 
-    /// Return String representation of time duration in HH:MM:SS formate
+    /// Return String representation of time duration in HH:MM:SS format
     /// - Returns: String
     func getTimeAsHourMinuteSecond() -> String {
         "\(hoursAsTwoDigitString()):\(minutesAsTwoDigitString()):\(secondsAsTwoDigitString())"
