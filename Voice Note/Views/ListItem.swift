@@ -1,6 +1,9 @@
 import SwiftUI
 import MapKit
 
+/**
+    A View that that represent single Voice Note as a List item
+ */
 struct ListItem: View {
     @ObservedObject var voiceNote: VoiceNote
     @State private var isOptionMenu = false

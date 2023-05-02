@@ -2,6 +2,9 @@
 
 import SwiftUI
 
+/**
+    A View that lets user to select language option
+ */
 struct LanguageSelectionView: View {
     @EnvironmentObject var speechRecognizer: SpeechRecognizer
     @Binding var isPresented: Bool

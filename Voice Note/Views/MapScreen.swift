@@ -2,6 +2,9 @@ import SwiftUI
 import CoreLocation
 import MapKit
 
+/**
+    A View that shows a map
+ */
 struct MapScreen: View {
 
     let buttonColor = #colorLiteral(red: 0.1764705926, green: 0.01176470611, blue: 0.5607843399, alpha: 1)

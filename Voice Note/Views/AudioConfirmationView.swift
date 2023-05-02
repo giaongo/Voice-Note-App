@@ -1,5 +1,8 @@
 import SwiftUI
 
+/**
+    View that present user a conformation UI to save Voice Note
+ */
 struct AudioConfirmationView: View {
     @EnvironmentObject var speechRecognizer: SpeechRecognizer
     @EnvironmentObject var voiceNoteViewModel: VoiceNoteViewModel

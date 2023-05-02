@@ -1,6 +1,9 @@
 import SwiftUI
 import CoreLocation
 
+/**
+    A View that that List all Voice notes
+ */
 struct RecordingListView: View {
     @State var toast:ToastView? = nil
     @Environment(\.coreData) private var coreDataService: CoreDataService

@@ -1,5 +1,8 @@
 import SwiftUI
 
+/**
+    A type that holds styling option
+ */
 enum ToastStyle {
     case error
     case warning
@@ -25,6 +28,9 @@ enum ToastStyle {
     }
 }
 
+/**
+    A View that represent notification
+ */
 struct ToastView: View, Equatable {
     static func == (lhs: ToastView, rhs: ToastView) -> Bool {
         return lhs.title == rhs.title && lhs.message == rhs.message

@@ -1,5 +1,8 @@
 import SwiftUI
 
+/**
+    Main entry view of Voice Note application
+ */
 struct ContentView: View {
     @State var increaseHeight: Bool = false
     @State var toast:ToastView? = nil
