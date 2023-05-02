@@ -196,8 +196,8 @@ class VoiceNoteViewModel: NSObject, ObservableObject, AVAudioPlayerDelegate, AVA
 
             let id = UUID()
             newVoiceNote.id = id
-            newVoiceNote.text = "extractedKeywords"
-            newVoiceNote.title = "title"
+            newVoiceNote.text = text
+            newVoiceNote.title = title
             newVoiceNote.fileUrl = url
             newVoiceNote.createdAt = Date()
             newVoiceNote.duration = durationInSeconds
