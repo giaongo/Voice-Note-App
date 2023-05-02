@@ -5,8 +5,8 @@
 
 import Foundation
 
-// A wrapper to hold response from temperature API
-// https://www.7timer.info/bin/api.pl
+/// A wrapper to hold response from temperature API
+/// https://www.7timer.info/bin/api.pl
 struct TemperatureResponse: Identifiable {
     let id: Int32
     let weather: String

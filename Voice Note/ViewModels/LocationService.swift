@@ -8,6 +8,10 @@ import CoreLocation
 import Combine
 import MapKit
 
+/**
+    A class that provides service related to device location.
+    An instance of this class is Singleton
+ */
 class LocationService: NSObject, CLLocationManagerDelegate, ObservableObject {
 
     static var sharedLocationService = LocationService()

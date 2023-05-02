@@ -1,13 +1,16 @@
 import SwiftUI
 import MapKit
 
+/**
+    A View that that represent single Voice Note as a List item
+ */
 struct ListItem: View {
     @ObservedObject var voiceNote: VoiceNote
     @State private var isOptionMenu = false
     @State private var isDeleteAlert = false
     @State private var defaultSelect = "None"
     @State private var showDetail = false
-    //TODO move this some where else
+
     let buttonColor = #colorLiteral(red: 0.1764705926, green: 0.01176470611, blue: 0.5607843399, alpha: 1)
 
     @State var region = MKCoordinateRegion(

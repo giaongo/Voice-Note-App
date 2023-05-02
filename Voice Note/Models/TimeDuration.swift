@@ -1,7 +1,7 @@
 import Foundation
 
 /**
-    A model returns time duration based on hours, minutes and seconds
+    A model that holds duration of time
  */
 struct TimeDuration: Sizeable {
     var size: Double?
@@ -12,8 +12,8 @@ struct TimeDuration: Sizeable {
         self.size = size
     }
 
+    /// Return duration in seconds
     /// - Returns: Int
-    /// - return time duration in seconds
     func seconds() -> Int {
         if let size = size {
             return Int(size.truncatingRemainder(dividingBy: 60))
@@ -22,8 +22,8 @@ struct TimeDuration: Sizeable {
         }
     }
 
+    /// Return duration in minutes
     /// - Returns: Int
-    /// - return time duration in minutes
     func minutes() -> Int {
         if let size = size {
             return Int(size / 60)
@@ -32,9 +32,8 @@ struct TimeDuration: Sizeable {
         }
     }
 
-    // FIXME: Fix calculation
+    /// Return duration in hours
     /// - Returns: Int
-    /// - return time duration in hours
     func hours() -> Int {
         if let size = size {
             return Int((size / 60) / 60)
@@ -43,26 +42,27 @@ struct TimeDuration: Sizeable {
         }
     }
 
-    // FIXME: Fix calculation
+    /// Return two digit String representation of second
     /// - Returns: String
-    /// - return time duration in seconds as a String
     func secondsAsTwoDigitString() -> String {
         String(format: "%02d", seconds())
     }
 
-    // FIXME: Fix calculation
+    /// Return two digit String representation of minutes
     /// - Returns: String
-    /// - return time duration in minutes as a String
     func minutesAsTwoDigitString() -> String {
         String(format: "%02d", minutes())
 
     }
+
+    /// Return two digit String representation of hours
     /// - Returns: String
-    /// - return time duration in hours as a String
     func hoursAsTwoDigitString() -> String {
         String(format: "%02d", hours())
     }
 
+    /// Return String representation of time duration in HH:MM:SS format
+    /// - Returns: String
     func getTimeAsHourMinuteSecond() -> String {
         "\(hoursAsTwoDigitString()):\(minutesAsTwoDigitString()):\(secondsAsTwoDigitString())"
     }

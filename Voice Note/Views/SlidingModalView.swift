@@ -1,5 +1,8 @@
 import SwiftUI
 
+/**
+    A View that that present audio recording or confirmation
+ */
 struct SlidingModalView: View {
     @EnvironmentObject var voiceNoteViewModel: VoiceNoteViewModel
     @EnvironmentObject var speechRecognizer: SpeechRecognizer

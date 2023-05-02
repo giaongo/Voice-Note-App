@@ -1,5 +1,5 @@
 //
-// Created by Anwar Ulhaq on 1.4.2023.
+// Created by Giao, Moved to model folder by Anwar Ulhaq on 1.4.2023.
 //
 
 import Foundation

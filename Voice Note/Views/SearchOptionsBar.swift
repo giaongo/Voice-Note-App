@@ -1,5 +1,8 @@
 import SwiftUI
 
+/**
+    A View that that allows search
+ */
 struct SearchOptionsBar: View {
     @Binding var searchQuery: String
     var onSearchQuery: () -> Void

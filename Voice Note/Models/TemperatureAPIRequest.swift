@@ -5,6 +5,10 @@
 
 import Foundation
 
+/**
+  A Class handles Temperature resource. It uses a generic Resource type which should conform to APIResource.
+  It also confronts to NetworkRequest protocol to execute request and decode response.
+ */
 class TemperatureAPIRequest<Resource: APIResource> {
     let resource: Resource
 

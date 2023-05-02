@@ -4,7 +4,9 @@
 // 
 
 import Foundation
-
+/**
+ A type that provides filters for search
+ */
 enum SearchFilterItem: String, CaseIterable {
     case BY_VOICE_NOTE = "Voice notes"
     case BY_PLACES = "Places"

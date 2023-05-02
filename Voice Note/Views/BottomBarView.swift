@@ -9,6 +9,9 @@ import SwiftUI
 import NaturalLanguage
 import Foundation
 
+/**
+    A View in main screen that shows user options for navigation to List, Record and Home screen
+ */
 struct BottomBarView: View {
     @EnvironmentObject var voiceNoteViewModel: VoiceNoteViewModel
     @EnvironmentObject var speechRecognizer: SpeechRecognizer

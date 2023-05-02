@@ -5,14 +5,17 @@
 
 import Foundation
 
-class TemperatureDataService/*: ObservableObject*/ {
+/**
+    A class that provides service related to temperature data.
+    An instance of this class is Singleton
+ */
+class TemperatureDataService {
     @Published private(set) var temperatures: [Temperature] = []
     @Published private(set) var isLoading = false
 
     static let sharedLocationService = TemperatureDataService()
     private var request: TemperatureAPIRequest<TemperatureResource>?
 
-    // TODO should call fetchLatestTemperatures init
     private func loadLocationsFromCoreData() -> [Location] {
         CoreDataService.localStorage.fetchAllVoiceNotes().map { voiceNote -> Location? in
                     voiceNote.location
@@ -20,6 +23,9 @@ class TemperatureDataService/*: ObservableObject*/ {
                 .compactMap {$0}
     }
 
+    private init() {
+
+    }
     func fetchLatestTemperatures() async {
 
         _ = await withTaskGroup(of: (Temperature?, VoiceNote?).self) { group in
@@ -41,7 +47,7 @@ class TemperatureDataService/*: ObservableObject*/ {
                     do {
                         try context.save()
                     } catch {
-                        // TODO handle error
+                        print(#function, "Error saving temperature")
                     }
                 }
             }
@@ -60,7 +66,6 @@ class TemperatureDataService/*: ObservableObject*/ {
     }
 
     private func fetchNextSevenDaysTemperatureAt(location: Location) async throws -> [TemperatureResponse] {
-        // TODO create a abstract service class to convert Response to ModelType
         var temperatureResponses: [TemperatureResponse] = []
         let resource = TemperatureResource(
                 resourceURL: "https://www.7timer.info",

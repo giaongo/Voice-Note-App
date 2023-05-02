@@ -43,7 +43,7 @@ class MapViewModel: NSObject, ObservableObject {
         }
         if searchFilter.defaultValue == SearchFilterItem.BY_VOICE_NOTE {
             places = mapMarkers
-                    .filter{ mapMarker in mapMarker.taggedText.contains(searchText) }
+                    .filter{ mapMarker in mapMarker.taggedText.lowercased().contains(searchText.lowercased()) }
                     .map{ mapMarker -> Place in
                         Place(place: MKPlacemark(coordinate: mapMarker.coordinate), tags: mapMarker.taggedText)
                     }

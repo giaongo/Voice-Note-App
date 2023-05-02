@@ -4,7 +4,9 @@
 // 
 
 import Foundation
-
+/**
+ A type that can apply AnnotationType filter
+ */
 protocol Filterable {
     func apply(_: AnnotationType)
 }

@@ -1,6 +1,9 @@
 import SwiftUI
 import CoreLocation
 
+/**
+    A View that that List all Voice notes
+ */
 struct RecordingListView: View {
     @State var toast:ToastView? = nil
     @Environment(\.coreData) private var coreDataService: CoreDataService
@@ -33,11 +36,11 @@ struct RecordingListView: View {
                     /*ToolbarItem(placement: .navigationBarTrailing) {
                         EditButton()
                     }
-                    ToolbarItem {
+                    */ToolbarItem {
                         Button(action: addItem) {
                             Label("Add Item", systemImage: "plus")
                         }
-                    }*/
+                    }
                 }.navigationTitle("My Voice notes")
                 .padding(0)
         }
@@ -46,7 +49,7 @@ struct RecordingListView: View {
     }
     
     /**
-        This method displays sample data to the UI
+        Development option: This method add sample data to the UI
      */
     private func addItem() {
         withAnimation {

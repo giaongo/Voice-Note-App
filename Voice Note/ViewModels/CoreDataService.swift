@@ -2,7 +2,9 @@ import Foundation
 import CoreData
 
 /**
-    A class that contains methods associated with CoreData operation
+
+    A class that provides service related to Core data.
+    An instance of this class is Singleton
  */
 class CoreDataService {
     static let localStorage = CoreDataService()
@@ -21,7 +23,6 @@ class CoreDataService {
         persistenceController.container.viewContext
     }
 
-    // TODO Remove this at the end
     func addFakeItem () {
         print("Fake Item function called")
 
@@ -33,7 +34,7 @@ class CoreDataService {
         newVoiceNote.title = "Note title"
         newVoiceNote.near = "Kamppi"
         newVoiceNote.fileUrl = URL(fileURLWithPath: "/dev/secure/storage")
-        newVoiceNote.duration = 3765
+        newVoiceNote.duration = 3583
         newVoiceNote.createdAt = Date.init()
         newVoiceNote.location = Location(context: persistenceController.container.viewContext)
         newVoiceNote.location?.id = id
@@ -53,10 +54,6 @@ class CoreDataService {
             let nsError = error as NSError
             fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
         }
-    }
-
-    func loadLatestTemperatures() {
-
     }
 
     func fetchAllVoiceNotes() -> [VoiceNote] {
@@ -87,14 +84,23 @@ class CoreDataService {
         do {
             fetchedObject = try managedContext.existingObject(with: managedObjectID) as! VoiceNote
         } catch {
-            // TODO handle error
+            print("Error getting VoiceNote by managedID: \(error.localizedDescription)")
         }
 
         return fetchedObject
     }
 
-    func getVoiceNote(byFileURL fileURL: URL) {
-
+    func getVoiceNote(byFileURL fileURL: URL) -> [VoiceNote] {
+        let managedContext = getManageObjectContext()
+        let requestByFileURL: NSFetchRequest<VoiceNote> = VoiceNote.fetchRequest()
+        requestByFileURL.predicate = NSPredicate(format: "fileUrl == %@", fileURL.absoluteString )
+        var results: [VoiceNote?] = []
+        do {
+            results = try managedContext.fetch(requestByFileURL) as [VoiceNote]
+        } catch {
+            print("Error getting VoiceNote by byFileURL: \(error.localizedDescription)")
+        }
+        return results.compactMap{$0}
     }
 
     func getVoiceNote(byText text: String) -> [VoiceNote] {
@@ -106,7 +112,7 @@ class CoreDataService {
         do {
             results = try managedContext.fetch(requestById) as [VoiceNote]
         } catch {
-
+            print("Error getting VoiceNote by free text: \(error.localizedDescription)")
         }
         return results.compactMap{$0}
     }
@@ -120,7 +126,7 @@ class CoreDataService {
         do {
             results = try managedContext.fetch(requestById) as [VoiceNote]
         } catch {
-
+            print("Error getting VoiceNote by uuid: \(error.localizedDescription)")
         }
         return results.compactMap{$0}[0]
     }

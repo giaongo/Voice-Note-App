@@ -2,6 +2,9 @@ import SwiftUI
 import CoreLocation
 import MapKit
 
+/**
+    A View that contains all the details related to Voice Note
+ */
 struct DetailView: View {
     @EnvironmentObject var voiceNoteViewModel: VoiceNoteViewModel
     @EnvironmentObject var mapViewModel: MapViewModel

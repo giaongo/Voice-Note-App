@@ -5,8 +5,8 @@
 
 import Foundation
 
-// Abstract struct to hold any thing fetched from network
-// Item should confront to Decodable protocol
+/// Abstract struct to hold any thing fetched from network
+/// Item should confront to Decodable protocol
 struct APIResponseWrapper<T: Decodable> {
     // Other kind of responses can be added
     let temperatureResponses: [T]?

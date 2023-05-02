@@ -2,6 +2,9 @@ import SwiftUI
 import CoreLocation
 import MapKit
 
+/**
+    A View that shows a map
+ */
 struct MapScreen: View {
 
     let buttonColor = #colorLiteral(red: 0.1764705926, green: 0.01176470611, blue: 0.5607843399, alpha: 1)
@@ -60,25 +63,7 @@ struct MapScreen: View {
                  }, searchFilter: $mapViewModel.searchFilter.defaultValue)
 
                 // Search suggestions list
-                if !mapViewModel.places.isEmpty && mapViewModel.searchText != "" {
-                    ScrollView {
-                        VStack {
-                            ForEach(mapViewModel.places) {place in
-                                Text(place.tags)
-                                    .foregroundColor(Color(buttonColor))
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    .padding(.leading)
-                                    .onTapGesture{
-                                        mapViewModel.selectPlace(place: place)
-                                    }.textCase(.lowercase)
-                                
-                                Divider()
-                            }
-                        }
-                        .padding(.top)
-                    }
-                    .background(Color(.systemGray6))
-                }
+                SearchSuggestionList()
                 Spacer()
 
                 // Side buttons on map
