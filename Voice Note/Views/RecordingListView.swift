@@ -33,11 +33,11 @@ struct RecordingListView: View {
                     /*ToolbarItem(placement: .navigationBarTrailing) {
                         EditButton()
                     }
-                    ToolbarItem {
+                    */ToolbarItem {
                         Button(action: addItem) {
                             Label("Add Item", systemImage: "plus")
                         }
-                    }*/
+                    }
                 }.navigationTitle("My Voice notes")
                 .padding(0)
         }
@@ -50,7 +50,7 @@ struct RecordingListView: View {
      */
     private func addItem() {
         withAnimation {
-            //coreDataService.addFakeItem()
+            coreDataService.addFakeItem()
         }
     }
 
