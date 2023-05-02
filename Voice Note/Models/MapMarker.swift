@@ -6,6 +6,9 @@
 import Foundation
 import CoreLocation
 
+/**
+    A Identifiable struct whose instance holds a visible marker on Map
+ */
 struct MapMarker: Identifiable {
     let id: UUID
     let taggedText: String

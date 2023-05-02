@@ -3,8 +3,8 @@ import CoreData
 
 
 /**
- A Model that conforms to the Decodable protocol and is a subclass of NSManagedObject. Upon initialization, this model decodes the JSON data and set the model properties accordingly
- */
+ A CoreData entity class extension to make it confront to decodable
+  */
 @objc(Temperature)
 public class Temperature: NSManagedObject, Decodable {
     enum CodingKeys: String, CodingKey {

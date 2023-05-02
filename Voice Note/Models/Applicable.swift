@@ -2,7 +2,7 @@ import Foundation
 import CoreData
 
 /**
-  A protocol is intended to be used as a blueprint for defining the size in a program
+  A type that can apply
  */
 protocol Applicable {
     func apply(_: NSManagedObject)

@@ -5,6 +5,9 @@
 
 import Foundation
 
+/**
+ A model that hold map search filter
+ */
 struct SearchFilter {
     var defaultValue: SearchFilterItem = SearchFilterItem.BY_PLACES
 }

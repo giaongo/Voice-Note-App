@@ -2,7 +2,7 @@ import SwiftUI
 import MapKit
 
 /**
-    A Model defines location information on map
+    A Model that defines search places
  */
 struct Place: Identifiable {
     

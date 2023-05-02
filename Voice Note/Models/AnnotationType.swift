@@ -4,7 +4,9 @@
 // 
 
 import Foundation
-
+/**
+ An Enum class to distinguish between Map Annotations
+ */
 enum AnnotationType {
     case SEARCH_RESULT
     case VOICE_NOTE

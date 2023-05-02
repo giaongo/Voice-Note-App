@@ -4,7 +4,10 @@
 // 
 
 import Foundation
-
+/**
+ A type that transform the data it receives into a model type,
+ does asynchronous data transfer and has a callback to pass the processed data back to the caller.
+ */
 protocol NetworkRequest: AnyObject {
     associatedtype ModelType
     func decode(_ data: Data) async -> ModelType?
@@ -20,8 +23,6 @@ extension NetworkRequest {
             completion(value)
         } else {
             completion(nil)
-
         }
-
     }
 }

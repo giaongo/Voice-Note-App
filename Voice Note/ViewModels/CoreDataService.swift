@@ -21,44 +21,6 @@ class CoreDataService {
         persistenceController.container.viewContext
     }
 
-    // TODO Remove this at the end
-    func addFakeItem () {
-        print("Fake Item function called")
-
-        let newVoiceNote = VoiceNote(context: persistenceController.container.viewContext)
-        let id = UUID()
-
-        newVoiceNote.id = id
-        newVoiceNote.text = "this is my voicenote text"
-        newVoiceNote.title = "Note title"
-        newVoiceNote.near = "Kamppi"
-        newVoiceNote.fileUrl = URL(fileURLWithPath: "/dev/secure/storage")
-        newVoiceNote.duration = 3765
-        newVoiceNote.createdAt = Date.init()
-        newVoiceNote.location = Location(context: persistenceController.container.viewContext)
-        newVoiceNote.location?.id = id
-        newVoiceNote.location?.longitude = Double.random(in: 24.600750..<25.30750)//24.444
-        newVoiceNote.location?.latitude = Double.random(in: 60.090760..<60.430440)
-        newVoiceNote.weather = Weather(context: persistenceController.container.viewContext)
-        newVoiceNote.weather?.temperature = Temperature(context: persistenceController.container.viewContext)
-        //newVoiceNote.weather?.temperature?.average = 34
-        newVoiceNote.weather?.temperature?.maximum = 44
-        newVoiceNote.weather?.temperature?.minimum = 24
-
-        do {
-            try persistenceController.container.viewContext.save()
-        } catch {
-            // Replace this implementation with code to handle the error appropriately.
-            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-            let nsError = error as NSError
-            fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-        }
-    }
-
-    func loadLatestTemperatures() {
-
-    }
-
     func fetchAllVoiceNotes() -> [VoiceNote] {
         var voiceNotes: [VoiceNote] = []
         let managedContext = persistenceController.container.viewContext
@@ -87,14 +49,23 @@ class CoreDataService {
         do {
             fetchedObject = try managedContext.existingObject(with: managedObjectID) as! VoiceNote
         } catch {
-            // TODO handle error
+            print("Error getting VoiceNote by managedID: \(error.localizedDescription)")
         }
 
         return fetchedObject
     }
 
-    func getVoiceNote(byFileURL fileURL: URL) {
-
+    func getVoiceNote(byFileURL fileURL: URL) -> [VoiceNote] {
+        let managedContext = getManageObjectContext()
+        let requestByFileURL: NSFetchRequest<VoiceNote> = VoiceNote.fetchRequest()
+        requestByFileURL.predicate = NSPredicate(format: "fileUrl == %@", fileURL.absoluteString )
+        var results: [VoiceNote?] = []
+        do {
+            results = try managedContext.fetch(requestByFileURL) as [VoiceNote]
+        } catch {
+            print("Error getting VoiceNote by byFileURL: \(error.localizedDescription)")
+        }
+        return results.compactMap{$0}
     }
 
     func getVoiceNote(byText text: String) -> [VoiceNote] {
@@ -106,7 +77,7 @@ class CoreDataService {
         do {
             results = try managedContext.fetch(requestById) as [VoiceNote]
         } catch {
-
+            print("Error getting VoiceNote by free text: \(error.localizedDescription)")
         }
         return results.compactMap{$0}
     }
@@ -120,7 +91,7 @@ class CoreDataService {
         do {
             results = try managedContext.fetch(requestById) as [VoiceNote]
         } catch {
-
+            print("Error getting VoiceNote by uuid: \(error.localizedDescription)")
         }
         return results.compactMap{$0}[0]
     }

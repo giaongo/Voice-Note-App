@@ -6,7 +6,7 @@
 import Foundation
 
 /**
-Provide a shared implementation of,
+    Provides a shared implementation of network resource,
     an associated model type into which data needs to be converted (Temperature, Wind, etc.).
     a resourceURL, for different type of weather api (TemperatureAPI, WindAPI, etc.)
     optional methodPath, e.g. /v2 of /current etc.
