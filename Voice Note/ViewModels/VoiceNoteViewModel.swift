@@ -202,7 +202,6 @@ class VoiceNoteViewModel: NSObject, ObservableObject, AVAudioPlayerDelegate, AVA
             newVoiceNote.createdAt = Date()
             newVoiceNote.duration = durationInSeconds
             newVoiceNote.location = Location(context: managedObjectContext)
-            // TODO may DB restructuring needed
             newVoiceNote.location?.id = id
             newVoiceNote.location?.latitude = currentLocation.coordinate.latitude
             newVoiceNote.location?.longitude = currentLocation.coordinate.longitude

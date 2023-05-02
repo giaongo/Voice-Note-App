@@ -3,6 +3,9 @@ import AVFoundation
 import Speech
 import SwiftUI
 
+/**
+    A class who's instance will do speech recognition
+ */
 class SpeechRecognizer: ObservableObject {
     private var task: SFSpeechRecognitionTask?
     private var recognizer: SFSpeechRecognizer?

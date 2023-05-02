@@ -46,11 +46,11 @@ struct RecordingListView: View {
     }
     
     /**
-        This method displays sample data to the UI
+        Development option: This method add sample data to the UI
      */
     private func addItem() {
         withAnimation {
-            coreDataService.addFakeItem()
+            //coreDataService.addFakeItem()
         }
     }
 

@@ -2,7 +2,9 @@ import Foundation
 import CoreData
 
 /**
-    A class that contains methods associated with CoreData operation
+
+    A class that provides service related to Core data.
+    An instance of this class is Singleton
  */
 class CoreDataService {
     static let localStorage = CoreDataService()

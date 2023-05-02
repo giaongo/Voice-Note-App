@@ -28,7 +28,6 @@ extension CodingUserInfoKey {
     static let managedObjectContext = CodingUserInfoKey(rawValue: "managedObjectContext")!
 }
 
-// TODO move it some where else
 enum DecoderConfigurationError: Error {
     case missingManagedObjectContext
 }
