@@ -46,3 +46,4 @@ An iOS mobile app is a group project under Metropolia UAS scope. The app designe
 - Xcode 
 
 ## Demos
+[![Watch the video](https://img.youtube.com/vi/WOnUqRYEdqk/0.jpg)](https://youtu.be/WOnUqRYEdqk)
